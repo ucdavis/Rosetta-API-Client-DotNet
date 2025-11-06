@@ -1,0 +1,763 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "UC Davis IAM API",
+    "description": "This API provides resources for querying and modifying identity data collected from various sources by the Identity\nand Access Management (IAM) team. It is intended for use by developers that need to integrate identity data into their\napplications.\n",
+    "version": "v1"
+  },
+  "host": "iam-rosetta-dev-2y5rmy.jrfxkn.usa-w2.cloudhub.io",
+  "basePath": "/api/{version}",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/campaign-contacts": {
+      "get": {
+        "description": "Returns a collection of identities modified in the last 24 hours",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/csv"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "description": "Maximum number of records to return.",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "save",
+            "description": "If true, CSV will be saved to local system",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "text/csv",
+            "schema": {
+              "type": "file"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/identities": {
+      "get": {
+        "description": "Returns a collection of identities modified in the last 24 hours",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "description": "Maximum number of records to return.",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Identity"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/baseprofiles": {
+      "get": {
+        "description": "Returns base profile attributes from accounts",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BaseProfile"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/employmentstatus": {
+      "get": {
+        "description": "Returns employment status information from accounts",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EmploymentStatus"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/ucpathentitlements": {
+      "get": {
+        "description": "Returns UC Path entitlements from accounts",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UCPathEntitlement"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/studentassociations": {
+      "get": {
+        "description": "Returns student associations from accounts",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/StudentAssociation"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/accounts": {
+      "get": {
+        "description": "Returns a collection of all accounts",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific IAM ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/accounts/{id}": {
+      "get": {
+        "description": "Returns a specific account by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/people": {
+      "get": {
+        "description": "Returns a collection of all people",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "email",
+            "description": "Return user info for an UC Davis email address",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._%+-]+@ucdavis\\.edu$"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to",
+            "required": false,
+            "in": "query",
+            "default": 10000,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/people/{id}": {
+      "get": {
+        "description": "Returns a specific person by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/people/employees": {
+      "get": {
+        "description": "Returns a collection of all employees",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/people/employees/{id}": {
+      "get": {
+        "description": "Returns a specific employee by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/people/students": {
+      "get": {
+        "description": "Returns a collection of all students",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/people/students/{id}": {
+      "get": {
+        "description": "Returns a specific student by ID",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/colleges": {
+      "get": {
+        "description": "Returns a list of all colleges",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/majors": {
+      "get": {
+        "description": "Returns a list of all majors",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/me": {
+      "get": {
+        "description": "Returns information about the currently logged in user",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/groups": {
+      "get": {
+        "description": "Returns a collection of all groups",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/organizations": {
+      "get": {
+        "description": "Returns a collection of all organizations",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/roles": {
+      "get": {
+        "description": "Returns a collection of all roles",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Identity": {
+      "type": "object",
+      "required": [
+        "livedFirstName",
+        "livedLastName",
+        "email",
+        "iamid",
+        "affiliations",
+        "provisioningPrimaryStatus"
+      ],
+      "properties": {
+        "livedFirstName": {
+          "type": "string"
+        },
+        "livedLastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "iamid": {
+          "type": "string"
+        },
+        "affiliations": {
+          "type": "array",
+          "items": {}
+        },
+        "provisioningPrimaryStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "BaseProfile": {
+      "type": "object",
+      "required": [
+        "attributes"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "object"
+        }
+      }
+    },
+    "EmploymentStatus": {
+      "type": "object",
+      "required": [
+        "attributes"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "object"
+        }
+      }
+    },
+    "UCPathEntitlement": {
+      "type": "object",
+      "required": [
+        "attributes"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "object"
+        }
+      }
+    },
+    "StudentAssociation": {
+      "type": "object",
+      "required": [
+        "attributes"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth_2_0": {
+      "type": "oauth2",
+      "x-amf-describedBy": {
+        "headers": {
+          "Authorization": {
+            "description": "Used to send a valid OAuth 2 access token. Format: Bearer {token}",
+            "type": "string",
+            "pattern": "Bearer .+"
+          }
+        },
+        "queryParameters": {
+          "access_token": {
+            "description": "Used to send a valid OAuth 2 access token. Do not use together with the \"Authorization\" header.",
+            "type": "string"
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized - Bad or expired token. This can happen if the user or IAM team has revoked or expired an access token. To fix, you should re-authenticate the user.\n",
+            "body": {
+              "application/json": {
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Invalid or expired access token",
+                  "timestamp": "2025-07-28T10:30:00Z"
+                },
+                "type": "any"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Bad OAuth request or insufficient scopes. The token may not have the required permissions for this resource.\n",
+            "body": {
+              "application/json": {
+                "example": {
+                  "error": "forbidden",
+                  "message": "Insufficient scopes for this resource",
+                  "requiredScopes": [
+                    "iam:read"
+                  ],
+                  "timestamp": "2025-07-28T10:30:00Z"
+                },
+                "type": "any"
+              }
+            }
+          }
+        }
+      },
+      "tokenUrl": "https://iam-mulesoft-oauth-provider.us-w1.cloudhub.io/token",
+      "flow": "application",
+      "scopes": {
+        "*": ""
+      },
+      "x-amf-settings": {
+        "authorizationGrants": [
+          "client_credentials"
+        ]
+      }
+    }
+  }
+}

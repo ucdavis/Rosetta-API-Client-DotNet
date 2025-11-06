@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    
+    <!-- NuGet Package Metadata -->
+    <PackageId>UCD.Rosetta.Client</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>UC Davis</Authors>
+    <Company>University of California, Davis</Company>
+    <Description>Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.</Description>
+    <PackageTags>ucdavis;iam;identity;rosetta;api-client</PackageTags>
+    <PackageProjectUrl>https://github.com/ucdavis/UCD.Rosetta.Client</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ucdavis/UCD.Rosetta.Client</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.10" />
+    <PackageReference Include="NSwag.MSBuild" Version="14.6.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Run NSwag to generate client code before build -->
+  <Target Name="NSwag" BeforeTargets="CoreCompile" Condition="'$(Configuration)' == 'Debug' OR '$(NCrunch)' == '1'">
+    <Exec ConsoleToMSBuild="true" ContinueOnError="true" Command="$(NSwagExe_Net80) run nswag.json /variables:Configuration=$(Configuration)">
+      <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
+    </Exec>
+    <Message Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' == '0'" Importance="low" />
+    <Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'" />
+  </Target>
+
+</Project>
