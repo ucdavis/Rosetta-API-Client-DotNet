@@ -23,6 +23,17 @@ public class RosettaClient : IDisposable
     /// </code>
     /// </summary>
     public IClient Api { get; }
+    
+    /// <summary>
+    /// Gets or sets the maximum number of characters to log from API responses.
+    /// Set to 0 to disable logging (default), -1 for unlimited, or a positive number to limit output.
+    /// Useful for troubleshooting API issues and seeing actual response data.
+    /// </summary>
+    public int DebugResponseMaxLength
+    {
+        get => ((Generated.Client)Api).DebugResponseMaxLength;
+        set => ((Generated.Client)Api).DebugResponseMaxLength = value;
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RosettaClient"/> class.

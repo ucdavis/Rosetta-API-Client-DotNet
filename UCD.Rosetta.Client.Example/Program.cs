@@ -19,6 +19,10 @@ var options = new RosettaClientOptions
 // Create the client
 using var client = new RosettaClient(options);
 
+// Enable debug logging to see raw API responses
+// Use -1 for unlimited, 0 to disable, or a positive number (e.g., 1000) to limit output
+client.DebugResponseMaxLength = 0;
+
 try
 {
     Console.WriteLine("Example 1: Get information about the authenticated user");
