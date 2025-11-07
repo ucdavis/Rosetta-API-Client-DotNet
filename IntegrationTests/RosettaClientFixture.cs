@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
 
-namespace UCD.Rosetta.Client.IntegrationTests;
+namespace IntegrationTests;
 
 /// <summary>
 /// Test fixture for integration tests that provides a configured RosettaClient.

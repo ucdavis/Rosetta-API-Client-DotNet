@@ -20,8 +20,8 @@ The tests load configuration from multiple sources (in priority order):
 The test project shares the same UserSecretsId with the example project, so you only need to configure once:
 
 ```bash
-dotnet user-secrets set "RosettaClient:ClientId" "your-client-id" --project UCD.Rosetta.Client.Example
-dotnet user-secrets set "RosettaClient:ClientSecret" "your-client-secret" --project UCD.Rosetta.Client.Example
+dotnet user-secrets set "RosettaClient:ClientId" "your-client-id" --project Example
+dotnet user-secrets set "RosettaClient:ClientSecret" "your-client-secret" --project Example
 ```
 
 ### Option 2: Environment Variables (CI/CD)
@@ -44,7 +44,7 @@ dotnet test
 
 Run tests from the integration test project only:
 ```bash
-dotnet test UCD.Rosetta.Client.IntegrationTests
+dotnet test IntegrationTests
 ```
 
 Run with verbose output:

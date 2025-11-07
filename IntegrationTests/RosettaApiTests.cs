@@ -1,4 +1,4 @@
-namespace UCD.Rosetta.Client.IntegrationTests;
+namespace IntegrationTests;
 
 /// <summary>
 /// Integration tests for the Rosetta API Client.

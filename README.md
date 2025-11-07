@@ -347,7 +347,7 @@ Quick steps to run the example locally:
 1. Add your Rosetta credentials to user secrets for the example project (the example project uses UserSecretsId `db36e8a1-703d-48f0-af34-05f22ba84854`):
 
 ```bash
-cd UCD.Rosetta.Client/UCD.Rosetta.Client.Example
+cd Example
 dotnet user-secrets set "RosettaClient:ClientId" "<your-client-id>"
 dotnet user-secrets set "RosettaClient:ClientSecret" "<your-client-secret>"
 dotnet user-secrets set "RosettaClient:TokenUrl" "https://your-oauth-server.com/token"
@@ -356,18 +356,18 @@ dotnet user-secrets set "RosettaClient:TokenUrl" "https://your-oauth-server.com/
 2. Run the example:
 
 ```bash
-dotnet run --project UCD.Rosetta.Client.Example
+dotnet run --project Example
 ```
 
 Running integration tests:
 
-- The integration test project `UCD.Rosetta.Client.IntegrationTests` shares the same UserSecretsId as the example project so the commands above are sufficient for tests as well.
+- The integration test project `IntegrationTests` shares the same UserSecretsId as the example project so the commands above are sufficient for tests as well.
 - Tests also read environment variables, which is useful for CI. The supported environment variable names mirror the configuration keys (for example: `RosettaClient__ClientId` and `RosettaClient__ClientSecret`).
 
 Run tests locally with:
 
 ```bash
-dotnet test UCD.Rosetta.Client.IntegrationTests
+dotnet test IntegrationTests
 ```
 
 Debugging API responses

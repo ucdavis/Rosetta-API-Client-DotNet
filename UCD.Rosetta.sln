@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCD.Rosetta.Client", "UCD.Rosetta.Client\UCD.Rosetta.Client.csproj", "{F452BDEA-4D20-43F4-B131-51770BE26492}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCD.Rosetta.Client.Example", "UCD.Rosetta.Client.Example\UCD.Rosetta.Client.Example.csproj", "{52BF61F0-04E2-4B08-BF12-A4D6F7E738FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{52BF61F0-04E2-4B08-BF12-A4D6F7E738FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCD.Rosetta.Client.IntegrationTests", "UCD.Rosetta.Client.IntegrationTests\UCD.Rosetta.Client.IntegrationTests.csproj", "{E3E17EF2-DEFB-476C-A3F7-1D964C4446C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{E3E17EF2-DEFB-476C-A3F7-1D964C4446C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
