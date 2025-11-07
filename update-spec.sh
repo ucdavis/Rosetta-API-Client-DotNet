@@ -5,10 +5,10 @@
 
 set -e
 
-VERSION=${1:-"1.0.10"}
+VERSION=${1:-"1.0.11"}
 SPEC_URL="https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/organizations/9b04bfa8-6eeb-4d85-b676-91db930f8411/assets/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/${VERSION}/files/fat-oas/zip/?sha=1762453698202"
 SPEC_DIR="./specs"
-SPEC_FILE="${SPEC_DIR}/rosetta-api-v${VERSION}.json"
+SPEC_FILE="${SPEC_DIR}/rosetta-api.json"
 
 echo "🔄 Updating Rosetta API OpenAPI Specification"
 echo "=============================================="
@@ -31,10 +31,9 @@ cp /tmp/rosetta-spec/api.json "${SPEC_FILE}"
 rm -rf /tmp/rosetta-spec /tmp/rosetta-spec.zip
 
 echo "✅ Specification updated: ${SPEC_FILE}"
+echo "📝 Version: ${VERSION}"
 echo ""
 echo "Next steps:"
-echo "1. Update nswag.json to point to the new spec file"
-echo "2. Run 'dotnet build' to regenerate the client code"
-echo "3. Test the changes"
-echo "4. Update version in UCD.Rosetta.Client.csproj"
-echo "5. Commit and tag the release"
+echo "1. Run 'dotnet clean && dotnet build' to regenerate the client code"
+echo "2. Test the changes with 'dotnet test'"
+echo "3. Review and commit the updated spec"

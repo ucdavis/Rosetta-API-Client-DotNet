@@ -13,7 +13,7 @@
   "paths": {
     "/campaign-contacts": {
       "get": {
-        "description": "Returns a collection of identities modified in the last 24 hours",
+        "description": "Returns a collection of all contacts for Campaign Studio",
         "consumes": [
           "application/json"
         ],
@@ -36,6 +36,28 @@
             "default": false,
             "type": "boolean"
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "text/csv",
+            "schema": {
+              "type": "file"
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/campaign-contacts-modified": {
+      "get": {
+        "description": "Returns a collection of all contacts for Campaign Studio that have been modified in the last 24 hours",
+        "produces": [
+          "text/csv"
         ],
         "responses": {
           "200": {
@@ -192,7 +214,7 @@
     },
     "/accounts": {
       "get": {
-        "description": "Returns a collection of all accounts",
+        "description": "Returns a collection of all accounts\nRule: At most ONE of (iamid | iamids) may be supplied. If more than one is provided, 400 is returned.        \n",
         "consumes": [
           "application/json"
         ],
@@ -232,6 +254,15 @@
               "type": "array",
               "items": {
                 "type": "object"
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": {
+                "error": "Only one of query parameters (iamid, iamids) may be provided."
               }
             }
           }
@@ -278,7 +309,7 @@
     },
     "/people": {
       "get": {
-        "description": "Returns a collection of all people",
+        "description": "Returns a collection of people.\nRule: At most ONE of (iamid | iamids | email) may be supplied. If more than one is provided, 400 is returned.        \n",
         "consumes": [
           "application/json"
         ],
@@ -286,6 +317,14 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific IAM ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
           {
             "name": "iamids",
             "description": "Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)",
@@ -296,11 +335,11 @@
           },
           {
             "name": "email",
-            "description": "Return user info for an UC Davis email address",
+            "description": "Return user info for a UC Davis email address",
             "required": false,
             "in": "query",
             "type": "string",
-            "pattern": "^[A-Za-z0-9._%+-]+@ucdavis\\.edu$"
+            "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
           },
           {
             "name": "limit",
@@ -319,6 +358,15 @@
               "type": "array",
               "items": {
                 "type": "object"
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": {
+                "error": "Only one of query parameters (iamid, iamids, email) may be provided."
               }
             }
           }

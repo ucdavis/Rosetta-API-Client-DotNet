@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "../specs/rosetta-api-v1.0.10.json",
+      "url": "../specs/rosetta-api.json",
       "output": null
     }
   },

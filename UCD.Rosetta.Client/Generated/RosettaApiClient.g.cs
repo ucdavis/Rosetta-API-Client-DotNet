@@ -32,12 +32,19 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns a collection of identities modified in the last 24 hours
+        /// Returns a collection of all contacts for Campaign Studio
         /// </remarks>
         /// <param name="limit">Maximum number of records to return.</param>
         /// <param name="save">If true, CSV will be saved to local system</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<FileResponse> CampaignContactsAsync(int? limit = null, bool? save = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of all contacts for Campaign Studio that have been modified in the last 24 hours
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> CampaignContactsModifiedAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -78,6 +85,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// Returns a collection of all accounts
+        /// <br/>Rule: At most ONE of (iamid | iamids) may be supplied. If more than one is provided, 400 is returned.
         /// </remarks>
         /// <param name="iamid">Return all accounts for a specific IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)</param>
@@ -94,13 +102,15 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns a collection of all people
+        /// Returns a collection of people.
+        /// <br/>Rule: At most ONE of (iamid | iamids | email) may be supplied. If more than one is provided, 400 is returned.
         /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)</param>
-        /// <param name="email">Return user info for an UC Davis email address</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
         /// <param name="limit">The maximum number of records to</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> PeopleAllAsync(string? iamids = null, string? email = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> PeopleAllAsync(string? iamid = null, string? iamids = null, string? email = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -231,7 +241,7 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns a collection of identities modified in the last 24 hours
+        /// Returns a collection of all contacts for Campaign Studio
         /// </remarks>
         /// <param name="limit">Maximum number of records to return.</param>
         /// <param name="save">If true, CSV will be saved to local system</param>
@@ -261,6 +271,77 @@ namespace UCD.Rosetta.Client.Generated
                         urlBuilder_.Append(System.Uri.EscapeDataString("save")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(save, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 206)
+                        {
+                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await ReadAsStreamAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
+                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
+                            return fileResponse_;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of all contacts for Campaign Studio that have been modified in the last 24 hours
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<FileResponse> CampaignContactsModifiedAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/csv"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "campaign-contacts-modified"
+                    urlBuilder_.Append("campaign-contacts-modified");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -687,6 +768,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// Returns a collection of all accounts
+        /// <br/>Rule: At most ONE of (iamid | iamids) may be supplied. If more than one is provided, 400 is returned.
         /// </remarks>
         /// <param name="iamid">Return all accounts for a specific IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)</param>
@@ -753,6 +835,16 @@ namespace UCD.Rosetta.Client.Generated
                                 throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new RosettaApiException<object>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
@@ -853,13 +945,15 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns a collection of all people
+        /// Returns a collection of people.
+        /// <br/>Rule: At most ONE of (iamid | iamids | email) may be supplied. If more than one is provided, 400 is returned.
         /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)</param>
-        /// <param name="email">Return user info for an UC Davis email address</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
         /// <param name="limit">The maximum number of records to</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> PeopleAllAsync(string? iamids = null, string? email = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> PeopleAllAsync(string? iamid = null, string? iamids = null, string? email = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -875,6 +969,10 @@ namespace UCD.Rosetta.Client.Generated
                     // Operation Path: "people"
                     urlBuilder_.Append("people");
                     urlBuilder_.Append('?');
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (iamids != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
@@ -920,6 +1018,16 @@ namespace UCD.Rosetta.Client.Generated
                                 throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new RosettaApiException<object>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {

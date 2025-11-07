@@ -319,17 +319,22 @@ UCD.Rosetta.Client/
 ├── Generated/
 │   └── RosettaApiClient.g.cs        # Auto-generated from OpenAPI spec
 └── specs/
-    └── rosetta-api-v1.0.10.json     # OpenAPI specification
+    └── rosetta-api.json             # OpenAPI specification
 ```
 
 ### Regenerating Client Code
 
-The client code is automatically regenerated from the OpenAPI specification during build. To manually update:
+The client code is automatically regenerated from the OpenAPI specification during build. 
 
-1. Download the latest OpenAPI spec from MuleSoft Exchange
-2. Replace `specs/rosetta-api-vX.X.X.json`
-3. Update the path in `nswag.json`
-4. Run `dotnet build`
+To update the spec to a new version, use the convenience script:
+```bash
+./update-spec.sh 1.0.12  # Replace with desired version
+```
+
+This will download the latest spec from MuleSoft Exchange and save it as `specs/rosetta-api.json`, then run:
+```bash
+dotnet clean && dotnet build
+```
 
 ## Future Enhancements
 
@@ -404,13 +409,3 @@ For issues, questions, or contributions:
 - **Issues**: [GitHub Issues](https://github.com/ucdavis/UCD.Rosetta.Client/issues)
 - **Documentation**: [Rosetta API Docs](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/)
 - **UC Davis IAM Team**: Contact your IAM representative for credentials and API access
-
-## Changelog
-
-### Version 1.0.0
-- Initial release
-- Full Rosetta API v1.0.10 support
-- OAuth 2.0 client credentials authentication
-- Dependency injection support
-- System.Text.Json serialization
-- Auto-generated from OpenAPI specification
