@@ -1,20 +1,19 @@
 ﻿using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
+using Microsoft.Extensions.Configuration;
 
 // Example: Using the Rosetta API Client
 Console.WriteLine("UC Davis Rosetta API Client Example");
 Console.WriteLine("====================================\n");
 
-// Configuration - In production, load these from appsettings.json, environment variables, or user secrets
-var options = new RosettaClientOptions
-{
-    BaseUrl = "https://iam-rosetta-dev-2y5rmy.jrfxkn.usa-w2.cloudhub.io/api/{version}",
-    TokenUrl = "https://your-token-endpoint.example.com/oauth/token",
-    ClientId = "your-client-id",
-    ClientSecret = "your-client-secret",
-    ApiVersion = "v1",
-    TimeoutSeconds = 30
-};
+// Configuration - load from appsettings.json, then override with user secrets
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddUserSecrets(System.Reflection.Assembly.GetEntryAssembly() ?? typeof(Program).Assembly, optional: true)
+    .Build();
+
+var options = new RosettaClientOptions();
+configuration.GetSection("RosettaClient").Bind(options);
 
 // Create the client
 using var client = new RosettaClient(options);
@@ -33,7 +32,7 @@ try
 
     Console.WriteLine("Example 2: Search for a person by email");
     Console.WriteLine("----------------------------------------");
-    var peopleByEmail = await client.Api.PeopleAllAsync(email: "someone@ucdavis.edu");
+    var peopleByEmail = await client.Api.PeopleAllAsync(email: "swebermilne@ucdavis.edu");
     Console.WriteLine($"✓ Found {peopleByEmail.Count} person/people\n");
 
     Console.WriteLine("Example 3: Get accounts for a specific IAM ID");
