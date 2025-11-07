@@ -338,6 +338,62 @@ The client code is automatically regenerated from the OpenAPI specification duri
 - 🔄 Retry policies with Polly
 - 📝 Enhanced logging and diagnostics
 
+## Local development, secrets, and running tests
+
+The repository includes a small example app and an xUnit integration test project. The example and tests load configuration from `appsettings.json` and then override sensitive values from user secrets or environment variables.
+
+Quick steps to run the example locally:
+
+1. Add your Rosetta credentials to user secrets for the example project (the example project uses UserSecretsId `db36e8a1-703d-48f0-af34-05f22ba84854`):
+
+```bash
+cd UCD.Rosetta.Client/UCD.Rosetta.Client.Example
+dotnet user-secrets set "RosettaClient:ClientId" "<your-client-id>"
+dotnet user-secrets set "RosettaClient:ClientSecret" "<your-client-secret>"
+dotnet user-secrets set "RosettaClient:TokenUrl" "https://your-oauth-server.com/token"
+```
+
+2. Run the example:
+
+```bash
+dotnet run --project UCD.Rosetta.Client.Example
+```
+
+Running integration tests:
+
+- The integration test project `UCD.Rosetta.Client.IntegrationTests` shares the same UserSecretsId as the example project so the commands above are sufficient for tests as well.
+- Tests also read environment variables, which is useful for CI. The supported environment variable names mirror the configuration keys (for example: `RosettaClient__ClientId` and `RosettaClient__ClientSecret`).
+
+Run tests locally with:
+
+```bash
+dotnet test UCD.Rosetta.Client.IntegrationTests
+```
+
+Debugging API responses
+
+- When diagnosing deserialization errors the generated client exposes a configurable debug hook that logs response metadata and a truncated response body. Set `DebugResponseMaxLength` on the `RosettaClient` wrapper to control output size:
+
+    - `0` = disabled (default)
+    - `-1` = unlimited (print full response)
+    - positive integer = maximum number of characters to print
+
+Example (in code):
+
+```csharp
+var client = new RosettaClient(options);
+client.DebugResponseMaxLength = 4096; // print up to 4KiB of response body for debugging
+```
+
+Why this extra configuration exists
+
+- The Rosetta API spec contains several endpoints typed as untyped objects (OpenAPI `type: object` or arrays of `object`). The generated client uses `System.Text.Json`. To handle runtime variations in responses (arrays, single objects, or plain strings) a small custom `JsonConverter` is registered at runtime which defensively parses these responses into an `ICollection<object>` safely. This keeps the library compatible with `System.Text.Json` (no Newtonsoft dependency) while being resilient to inconsistent server payloads.
+
+CI notes
+
+- For CI runs store secrets as protected pipeline variables or use your cloud provider's secret store and set the corresponding environment variables (`RosettaClient__ClientId`, `RosettaClient__ClientSecret`, etc.).
+- Avoid committing secrets to the repository. `appsettings.json` contains non-sensitive defaults and is safe to commit.
+
 ## License
 
 MIT License - See LICENSE file for details

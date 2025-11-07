@@ -6,10 +6,11 @@ using Microsoft.Extensions.Configuration;
 Console.WriteLine("UC Davis Rosetta API Client Example");
 Console.WriteLine("====================================\n");
 
-// Configuration - load from appsettings.json, then override with user secrets
+// Configuration - load from appsettings.json, user secrets and environment variables
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddUserSecrets(System.Reflection.Assembly.GetEntryAssembly() ?? typeof(Program).Assembly, optional: true)
+    .AddEnvironmentVariables(prefix: "ROSETTA_")
     .Build();
 
 var options = new RosettaClientOptions();
