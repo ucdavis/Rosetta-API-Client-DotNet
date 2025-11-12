@@ -33,7 +33,7 @@ try
 
     Console.WriteLine("Example 2: Search for a person by email");
     Console.WriteLine("----------------------------------------");
-    var peopleByEmail = await client.Api.PeopleAllAsync(email: "swebermilne@ucdavis.edu");
+    var peopleByEmail = await client.Api.PeopleAllAsync(email: "email-address@ucdavis.edu");
     Console.WriteLine($"✓ Found {peopleByEmail.Count} person/people\n");
 
     Console.WriteLine("Example 3: Get accounts for a specific IAM ID");

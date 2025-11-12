@@ -62,7 +62,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     public async Task PeopleAllAsync_WithEmail_ReturnsResults()
     {
         // Arrange
-        var email = "swebermilne@ucdavis.edu";
+        var email = _fixture.TestData.TestEmail ?? "swebermilne@ucdavis.edu";
 
         // Act
         var result = await _fixture.Client.Api.PeopleAllAsync(email: email);
@@ -84,28 +84,30 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         Assert.NotNull(result);
     }
 
-    [Fact(Skip = "Requires specific IAM ID")]
+    [SkippableFact]
     public async Task PeopleAllAsync_WithIamId_ReturnsResults()
     {
-        // Arrange
-        var iamId = "1234567890"; // Replace with actual IAM ID for testing
+        // Skip if no test data configured
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamId), 
+            "TestData:IamId not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.PeopleAllAsync(iamid: iamId);
+        var result = await _fixture.Client.Api.PeopleAllAsync(iamid: _fixture.TestData.IamId);
 
         // Assert
         Assert.NotNull(result);
         Assert.True(result.Count > 0, "Expected at least one result");
     }
 
-    [Fact(Skip = "Requires specific IAM ID")]
+    [SkippableFact]
     public async Task PeopleAsync_WithId_ReturnsResult()
     {
-        // Arrange
-        var id = "1234567890"; // Replace with actual IAM ID for testing
+        // Skip if no test data configured
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamId), 
+            "TestData:IamId not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.PeopleAsync(id);
+        var result = await _fixture.Client.Api.PeopleAsync(_fixture.TestData.IamId!);
 
         // Assert
         Assert.NotNull(result);
@@ -115,40 +117,43 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
     #region Accounts
 
-    [Fact(Skip = "Requires specific IAM ID")]
+    [SkippableFact]
     public async Task AccountsAllAsync_WithIamId_ReturnsResults()
     {
-        // Arrange
-        var iamId = "1234567890"; // Replace with actual IAM ID for testing
+        // Skip if no test data configured
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamId), 
+            "TestData:IamId not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.AccountsAllAsync(iamid: iamId);
+        var result = await _fixture.Client.Api.AccountsAllAsync(iamid: _fixture.TestData.IamId);
 
         // Assert
         Assert.NotNull(result);
     }
 
-    [Fact(Skip = "Requires specific IAM IDs")]
+    [SkippableFact]
     public async Task AccountsAllAsync_WithIamIds_ReturnsResults()
     {
-        // Arrange
-        var iamIds = "1234567890,0987654321"; // Replace with actual IAM IDs for testing
+        // Skip if no test data configured
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds), 
+            "TestData:IamIds not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.AccountsAllAsync(iamids: iamIds);
+        var result = await _fixture.Client.Api.AccountsAllAsync(iamids: _fixture.TestData.IamIds);
 
         // Assert
         Assert.NotNull(result);
     }
 
-    [Fact(Skip = "Requires specific account ID")]
+    [SkippableFact]
     public async Task AccountsAsync_WithId_ReturnsResult()
     {
-        // Arrange
-        var id = "account-id"; // Replace with actual account ID for testing
+        // Skip if no test data configured
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.AccountId), 
+            "TestData:AccountId not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.AccountsAsync(id);
+        var result = await _fixture.Client.Api.AccountsAsync(_fixture.TestData.AccountId!);
 
         // Assert
         Assert.NotNull(result);
@@ -168,14 +173,15 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         Assert.NotNull(result);
     }
 
-    [Fact(Skip = "Requires specific employee ID")]
+    [SkippableFact]
     public async Task EmployeesAsync_WithId_ReturnsResult()
     {
-        // Arrange
-        var id = "1234567890"; // Replace with actual employee ID for testing
+        // Skip if no test data configured
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.EmployeeId), 
+            "TestData:EmployeeId not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.EmployeesAsync(id);
+        var result = await _fixture.Client.Api.EmployeesAsync(_fixture.TestData.EmployeeId!);
 
         // Assert
         Assert.NotNull(result);
@@ -195,14 +201,15 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         Assert.NotNull(result);
     }
 
-    [Fact(Skip = "Requires specific student ID")]
+    [SkippableFact]
     public async Task StudentsAsync_WithId_ReturnsResult()
     {
-        // Arrange
-        var id = "1234567890"; // Replace with actual student ID for testing
+        // Skip if no test data configured
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.StudentId), 
+            "TestData:StudentId not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.StudentsAsync(id);
+        var result = await _fixture.Client.Api.StudentsAsync(_fixture.TestData.StudentId!);
 
         // Assert
         Assert.NotNull(result);

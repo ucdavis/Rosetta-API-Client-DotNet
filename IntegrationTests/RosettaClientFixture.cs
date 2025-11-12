@@ -12,6 +12,7 @@ public class RosettaClientFixture : IDisposable
 {
     public RosettaClient Client { get; }
     public RosettaClientOptions Options { get; }
+    public TestDataOptions TestData { get; }
 
     public RosettaClientFixture()
     {
@@ -23,6 +24,9 @@ public class RosettaClientFixture : IDisposable
 
         Options = new RosettaClientOptions();
         configuration.GetSection("RosettaClient").Bind(Options);
+
+        TestData = new TestDataOptions();
+        configuration.GetSection("TestData").Bind(TestData);
 
         // Create the client
         Client = new RosettaClient(Options);
