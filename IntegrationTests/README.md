@@ -55,6 +55,55 @@ export ROSETTA_TestData__TestEmail="someone@ucdavis.edu"
 
 **Note:** Use double underscores (`__`) to represent nested configuration sections in environment variables.
 
+## Debug Logging
+
+Enable debug logging to see raw API response payloads during test execution. This is useful for troubleshooting issues or understanding API responses.
+
+When enabled, every API response will be logged to the console with:
+- Request method and path (e.g., `GET /api/v1/me`)
+- HTTP status code (e.g., `200 OK`)
+- Content-Type header
+- Response body length
+- Response body content (full or truncated based on max length)
+
+### Enable via User Secrets (Local Development)
+
+```bash
+dotnet user-secrets set "TestData:EnableDebugLogging" "true" --project Example
+dotnet user-secrets set "TestData:DebugResponseMaxLength" "4000" --project Example  # Optional: default is 2000
+```
+
+### Enable via Environment Variables (CI/CD)
+
+```bash
+export ROSETTA_TestData__EnableDebugLogging=true
+export ROSETTA_TestData__DebugResponseMaxLength=4000  # Optional
+```
+
+### Debug Response Max Length Options
+
+- `0` - Disable response logging (same as EnableDebugLogging=false)
+- `-1` - Unlimited (print full response, be careful with large responses!)
+- `2000` - Default, print up to 2000 characters
+- Any positive number - Truncate response to that many characters
+
+### Example Output
+
+When debug logging is enabled, you'll see output like this for each API call:
+
+```
+=== DEBUG: API Response ===
+Request: GET /api/v1/me
+Status: 200 OK
+Content-Type: application/json; charset=utf-8
+Body Length: 1523 characters
+Body:
+{"iamId":"1234567890","name":"John Doe","email":"johndoe@ucdavis.edu",...}
+=========================
+```
+
+**Note:** Debug logging prints raw JSON responses to the console, which can be verbose. Only enable when actively debugging.
+
 ## Running Tests
 
 Run all tests:

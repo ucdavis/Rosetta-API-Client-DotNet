@@ -30,6 +30,13 @@ public class RosettaClientFixture : IDisposable
 
         // Create the client
         Client = new RosettaClient(Options);
+
+        // Configure debug logging if enabled
+        if (TestData.EnableDebugLogging)
+        {
+            Client.DebugResponseMaxLength = TestData.DebugResponseMaxLength;
+            Console.WriteLine($"[Debug] Response logging enabled (max length: {(TestData.DebugResponseMaxLength == -1 ? "unlimited" : TestData.DebugResponseMaxLength.ToString())})");
+        }
     }
 
     public void Dispose()

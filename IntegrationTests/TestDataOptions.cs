@@ -41,4 +41,21 @@ public class TestDataOptions
     /// Example: "someone@ucdavis.edu"
     /// </summary>
     public string? TestEmail { get; set; }
+
+    /// <summary>
+    /// Enable debug logging of API response payloads during tests.
+    /// When enabled, raw response data will be printed to console.
+    /// Default: false
+    /// 
+    /// Set via user secrets: dotnet user-secrets set "TestData:EnableDebugLogging" "true" --project Example
+    /// Set via env var: export ROSETTA_TestData__EnableDebugLogging=true
+    /// </summary>
+    public bool EnableDebugLogging { get; set; }
+
+    /// <summary>
+    /// Maximum length of response payload to log when debug logging is enabled.
+    /// Use -1 for unlimited, 0 to disable, or a positive number to truncate.
+    /// Default: 2000 characters
+    /// </summary>
+    public int DebugResponseMaxLength { get; set; } = 2000;
 }

@@ -17,15 +17,29 @@ public partial class Client
 
     partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response)
     {
-        if (DebugResponseMaxLength != 0)
+        if (DebugResponseMaxLength != 0 && response.Content != null)
         {
+            // Read the response body - we need to buffer it so it can be read again
+            var responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            
+            // Re-create the content with the buffered string so it can be read again during deserialization
+            var newContent = new System.Net.Http.StringContent(responseBody, 
+                System.Text.Encoding.UTF8, 
+                response.Content.Headers.ContentType?.MediaType ?? "application/json");
+            
+            // Copy headers from original content
+            foreach (var header in response.Content.Headers)
+            {
+                newContent.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            }
+            
+            response.Content = newContent;
+            
             // Log response details to console
             Console.WriteLine("=== DEBUG: API Response ===");
+            Console.WriteLine($"Request: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri?.PathAndQuery}");
             Console.WriteLine($"Status: {(int)response.StatusCode} {response.StatusCode}");
             Console.WriteLine($"Content-Type: {response.Content.Headers.ContentType}");
-            
-            // Read and log the response body
-            var responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             Console.WriteLine($"Body Length: {responseBody.Length} characters");
             Console.WriteLine("Body:");
             
