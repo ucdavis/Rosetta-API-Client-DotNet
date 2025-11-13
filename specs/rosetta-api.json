@@ -309,7 +309,7 @@
     },
     "/people": {
       "get": {
-        "description": "Returns a collection of people.\nRule: At most ONE of (iamid | iamids | email) may be supplied. If more than one is provided, 400 is returned.        \n",
+        "description": "Returns a collection of people.\n",
         "consumes": [
           "application/json"
         ],
@@ -319,7 +319,7 @@
         "parameters": [
           {
             "name": "iamid",
-            "description": "Return all accounts for a specific IAM ID",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
             "required": false,
             "in": "query",
             "type": "string",
@@ -327,7 +327,7 @@
           },
           {
             "name": "iamids",
-            "description": "Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)",
+            "description": "Comma-separated list of 10-digit IAM IDs",
             "required": false,
             "in": "query",
             "type": "string",
@@ -340,6 +340,22 @@
             "in": "query",
             "type": "string",
             "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "affiliationContains",
+            "description": "Comma-separated list of possible affiltion values",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:employee|student|faculty)(?:\\s*,\\s*(?:employee|student|faculty))*\\s*$"
+          },
+          {
+            "name": "employmentStatus",
+            "description": "Comma separated list of possible employment status codes",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(?:\\s*,\\s*(?:is_ssp|is_campus_employee|is_health_employee))*\\s*$"
           },
           {
             "name": "limit",
@@ -355,52 +371,73 @@
             "description": "",
             "x-amf-mediaType": "application/json",
             "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "displayname": "Alex Smith",
+                  "birth_date": "*******",
+                  "provisioning_status": [
+                    {
+                      "primary": "active"
+                    }
+                  ],
+                  "affiliation": [
+                    "student",
+                    "employee",
+                    "faculty"
+                  ],
+                  "employment_status": [
+                    "is_campus_employee",
+                    "is_without_salary"
+                  ],
+                  "names": {
+                    "lived_first_name": "Alex",
+                    "lived_middle_name": "J",
+                    "lived_last_name": "Smith",
+                    "legal_first_name": "*******",
+                    "legal_middle_name": "*******",
+                    "legal_last_name": "*******"
+                  },
+                  "ids": {
+                    "iam_id": "123456",
+                    "student_id": "A12345678",
+                    "employee_id": "E543210",
+                    "mail_id": "asmith",
+                    "pidm": "456789"
+                  },
+                  "email": [
+                    {
+                      "primary": "asmith@ucdavis.edu"
+                    },
+                    {
+                      "work": "asmith@ucdavis.edu"
+                    },
+                    {
+                      "personal": "*******"
+                    }
+                  ],
+                  "phone": [
+                    {
+                      "primary": "*******"
+                    },
+                    {
+                      "personal": "*******"
+                    }
+                  ],
+                  "student_association": {
+                    "college": "ENG",
+                    "major": "CPSC",
+                    "academic_level": "UG",
+                    "class_level": "JR"
+                  },
+                  "modified_date": "2025-11-07T12:55:31Z",
+                  "create_date": "2023-08-14T09:22:10Z"
+                }
+              ],
               "type": "array",
               "items": {
-                "type": "object"
+                "$ref": "#/definitions/Person"
               }
-            }
-          },
-          "400": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "example": {
-                "error": "Only one of query parameters (iamid, iamids, email) may be provided."
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/people/{id}": {
-      "get": {
-        "description": "Returns a specific person by ID",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "object"
             }
           }
         },
@@ -743,6 +780,200 @@
       "properties": {
         "attributes": {
           "type": "object"
+        }
+      }
+    },
+    "Person": {
+      "description": "An object containing identity data about a user.",
+      "type": "object",
+      "required": [
+        "iam_id",
+        "displayname",
+        "birth_date",
+        "provisioning_status",
+        "affiliation",
+        "employment_status",
+        "names",
+        "ids",
+        "email",
+        "phone",
+        "student_association",
+        "modified_date",
+        "create_date"
+      ],
+      "properties": {
+        "iam_id": {
+          "type": "string"
+        },
+        "displayname": {
+          "type": "string"
+        },
+        "birth_date": {
+          "type": "string"
+        },
+        "provisioning_status": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "primary"
+            ],
+            "properties": {
+              "primary": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "affiliation": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "employment_status": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "names": {
+          "type": "object",
+          "required": [
+            "lived_first_name",
+            "lived_last_name",
+            "legal_first_name",
+            "legal_last_name"
+          ],
+          "properties": {
+            "lived_first_name": {
+              "type": "string"
+            },
+            "lived_middle_name": {
+              "type": "string"
+            },
+            "lived_last_name": {
+              "type": "string"
+            },
+            "legal_first_name": {
+              "type": "string"
+            },
+            "legal_middle_name": {
+              "type": "string"
+            },
+            "legal_last_name": {
+              "type": "string"
+            }
+          }
+        },
+        "ids": {
+          "type": "object",
+          "required": [
+            "iam_id"
+          ],
+          "properties": {
+            "iam_id": {
+              "type": "string"
+            },
+            "student_id": {
+              "type": "string"
+            },
+            "mothra_id": {
+              "type": "string"
+            },
+            "employee_id": {
+              "type": "string"
+            },
+            "mail_id": {
+              "type": "string"
+            },
+            "pidm": {
+              "type": "string"
+            },
+            "pps_id": {
+              "type": "string"
+            },
+            "cosmos_id": {
+              "type": "string"
+            },
+            "cpe_id": {
+              "type": "string"
+            },
+            "health_affiliate_id": {
+              "type": "string"
+            },
+            "ucanr_id": {
+              "type": "string"
+            },
+            "usda_whnrc_id": {
+              "type": "string"
+            },
+            "affiliate_id": {
+              "type": "string"
+            },
+            "ucnet_id": {
+              "type": "string"
+            }
+          }
+        },
+        "email": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "primary": {
+                "type": "string"
+              },
+              "work": {
+                "type": "string"
+              },
+              "personal": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "phone": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "primary": {
+                "type": "string"
+              },
+              "work": {
+                "type": "string"
+              },
+              "personal": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "student_association": {
+          "type": "object",
+          "properties": {
+            "college": {
+              "type": "string"
+            },
+            "major": {
+              "type": "string"
+            },
+            "academic_level": {
+              "type": "string"
+            },
+            "class_level": {
+              "type": "string"
+            }
+          }
+        },
+        "modified_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "create_date": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     }

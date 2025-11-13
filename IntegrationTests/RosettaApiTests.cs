@@ -59,40 +59,40 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     #region People
 
     [Fact]
-    public async Task PeopleAllAsync_WithEmail_ReturnsResults()
+    public async Task PeopleAsync_WithEmail_ReturnsResults()
     {
         // Arrange
         var email = _fixture.TestData.TestEmail ?? "swebermilne@ucdavis.edu";
 
         // Act
-        var result = await _fixture.Client.Api.PeopleAllAsync(email: email);
+        var result = await _fixture.Client.Api.PeopleAsync(email: email);
 
         // Assert
         Assert.NotNull(result);
     }
 
     [Fact]
-    public async Task PeopleAllAsync_WithLimit_ReturnsResults()
+    public async Task PeopleAsync_WithLimit_ReturnsResults()
     {
         // Arrange
         var limit = 5;
 
         // Act
-        var result = await _fixture.Client.Api.PeopleAllAsync(limit: limit);
+        var result = await _fixture.Client.Api.PeopleAsync(limit: limit);
 
         // Assert
         Assert.NotNull(result);
     }
 
     [SkippableFact]
-    public async Task PeopleAllAsync_WithIamId_ReturnsResults()
+    public async Task PeopleAsync_WithIamId_ReturnsResults()
     {
         // Skip if no test data configured
         Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamId), 
             "TestData:IamId not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.PeopleAllAsync(iamid: _fixture.TestData.IamId);
+        var result = await _fixture.Client.Api.PeopleAsync(iamid: _fixture.TestData.IamId);
 
         // Assert
         Assert.NotNull(result);
@@ -100,14 +100,14 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task PeopleAsync_WithId_ReturnsResult()
+    public async Task PeopleAsync_WithIamIds_ReturnsResults()
     {
         // Skip if no test data configured
-        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamId), 
-            "TestData:IamId not configured in user secrets or environment variables");
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds), 
+            "TestData:IamIds not configured in user secrets or environment variables");
 
         // Act
-        var result = await _fixture.Client.Api.PeopleAsync(_fixture.TestData.IamId!);
+        var result = await _fixture.Client.Api.PeopleAsync(iamids: _fixture.TestData.IamIds);
 
         // Assert
         Assert.NotNull(result);

@@ -103,21 +103,15 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// Returns a collection of people.
-        /// <br/>Rule: At most ONE of (iamid | iamids | email) may be supplied. If more than one is provided, 400 is returned.
         /// </remarks>
-        /// <param name="iamid">Return all accounts for a specific IAM ID</param>
-        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="affiliationContains">Comma-separated list of possible affiltion values</param>
+        /// <param name="employmentStatus">Comma separated list of possible employment status codes</param>
         /// <param name="limit">The maximum number of records to</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> PeopleAllAsync(string? iamid = null, string? iamids = null, string? email = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <remarks>
-        /// Returns a specific person by ID
-        /// </remarks>
-        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<object> PeopleAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? iamid = null, string? iamids = null, string? email = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -946,14 +940,15 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// Returns a collection of people.
-        /// <br/>Rule: At most ONE of (iamid | iamids | email) may be supplied. If more than one is provided, 400 is returned.
         /// </remarks>
-        /// <param name="iamid">Return all accounts for a specific IAM ID</param>
-        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="affiliationContains">Comma-separated list of possible affiltion values</param>
+        /// <param name="employmentStatus">Comma separated list of possible employment status codes</param>
         /// <param name="limit">The maximum number of records to</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> PeopleAllAsync(string? iamid = null, string? iamids = null, string? email = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? iamid = null, string? iamids = null, string? email = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -980,6 +975,14 @@ namespace UCD.Rosetta.Client.Generated
                     if (email != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employmentStatus != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     if (limit != null)
                     {
@@ -1012,94 +1015,7 @@ namespace UCD.Rosetta.Client.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<object>>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new RosettaApiException<object>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <remarks>
-        /// Returns a specific person by ID
-        /// </remarks>
-        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<object> PeopleAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-                    var urlBuilder_ = new System.Text.StringBuilder();
-                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "people/{id}"
-                    urlBuilder_.Append("people/");
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
-                        foreach (var item_ in response_.Headers)
-                            headers_[item_.Key] = item_.Value;
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -2060,6 +1976,202 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("attributes")]
         [System.ComponentModel.DataAnnotations.Required]
         public object Attributes { get; set; } = new object();
+
+    }
+
+    /// <summary>
+    /// An object containing identity data about a user.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Person
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("displayname")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Displayname { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("birth_date")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Birth_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("provisioning_status")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Provisioning_status> Provisioning_status { get; set; } = new System.Collections.Generic.List<Provisioning_status>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("affiliation")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Affiliation { get; set; } = new System.Collections.Generic.List<string>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("employment_status")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Employment_status { get; set; } = new System.Collections.Generic.List<string>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("names")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Names Names { get; set; } = new Names();
+
+        [System.Text.Json.Serialization.JsonPropertyName("ids")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Ids Ids { get; set; } = new Ids();
+
+        [System.Text.Json.Serialization.JsonPropertyName("email")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Email> Email { get; set; } = new System.Collections.Generic.List<Email>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("phone")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Phone> Phone { get; set; } = new System.Collections.Generic.List<Phone>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("student_association")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Student_association Student_association { get; set; } = new Student_association();
+
+        [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.DateTimeOffset Modified_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("create_date")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.DateTimeOffset Create_date { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Provisioning_status
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("primary")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Primary { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Names
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("lived_first_name")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Lived_first_name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("lived_middle_name")]
+        public string? Lived_middle_name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("lived_last_name")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Lived_last_name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("legal_first_name")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Legal_first_name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("legal_middle_name")]
+        public string? Legal_middle_name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("legal_last_name")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Legal_last_name { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Ids
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("student_id")]
+        public string? Student_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("mothra_id")]
+        public string? Mothra_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
+        public string? Employee_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("mail_id")]
+        public string? Mail_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("pidm")]
+        public string? Pidm { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("pps_id")]
+        public string? Pps_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cosmos_id")]
+        public string? Cosmos_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cpe_id")]
+        public string? Cpe_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("health_affiliate_id")]
+        public string? Health_affiliate_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ucanr_id")]
+        public string? Ucanr_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_id")]
+        public string? Usda_whnrc_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("affiliate_id")]
+        public string? Affiliate_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ucnet_id")]
+        public string? Ucnet_id { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Email
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("primary")]
+        public string? Primary { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("work")]
+        public string? Work { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("personal")]
+        public string? Personal { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Phone
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("primary")]
+        public string? Primary { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("work")]
+        public string? Work { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("personal")]
+        public string? Personal { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Student_association
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("college")]
+        public string? College { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("major")]
+        public string? Major { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("academic_level")]
+        public string? Academic_level { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("class_level")]
+        public string? Class_level { get; set; } = default!;
 
     }
 
