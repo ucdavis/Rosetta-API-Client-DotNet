@@ -27,42 +27,13 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
     #endregion
 
-    #region Identities
-
-    [Fact]
-    public async Task IdentitiesAsync_WithLimit_ReturnsResults()
-    {
-        // Arrange
-        var limit = 10;
-
-        // Act
-        var result = await _fixture.Client.Api.IdentitiesAsync(limit: limit);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.True(result.Count <= limit, $"Expected at most {limit} results, got {result.Count}");
-    }
-
-    [Fact]
-    public async Task IdentitiesAsync_WithoutLimit_ReturnsResults()
-    {
-        // Act
-        var result = await _fixture.Client.Api.IdentitiesAsync();
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.True(result.Count > 0, "Expected at least one result");
-    }
-
-    #endregion
-
     #region People
 
     [Fact]
     public async Task PeopleAsync_WithEmail_ReturnsResults()
     {
         // Arrange
-        var email = _fixture.TestData.TestEmail ?? "swebermilne@ucdavis.edu";
+        var email = _fixture.TestData.TestEmail ?? "testemail@ucdavis.edu";
 
         // Act
         var result = await _fixture.Client.Api.PeopleAsync(email: email);
@@ -264,46 +235,6 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     {
         // Act
         var result = await _fixture.Client.Api.MajorsAsync();
-
-        // Assert
-        Assert.NotNull(result);
-    }
-
-    [Fact]
-    public async Task BaseprofilesAsync_ReturnsResults()
-    {
-        // Act
-        var result = await _fixture.Client.Api.BaseprofilesAsync();
-
-        // Assert
-        Assert.NotNull(result);
-    }
-
-    [Fact]
-    public async Task EmploymentstatusAsync_ReturnsResults()
-    {
-        // Act
-        var result = await _fixture.Client.Api.EmploymentstatusAsync();
-
-        // Assert
-        Assert.NotNull(result);
-    }
-
-    [Fact]
-    public async Task UcpathentitlementsAsync_ReturnsResults()
-    {
-        // Act
-        var result = await _fixture.Client.Api.UcpathentitlementsAsync();
-
-        // Assert
-        Assert.NotNull(result);
-    }
-
-    [Fact]
-    public async Task StudentassociationsAsync_ReturnsResults()
-    {
-        // Act
-        var result = await _fixture.Client.Api.StudentassociationsAsync();
 
         // Assert
         Assert.NotNull(result);

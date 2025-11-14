@@ -41,12 +41,7 @@ try
     var accounts = await client.Api.AccountsAllAsync(iamid: "1234567890");
     Console.WriteLine($"✓ Found {accounts.Count} account(s)\n");
 
-    Console.WriteLine("Example 4: Get identities modified in last 24 hours");
-    Console.WriteLine("----------------------------------------------------");
-    var identities = await client.Api.IdentitiesAsync(limit: 10);
-    Console.WriteLine($"✓ Retrieved {identities.Count} identities\n");
-
-    Console.WriteLine("Example 5: Get all groups");
+    Console.WriteLine("Example 4: Get all groups");
     Console.WriteLine("-------------------------");
     var groups = await client.Api.GroupsAsync();
     Console.WriteLine($"✓ Retrieved {groups.Count} groups\n");
