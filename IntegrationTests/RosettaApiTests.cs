@@ -23,6 +23,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.Fail($"MeAsync returns untyped 'object'. API spec incomplete. Response: {result}");
     }
 
     #endregion
@@ -53,6 +54,8 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.True(result.Count <= limit, 
+            $"Expected at most {limit} results, got {result.Count}");
     }
 
     [SkippableFact]
@@ -100,6 +103,8 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        var first = result.FirstOrDefault();
+        Assert.Fail($"AccountsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
     }
 
     [SkippableFact]
@@ -114,6 +119,25 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        var first = result.FirstOrDefault();
+        Assert.Fail($"AccountsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
+    }
+
+    [Fact]
+    public async Task AccountsAllAsync_WithLimit_ReturnsResults()
+    {
+        // Arrange
+        var limit = 10;
+
+        // Act
+        var result = await _fixture.Client.Api.AccountsAllAsync(limit: limit);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.True(result.Count <= limit, 
+            $"Expected at most {limit} results, got {result.Count}");
+        var first = result.FirstOrDefault();
+        Assert.Fail($"AccountsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
     }
 
     [SkippableFact]
@@ -128,6 +152,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.Fail($"AccountsAsync returns untyped 'object'. API spec incomplete. Response: {result}");
     }
 
     #endregion
@@ -142,6 +167,8 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        var first = result.FirstOrDefault();
+        Assert.Fail($"EmployeesAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
     }
 
     [SkippableFact]
@@ -156,6 +183,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.Fail($"EmployeesAsync returns untyped 'object'. API spec incomplete. Response: {result}");
     }
 
     #endregion
@@ -170,6 +198,8 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        var first = result.FirstOrDefault();
+        Assert.Fail($"StudentsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
     }
 
     [SkippableFact]
@@ -184,6 +214,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.Fail($"StudentsAsync returns untyped 'object'. API spec incomplete. Response: {result}");
     }
 
     #endregion
@@ -198,6 +229,8 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        var first = result.FirstOrDefault();
+        Assert.Fail($"GroupsAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
     }
 
     [Fact]
@@ -208,6 +241,8 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        var first = result.FirstOrDefault();
+        Assert.Fail($"OrganizationsAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
     }
 
     [Fact]
@@ -218,6 +253,8 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        var first = result.FirstOrDefault();
+        Assert.Fail($"RolesAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
     }
 
     [Fact]
@@ -228,6 +265,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.Fail($"CollegesAsync returns untyped 'object'. API spec incomplete. Response: {result}");
     }
 
     [Fact]
@@ -238,27 +276,49 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.Fail($"MajorsAsync returns untyped 'object'. API spec incomplete. Response: {result}");
     }
 
     #endregion
 
     #region Campaign Contacts
 
-    [Fact(Skip = "CSV file download - test manually")]
+    [Fact]
     public async Task CampaignContactsAsync_ReturnsFile()
     {
         // Arrange
         var limit = 10;
 
         // Act
-        var result = await _fixture.Client.Api.CampaignContactsAsync(limit: limit, save: true);
+        var result = await _fixture.Client.Api.CampaignContactsAsync(limit: limit, save: false);
 
         // Assert
         Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.False(result.IsPartial, "Expected complete response, not partial (206)");
         Assert.NotNull(result.Stream);
+        Assert.True(result.Stream.CanRead, "Expected readable stream");
+        Assert.True(result.Stream.Length > 0, 
+            $"Expected non-empty CSV stream, got {result.Stream.Length} bytes");
+        
+        // Verify Content-Type header suggests CSV
+        if (result.Headers.TryGetValue("Content-Type", out var contentTypes))
+        {
+            var contentType = string.Join(", ", contentTypes);
+            Assert.True(contentType.Contains("csv", StringComparison.OrdinalIgnoreCase) || 
+                       contentType.Contains("text", StringComparison.OrdinalIgnoreCase),
+                $"Expected CSV content type, got: {contentType}");
+        }
+
+        // Basic CSV format validation - read first few bytes to verify it looks like CSV
+        using var reader = new StreamReader(result.Stream, leaveOpen: false);
+        var firstLine = await reader.ReadLineAsync();
+        Assert.NotNull(firstLine);
+        Assert.True(firstLine.Contains(',') || firstLine.Contains('\t'),
+            $"Expected CSV-like content with delimiters, got: {firstLine.Substring(0, Math.Min(100, firstLine.Length))}");
     }
 
-    [Fact(Skip = "CSV file download - test manually")]
+    [Fact]
     public async Task CampaignContactsModifiedAsync_ReturnsFile()
     {
         // Act
@@ -266,7 +326,28 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+        Assert.Equal(200, result.StatusCode);
+        Assert.False(result.IsPartial, "Expected complete response, not partial (206)");
         Assert.NotNull(result.Stream);
+        Assert.True(result.Stream.CanRead, "Expected readable stream");
+        Assert.True(result.Stream.Length > 0, 
+            $"Expected non-empty CSV stream, got {result.Stream.Length} bytes");
+        
+        // Verify Content-Type header suggests CSV
+        if (result.Headers.TryGetValue("Content-Type", out var contentTypes))
+        {
+            var contentType = string.Join(", ", contentTypes);
+            Assert.True(contentType.Contains("csv", StringComparison.OrdinalIgnoreCase) || 
+                       contentType.Contains("text", StringComparison.OrdinalIgnoreCase),
+                $"Expected CSV content type, got: {contentType}");
+        }
+
+        // Basic CSV format validation - read first few bytes to verify it looks like CSV
+        using var reader = new StreamReader(result.Stream, leaveOpen: false);
+        var firstLine = await reader.ReadLineAsync();
+        Assert.NotNull(firstLine);
+        Assert.True(firstLine.Contains(',') || firstLine.Contains('\t'),
+            $"Expected CSV-like content with delimiters, got: {firstLine.Substring(0, Math.Min(100, firstLine.Length))}");
     }
 
     #endregion
