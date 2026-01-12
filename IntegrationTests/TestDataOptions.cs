@@ -42,6 +42,8 @@ public class TestDataOptions
     /// </summary>
     public string? TestEmail { get; set; }
 
+    public string? TestDisplayName { get; set; }
+
     /// <summary>
     /// Enable debug logging of API response payloads during tests.
     /// When enabled, raw response data will be printed to console.
