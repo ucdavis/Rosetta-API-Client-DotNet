@@ -1,3 +1,5 @@
+using Shouldly;
+
 namespace IntegrationTests;
 
 /// <summary>
@@ -71,6 +73,13 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         // Assert
         Assert.NotNull(result);
         Assert.True(result.Count > 0, "Expected at least one result");
+
+        //I like shouldly...
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(0);
+        result.ElementAt(0).Iam_id.ShouldBe(_fixture.TestData.IamId);
+        result.ElementAt(0).Displayname.ShouldNotBeNullOrEmpty();
+        result.ElementAt(0).Displayname.ShouldBe(_fixture.TestData.TestDisplayName);
     }
 
     [SkippableFact]
