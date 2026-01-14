@@ -80,6 +80,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         result.ElementAt(0).Iam_id.ShouldBe(_fixture.TestData.IamId);
         result.ElementAt(0).Displayname.ShouldNotBeNullOrEmpty();
         result.ElementAt(0).Displayname.ShouldBe(_fixture.TestData.TestDisplayName);
+        result.ElementAt(0).Manager_iam_id.ShouldEndWith("584"); //If using Jason's test user, manager iam id ends with 584
     }
 
     [SkippableFact]

@@ -10,6 +10,11 @@
   "schemes": [
     "https"
   ],
+  "externalDocs": {
+    "url": "http://",
+    "description": "  \n  type ProvisioningStatus {\n    primary: String\n  }\n\n  type NameRecord {\n    lived_first_name: String\n    lived_middle_name: String\n    lived_last_name: String\n    legal_first_name: String\n    legal_middle_name: String\n    legal_last_name: String\n  }\n\n  type IdentityIds {\n    iam_id: String\n    login_id: String\n    student_id: String\n    mothra_id: String\n    employee_id: String\n    mail_id: String\n    pidm: String\n    pps_id: String\n    cosmos_id: String\n    cpe_id: String\n    health_affiliate_id: String\n    ucanr_id: String\n    usda_whnrc_id: String\n    affiliate_id: String\n    ucnet_id: String\n  }\n\n  type EmailAddresses {\n    primary: String\n    work: String\n    personal: String\n  }\n\n  type PhoneNumbers {\n    primary: String\n    work: String\n    personal: String\n  }\n\n  type StudentAssociation {\n    college: String\n    major: String\n    academic_level: String\n    class_level: String\n  }\n\n  type PayrollAssociation {\n    employee_record: String\n    employee_id: String\n    position_number: String\n    position_title: String\n    relationship_to_organization: String\n    employee_classification: String\n    employee_classification_description: String\n    status: String\n    hire_date: String\n    start_date: String\n    termination_date: String\n    fte_percentage: String\n    reports_to_position: String\n    job_type_id: String\n    job_type_description: String\n    job_family_id: String\n    job_family_description: String\n    organization_id: String\n    organization_title: String\n    division_id: String\n    division_title: String\n    subdivision_id: String\n    subdivision_title: String\n    business_unit_id: String\n    business_unit_title: String\n    department_id: String\n    department_title: String\n    department_short_title: String\n  }\n\n  type Person {\n    iam_id: ID\n    displayname: String\n    birth_date: String\n    manager_iam_id: String\n    provisioning_status: [ProvisioningStatus]\n    affiliation: [String]\n    employment_status: [String]\n    name: [NameRecord]\n    id: [IdentityIds]\n    email: [EmailAddresses]\n    phone: [PhoneNumbers]\n    student_association: [StudentAssociation]\n    payroll_association: [PayrollAssociation]\n    modified_date: String\n    create_date: String\n  }\n\n  type College {\n    college_code: String\n    college_title: String\n  }\n\n  type Major {\n    major_code: String\n    major_title: String\n    major_status: String\n  }\n\n  type Query {\n    colleges(\n      college_code: String\n      college_title: String\n    ): [College]\n    majors(\n      major_code: String\n      major_title: String\n      major_status: String\n    ): [Major]\n    people(\n      iamid: String\n      manager_iam_id: String\n      iamids: [String]\n      email: String\n      emails: [String]\n      loginid: String\n      employeeid: String\n      studentid: String\n      mailid: String\n      pidm: String\n      mothraid: String\n      pps_id: String\n      cosmos_id: String\n      cpe_id: String\n      health_affiliate_id: String\n      ucanr_id: String\n      usda_whnrc_id: String\n      affiliate_id: String\n      ucnet_id: String\n      affiliationContains: String\n      employmentStatus: String\n      limit: Int = 10000\n    ): [Person]\n  }",
+    "x-amf-title": "GraphQL Schema"
+  },
   "paths": {
     "/campaign-contacts": {
       "get": {
@@ -170,9 +175,9 @@
         ]
       }
     },
-    "/people": {
-      "get": {
-        "description": "Returns a collection of people.\n",
+    "/graphql": {
+      "post": {
+        "description": "GraphQL endpoint for IAM.\n\nIt supports queries on `Person` as defined in the GraphQL Schema under Documentation.\n\nExamples:\n\nSingle Data Source:\n      {\n          \"query\": \"{ people(limit: 10) { iam_id displayname email { primary } } }\"\n      }\n      \nMultiple Data Sources:\n      {\n      \"query\": \"{ \n          people( limit: 1 affiliationContains: \\\"student\\\" ) \n          { \n              iam_id        \n              name {lived_first_name lived_last_name}\n              id {login_id}\n              email {primary}\n              phone {primary}\n              student_association {college major academic_level class_level}\n          }\n          colleges\n          {\n              college_code\n              college_title\n          }\n          majors\n          {\n              major_title\n              major_code\n          }\n          }\"\n      }\n",
         "consumes": [
           "application/json"
         ],
@@ -180,6 +185,68 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "description": "Standard GraphQL response",
+              "example": {
+                "data": {
+                  "people": [
+                    {
+                      "iam_id": "1234567890",
+                      "displayname": "Alice Example",
+                      "email": [
+                        {
+                          "primary": "aexample@ucdavis.edu"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth_2_0": []
+          }
+        ]
+      }
+    },
+    "/people": {
+      "get": {
+        "description": "Returns a collection of people or a person.\n",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "firstname",
+            "description": "Return all accounts for specified first name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "description": "Return all accounts for specified last name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
           {
             "name": "iamid",
             "description": "Return all accounts for a specific 10-digit IAM ID",
@@ -197,12 +264,111 @@
             "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
           },
           {
+            "name": "manager_iam_id",
+            "description": "Return all accounts for a specific 10-digit manager_iam_id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
             "name": "email",
             "description": "Return user info for a UC Davis email address",
             "required": false,
             "in": "query",
             "type": "string",
             "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "loginid",
+            "description": "Return user info for a UC Davis login id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "employeeid",
+            "description": "Filter by employee ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "studentid",
+            "description": "Filter by student ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mailid",
+            "description": "Filter by mail ID (pre-@ part)",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pidm",
+            "description": "Filter by PIDM",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mothraid",
+            "description": "Filter by Mothra ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pps_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cosmos_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cpe_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "health_affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucanr_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "usda_whnrc_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucnet_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
           },
           {
             "name": "affiliationContains",
@@ -236,65 +402,124 @@
             "schema": {
               "example": [
                 {
-                  "iam_id": "1234567890",
-                  "displayname": "Alex Smith",
-                  "birth_date": "*******",
+                  "iam_id": "1000000001",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1000000002",
                   "provisioning_status": [
                     {
                       "primary": "active"
                     }
                   ],
                   "affiliation": [
-                    "student",
                     "employee",
-                    "faculty"
+                    "student",
+                    "affiliate"
                   ],
                   "employment_status": [
-                    "is_campus_employee",
-                    "is_without_salary"
+                    "is_msp",
+                    "is_msp_career",
+                    "is_campus_employee"
                   ],
                   "name": [
                     {
-                      "lived_first_name": "Alex",
-                      "lived_middle_name": "J",
-                      "lived_last_name": "Smith",
-                      "legal_first_name": "*******",
-                      "legal_middle_name": "*******",
-                      "legal_last_name": "*******"
+                      "lived_first_name": "Alice"
+                    },
+                    {
+                      "lived_middle_name": "Beth"
+                    },
+                    {
+                      "lived_last_name": "Example"
+                    },
+                    {
+                      "legal_first_name": "Alicia"
+                    },
+                    {
+                      "legal_middle_name": "B."
+                    },
+                    {
+                      "legal_last_name": "Exampleton"
                     }
                   ],
                   "id": [
                     {
-                      "iam_id": "123456",
-                      "student_id": "A12345678",
-                      "employee_id": "E543210",
-                      "mail_id": "asmith",
-                      "pidm": "456789"
+                      "iam_id": "1000000001"
+                    },
+                    {
+                      "login_id": "aexample"
+                    },
+                    {
+                      "student_id": "01234567"
+                    },
+                    {
+                      "mothra_id": "00123456"
+                    },
+                    {
+                      "employee_id": "10987654"
+                    },
+                    {
+                      "mail_id": "aexample"
+                    },
+                    {
+                      "pidm": "9876543"
+                    },
+                    {
+                      "pps_id": "76543210"
+                    },
+                    {
+                      "cosmos_id": "COS123456"
+                    },
+                    {
+                      "cpe_id": "CPE98765"
+                    },
+                    {
+                      "health_affiliate_id": "HA12345"
+                    },
+                    {
+                      "ucanr_id": "UCANR54321"
+                    },
+                    {
+                      "usda_whnrc_id": "USDA9999"
+                    },
+                    {
+                      "affiliate_id": "AFF12345"
+                    },
+                    {
+                      "ucnet_id": "UCNET123456"
                     }
                   ],
                   "email": [
                     {
-                      "primary": "asmith@ucdavis.edu"
+                      "primary": "aexample@ucdavis.edu"
                     },
                     {
-                      "work": "asmith@ucdavis.edu"
+                      "work": "aexample@ucdavis.edu"
                     },
                     {
-                      "personal": "*******"
+                      "personal": "alice.personal@example.com"
                     }
                   ],
                   "phone": [
                     {
-                      "primary": "*******"
+                      "primary": "+1-530-555-0100"
                     },
                     {
-                      "personal": "*******"
+                      "work": "+1-530-555-0199"
+                    },
+                    {
+                      "personal": "+1-916-555-0123"
                     }
                   ],
                   "student_association": [
                     {
-                      "college": "ENG",
-                      "major": "CPSC",
+                      "college": "ENGR",
+                      "major": "CSE",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "college": "L&S",
+                      "major": "MATH",
                       "academic_level": "UG",
                       "class_level": "JR"
                     }
@@ -436,15 +661,49 @@
     "/colleges": {
       "get": {
         "description": "Returns a list of all colleges",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "college_code",
+            "description": "Return college information for the specified 2 character college code",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "maxLength": 2
+          },
+          {
+            "name": "college_title",
+            "description": "Return college information for colleges matching the specified college title",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "maxLength": 64
+          }
         ],
         "responses": {
           "200": {
             "description": "",
             "x-amf-mediaType": "application/json",
             "schema": {
-              "type": "object"
+              "example": [
+                {
+                  "college_code": "LS",
+                  "college_title": "College of Letters and Science"
+                },
+                {
+                  "college_code": "AG",
+                  "college_title": "College of Agricultural and Environmental Sciences"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/College"
+              }
             }
           }
         },
@@ -458,15 +717,61 @@
     "/majors": {
       "get": {
         "description": "Returns a list of all majors",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "major_code",
+            "description": "Return major information for the specified 4 character major code",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z]{4}$"
+          },
+          {
+            "name": "major_title",
+            "description": "Return major information for the specified major title",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9&';,\\-()/ ]+$",
+            "maxLength": 64
+          },
+          {
+            "name": "major_status",
+            "description": "Return majors with the specified status (Active = 'A', Inactive = 'I')",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[AaIi]$",
+            "maxLength": 1
+          }
         ],
         "responses": {
           "200": {
             "description": "",
             "x-amf-mediaType": "application/json",
             "schema": {
-              "type": "object"
+              "example": [
+                {
+                  "major_code": "GMDI",
+                  "major_title": "Medical Informatics",
+                  "major_status": "A"
+                },
+                {
+                  "major_code": "CSCI",
+                  "major_title": "Computer Science",
+                  "major_status": "A"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Major"
+              }
             }
           }
         },
@@ -583,6 +888,7 @@
         "iam_id",
         "displayname",
         "birth_date",
+        "manager_iam_id",
         "provisioning_status",
         "affiliation",
         "employment_status",
@@ -602,6 +908,9 @@
           "type": "string"
         },
         "birth_date": {
+          "type": "string"
+        },
+        "manager_iam_id": {
           "type": "string"
         },
         "provisioning_status": {
@@ -634,12 +943,6 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": [
-              "lived_first_name",
-              "lived_last_name",
-              "legal_first_name",
-              "legal_last_name"
-            ],
             "properties": {
               "lived_first_name": {
                 "type": "string"
@@ -666,11 +969,11 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": [
-              "iam_id"
-            ],
             "properties": {
               "iam_id": {
+                "type": "string"
+              },
+              "login_id": {
                 "type": "string"
               },
               "student_id": {
@@ -776,6 +1079,57 @@
         "create_date": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "College": {
+      "description": "College metadata.",
+      "type": "object",
+      "required": [
+        "college_code",
+        "college_title"
+      ],
+      "properties": {
+        "college_code": {
+          "description": "2-character college code",
+          "example": "LS",
+          "type": "string",
+          "maxLength": 2
+        },
+        "college_title": {
+          "description": "College title",
+          "example": "College of Letters and Science",
+          "type": "string",
+          "maxLength": 64
+        }
+      }
+    },
+    "Major": {
+      "description": "Major metadata.",
+      "type": "object",
+      "required": [
+        "major_code",
+        "major_title",
+        "major_status"
+      ],
+      "properties": {
+        "major_code": {
+          "description": "4-character major code",
+          "example": "GMDI",
+          "type": "string",
+          "maxLength": 4
+        },
+        "major_title": {
+          "description": "Major title",
+          "example": "Medical Informatics",
+          "type": "string",
+          "maxLength": 64
+        },
+        "major_status": {
+          "description": "Major status (A=Active, I=Inactive)",
+          "example": "A",
+          "type": "string",
+          "maxLength": 1
         }
       }
     }

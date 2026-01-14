@@ -66,16 +66,66 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns a collection of people.
+        /// GraphQL endpoint for IAM.
+        /// <br/>
+        /// <br/>It supports queries on `Person` as defined in the GraphQL Schema under Documentation.
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>
+        /// <br/>Single Data Source:
+        /// <br/>      {
+        /// <br/>          "query": "{ people(limit: 10) { iam_id displayname email { primary } } }"
+        /// <br/>      }
+        /// <br/>      
+        /// <br/>Multiple Data Sources:
+        /// <br/>      {
+        /// <br/>      "query": "{ 
+        /// <br/>          people( limit: 1 affiliationContains: \"student\" ) 
+        /// <br/>          { 
+        /// <br/>              iam_id        
+        /// <br/>              name {lived_first_name lived_last_name}
+        /// <br/>              id {login_id}
+        /// <br/>              email {primary}
+        /// <br/>              phone {primary}
+        /// <br/>              student_association {college major academic_level class_level}
+        /// <br/>          }
+        /// <br/>          colleges
+        /// <br/>          {
+        /// <br/>              college_code
+        /// <br/>              college_title
+        /// <br/>          }
+        /// <br/>          majors
+        /// <br/>          {
+        /// <br/>              major_title
+        /// <br/>              major_code
+        /// <br/>          }
+        /// <br/>          }"
+        /// <br/>      }
         /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of people or a person.
+        /// </remarks>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
         /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="affiliationContains">Comma-separated list of possible affiltion values</param>
         /// <param name="employmentStatus">Comma separated list of possible employment status codes</param>
         /// <param name="limit">The maximum number of records to</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? iamid = null, string? iamids = null, string? email = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -109,15 +159,20 @@ namespace UCD.Rosetta.Client.Generated
         /// <remarks>
         /// Returns a list of all colleges
         /// </remarks>
+        /// <param name="college_code">Return college information for the specified 2 character college code</param>
+        /// <param name="college_title">Return college information for colleges matching the specified college title</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<object> CollegesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<College>> CollegesAsync(string? college_code = null, string? college_title = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
         /// Returns a list of all majors
         /// </remarks>
+        /// <param name="major_code">Return major information for the specified 4 character major code</param>
+        /// <param name="major_title">Return major information for the specified major title</param>
+        /// <param name="major_status">Return majors with the specified status (Active = 'A', Inactive = 'I')</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<object> MajorsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Major>> MajorsAsync(string? major_code = null, string? major_title = null, string? major_status = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -531,16 +586,136 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns a collection of people.
+        /// GraphQL endpoint for IAM.
+        /// <br/>
+        /// <br/>It supports queries on `Person` as defined in the GraphQL Schema under Documentation.
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>
+        /// <br/>Single Data Source:
+        /// <br/>      {
+        /// <br/>          "query": "{ people(limit: 10) { iam_id displayname email { primary } } }"
+        /// <br/>      }
+        /// <br/>      
+        /// <br/>Multiple Data Sources:
+        /// <br/>      {
+        /// <br/>      "query": "{ 
+        /// <br/>          people( limit: 1 affiliationContains: \"student\" ) 
+        /// <br/>          { 
+        /// <br/>              iam_id        
+        /// <br/>              name {lived_first_name lived_last_name}
+        /// <br/>              id {login_id}
+        /// <br/>              email {primary}
+        /// <br/>              phone {primary}
+        /// <br/>              student_association {college major academic_level class_level}
+        /// <br/>          }
+        /// <br/>          colleges
+        /// <br/>          {
+        /// <br/>              college_code
+        /// <br/>              college_title
+        /// <br/>          }
+        /// <br/>          majors
+        /// <br/>          {
+        /// <br/>              major_title
+        /// <br/>              major_code
+        /// <br/>          }
+        /// <br/>          }"
+        /// <br/>      }
         /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "graphql"
+                    urlBuilder_.Append("graphql");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of people or a person.
+        /// </remarks>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
         /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="affiliationContains">Comma-separated list of possible affiltion values</param>
         /// <param name="employmentStatus">Comma separated list of possible employment status codes</param>
         /// <param name="limit">The maximum number of records to</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? iamid = null, string? iamids = null, string? email = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -556,6 +731,14 @@ namespace UCD.Rosetta.Client.Generated
                     // Operation Path: "people"
                     urlBuilder_.Append("people");
                     urlBuilder_.Append('?');
+                    if (firstname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (iamid != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
@@ -564,9 +747,69 @@ namespace UCD.Rosetta.Client.Generated
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
+                    if (manager_iam_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("manager_iam_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(manager_iam_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (email != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (studentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mailid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mailid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mailid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pidm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pidm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pidm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mothraid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mothraid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pps_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pps_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pps_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cosmos_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cosmos_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cosmos_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cpe_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cpe_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cpe_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (health_affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("health_affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(health_affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucanr_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucanr_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucanr_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (usda_whnrc_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("usda_whnrc_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(usda_whnrc_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucnet_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucnet_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucnet_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     if (affiliationContains != null)
                     {
@@ -938,8 +1181,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <remarks>
         /// Returns a list of all colleges
         /// </remarks>
+        /// <param name="college_code">Return college information for the specified 2 character college code</param>
+        /// <param name="college_title">Return college information for colleges matching the specified college title</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<object> CollegesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<College>> CollegesAsync(string? college_code = null, string? college_title = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -954,6 +1199,16 @@ namespace UCD.Rosetta.Client.Generated
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "colleges"
                     urlBuilder_.Append("colleges");
+                    urlBuilder_.Append('?');
+                    if (college_code != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("college_code")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(college_code, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (college_title != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("college_title")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(college_title, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -980,7 +1235,7 @@ namespace UCD.Rosetta.Client.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<College>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1011,8 +1266,11 @@ namespace UCD.Rosetta.Client.Generated
         /// <remarks>
         /// Returns a list of all majors
         /// </remarks>
+        /// <param name="major_code">Return major information for the specified 4 character major code</param>
+        /// <param name="major_title">Return major information for the specified major title</param>
+        /// <param name="major_status">Return majors with the specified status (Active = 'A', Inactive = 'I')</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<object> MajorsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Major>> MajorsAsync(string? major_code = null, string? major_title = null, string? major_status = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1027,6 +1285,20 @@ namespace UCD.Rosetta.Client.Generated
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "majors"
                     urlBuilder_.Append("majors");
+                    urlBuilder_.Append('?');
+                    if (major_code != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("major_code")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(major_code, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (major_title != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("major_title")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(major_title, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (major_status != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("major_status")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(major_status, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1053,7 +1325,7 @@ namespace UCD.Rosetta.Client.Generated
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Major>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1520,6 +1792,10 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Birth_date { get; set; } = default!;
 
+        [System.Text.Json.Serialization.JsonPropertyName("manager_iam_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Manager_iam_id { get; set; } = default!;
+
         [System.Text.Json.Serialization.JsonPropertyName("provisioning_status")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Provisioning_status> Provisioning_status { get; set; } = new System.Collections.Generic.List<Provisioning_status>();
@@ -1562,6 +1838,64 @@ namespace UCD.Rosetta.Client.Generated
 
     }
 
+    /// <summary>
+    /// College metadata.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class College
+    {
+
+        /// <summary>
+        /// 2-character college code
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("college_code")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(2)]
+        public string College_code { get; set; } = default!;
+
+        /// <summary>
+        /// College title
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("college_title")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(64)]
+        public string College_title { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// Major metadata.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Major
+    {
+
+        /// <summary>
+        /// 4-character major code
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("major_code")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(4)]
+        public string Major_code { get; set; } = default!;
+
+        /// <summary>
+        /// Major title
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("major_title")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(64)]
+        public string Major_title { get; set; } = default!;
+
+        /// <summary>
+        /// Major status (A=Active, I=Inactive)
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("major_status")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(1)]
+        public string Major_status { get; set; } = default!;
+
+    }
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Provisioning_status
     {
@@ -1577,26 +1911,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_first_name")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Lived_first_name { get; set; } = default!;
+        public string? Lived_first_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_middle_name")]
         public string? Lived_middle_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_last_name")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Lived_last_name { get; set; } = default!;
+        public string? Lived_last_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_first_name")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Legal_first_name { get; set; } = default!;
+        public string? Legal_first_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_middle_name")]
         public string? Legal_middle_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_last_name")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Legal_last_name { get; set; } = default!;
+        public string? Legal_last_name { get; set; } = default!;
 
     }
 
@@ -1605,8 +1935,10 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Iam_id { get; set; } = default!;
+        public string? Iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("login_id")]
+        public string? Login_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("student_id")]
         public string? Student_id { get; set; } = default!;
