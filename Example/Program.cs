@@ -25,26 +25,26 @@ client.DebugResponseMaxLength = 0;
 
 try
 {
-    Console.WriteLine("Example 1: Get information about the authenticated user");
-    Console.WriteLine("--------------------------------------------------------");
-    var me = await client.Api.MeAsync();
-    Console.WriteLine($"✓ Successfully retrieved user information");
-    Console.WriteLine($"  (Inspect the 'me' object to see available properties)\n");
+    //Console.WriteLine("Example 1: Get information about the authenticated user");
+    //Console.WriteLine("--------------------------------------------------------");
+    //var me = await client.Api.MeAsync();
+    //Console.WriteLine($"✓ Successfully retrieved user information");
+    //Console.WriteLine($"  (Inspect the 'me' object to see available properties)\n");
 
     Console.WriteLine("Example 2: Search for a person by email");
     Console.WriteLine("----------------------------------------");
     var peopleByEmail = await client.Api.PeopleAsync(email: "email-address@ucdavis.edu");
     Console.WriteLine($"✓ Found {peopleByEmail.Count} person/people\n");
 
-    Console.WriteLine("Example 3: Get accounts for a specific IAM ID");
-    Console.WriteLine("----------------------------------------------");
-    var accounts = await client.Api.AccountsAllAsync(iamid: "1234567890");
-    Console.WriteLine($"✓ Found {accounts.Count} account(s)\n");
+    //Console.WriteLine("Example 3: Get accounts for a specific IAM ID");
+    //Console.WriteLine("----------------------------------------------");
+    //var accounts = await client.Api.AccountsAllAsync(iamid: "1234567890");
+    //Console.WriteLine($"✓ Found {accounts.Count} account(s)\n");
 
-    Console.WriteLine("Example 4: Get all groups");
-    Console.WriteLine("-------------------------");
-    var groups = await client.Api.GroupsAsync();
-    Console.WriteLine($"✓ Retrieved {groups.Count} groups\n");
+    //Console.WriteLine("Example 4: Get all groups");
+    //Console.WriteLine("-------------------------");
+    //var groups = await client.Api.GroupsAsync();
+    //Console.WriteLine($"✓ Retrieved {groups.Count} groups\n");
 
     Console.WriteLine("✓ All examples completed successfully!");
 }
