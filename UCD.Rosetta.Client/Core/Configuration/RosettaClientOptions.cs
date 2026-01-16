@@ -27,6 +27,11 @@ public class RosettaClientOptions
     public string ClientSecret { get; set; } = string.Empty;
 
     /// <summary>
+    /// The OAuth 2.0 scope for token requests.
+    /// </summary>
+    public string Scope { get; set; } = string.Empty;
+
+    /// <summary>
     /// Optional: The API version to use (default is "v1").
     /// This will be used to replace {version} in the BaseUri template.
     /// </summary>
@@ -54,5 +59,8 @@ public class RosettaClientOptions
 
         if (string.IsNullOrWhiteSpace(ClientSecret))
             throw new InvalidOperationException("RosettaClientOptions.ClientSecret is required.");
+
+        if (string.IsNullOrWhiteSpace(Scope))
+            throw new InvalidOperationException("RosettaClientOptions.Scope is required.");
     }
 }

@@ -12,7 +12,7 @@
   ],
   "externalDocs": {
     "url": "http://",
-    "description": "  \n  type ProvisioningStatus {\n    primary: String\n  }\n\n  type NameRecord {\n    lived_first_name: String\n    lived_middle_name: String\n    lived_last_name: String\n    legal_first_name: String\n    legal_middle_name: String\n    legal_last_name: String\n  }\n\n  type IdentityIds {\n    iam_id: String\n    login_id: String\n    student_id: String\n    mothra_id: String\n    employee_id: String\n    mail_id: String\n    pidm: String\n    pps_id: String\n    cosmos_id: String\n    cpe_id: String\n    health_affiliate_id: String\n    ucanr_id: String\n    usda_whnrc_id: String\n    affiliate_id: String\n    ucnet_id: String\n  }\n\n  type EmailAddresses {\n    primary: String\n    work: String\n    personal: String\n  }\n\n  type PhoneNumbers {\n    primary: String\n    work: String\n    personal: String\n  }\n\n  type StudentAssociation {\n    college: String\n    major: String\n    academic_level: String\n    class_level: String\n  }\n\n  type PayrollAssociation {\n    employee_record: String\n    employee_id: String\n    position_number: String\n    position_title: String\n    relationship_to_organization: String\n    employee_classification: String\n    employee_classification_description: String\n    status: String\n    hire_date: String\n    start_date: String\n    termination_date: String\n    fte_percentage: String\n    reports_to_position: String\n    job_type_id: String\n    job_type_description: String\n    job_family_id: String\n    job_family_description: String\n    organization_id: String\n    organization_title: String\n    division_id: String\n    division_title: String\n    subdivision_id: String\n    subdivision_title: String\n    business_unit_id: String\n    business_unit_title: String\n    department_id: String\n    department_title: String\n    department_short_title: String\n  }\n\n  type Person {\n    iam_id: ID\n    displayname: String\n    birth_date: String\n    manager_iam_id: String\n    provisioning_status: [ProvisioningStatus]\n    affiliation: [String]\n    employment_status: [String]\n    name: [NameRecord]\n    id: [IdentityIds]\n    email: [EmailAddresses]\n    phone: [PhoneNumbers]\n    student_association: [StudentAssociation]\n    payroll_association: [PayrollAssociation]\n    modified_date: String\n    create_date: String\n  }\n\n  type College {\n    college_code: String\n    college_title: String\n  }\n\n  type Major {\n    major_code: String\n    major_title: String\n    major_status: String\n  }\n\n  type Query {\n    colleges(\n      college_code: String\n      college_title: String\n    ): [College]\n    majors(\n      major_code: String\n      major_title: String\n      major_status: String\n    ): [Major]\n    people(\n      iamid: String\n      manager_iam_id: String\n      iamids: [String]\n      email: String\n      emails: [String]\n      loginid: String\n      employeeid: String\n      studentid: String\n      mailid: String\n      pidm: String\n      mothraid: String\n      pps_id: String\n      cosmos_id: String\n      cpe_id: String\n      health_affiliate_id: String\n      ucanr_id: String\n      usda_whnrc_id: String\n      affiliate_id: String\n      ucnet_id: String\n      affiliationContains: String\n      employmentStatus: String\n      limit: Int = 10000\n    ): [Person]\n  }",
+    "description": "  ```graphql\n    type ProvisioningStatus {\n      primary: String\n    }\n\n    type NameRecord {\n      lived_first_name: String\n      lived_middle_name: String\n      lived_last_name: String\n      legal_first_name: String\n      legal_middle_name: String\n      legal_last_name: String\n    }\n\n    type IdentityIds {\n      iam_id: String\n      login_id: String\n      student_id: String\n      mothra_id: String\n      employee_id: String\n      mail_id: String\n      pidm: String\n      pps_id: String\n      cosmos_id: String\n      cpe_id: String\n      health_affiliate_id: String\n      ucanr_id: String\n      usda_whnrc_id: String\n      affiliate_id: String\n      ucnet_id: String\n    }\n\n    type EmailAddresses {\n      primary: String\n      work: String\n      personal: String\n    }\n\n    type PhoneNumbers {\n      primary: String\n      work: String\n      personal: String\n    }\n\n    type StudentAssociation {\n      college: String\n      major: String\n      academic_level: String\n      class_level: String\n    }\n\n    type PayrollAssociation {\n      employee_record: String\n      employee_id: String\n      position_number: String\n      position_title: String\n      relationship_to_organization: String\n      employee_classification: String\n      employee_classification_description: String\n      status: String\n      hire_date: String\n      start_date: String\n      termination_date: String\n      fte_percentage: String\n      reports_to_position: String\n      job_type_id: String\n      job_type_description: String\n      job_family_id: String\n      job_family_description: String\n      organization_id: String\n      organization_title: String\n      division_id: String\n      division_title: String\n      subdivision_id: String\n      subdivision_title: String\n      business_unit_id: String\n      business_unit_title: String\n      department_id: String\n      department_title: String\n      department_short_title: String\n    }\n\n    type Person {\n      iam_id: ID\n      displayname: String\n      birth_date: String\n      manager_iam_id: String\n      provisioning_status: [ProvisioningStatus]\n      affiliation: [String]\n      employment_status: [String]\n      name: [NameRecord]\n      id: [IdentityIds]\n      email: [EmailAddresses]\n      phone: [PhoneNumbers]\n      student_association: [StudentAssociation]\n      payroll_association: [PayrollAssociation]\n      modified_date: String\n      create_date: String\n    }\n\n    type College {\n      college_code: String\n      college_title: String\n    }\n\n    type Major {\n      major_code: String\n      major_title: String\n      major_status: String\n    }\n\n    type Query {\n      colleges(\n        college_code: String\n        college_title: String\n      ): [College]\n      majors(\n        major_code: String\n        major_title: String\n        major_status: String\n      ): [Major]\n      people(\n        iamid: String\n        firstname: String\n        lastname: String\n        manager_iam_id: String\n        iamids: [String]\n        email: String\n        emails: [String]\n        loginid: String\n        employeeid: String\n        studentid: String\n        mailid: String\n        pidm: String\n        mothraid: String\n        pps_id: String\n        cosmos_id: String\n        cpe_id: String\n        health_affiliate_id: String\n        ucanr_id: String\n        usda_whnrc_id: String\n        affiliate_id: String\n        ucnet_id: String\n        affiliationContains: String\n        employmentStatus: String\n        limit: Int = 10000\n      ): [Person]\n    }\n```",
     "x-amf-title": "GraphQL Schema"
   },
   "paths": {
@@ -53,7 +53,7 @@
         },
         "security": [
           {
-            "oauth_2_0": []
+            "Oauth2": []
           }
         ]
       }
@@ -75,102 +75,7 @@
         },
         "security": [
           {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/accounts": {
-      "get": {
-        "description": "Returns a collection of all accounts\nRule: At most ONE of (iamid | iamids) may be supplied. If more than one is provided, 400 is returned.        \n",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "iamid",
-            "description": "Return all accounts for a specific IAM ID",
-            "required": false,
-            "in": "query",
-            "type": "string",
-            "pattern": "^\\d{10}$"
-          },
-          {
-            "name": "iamids",
-            "description": "Comma-separated list of 10-digit IAM IDs (e.g. 1234567890,0987654321)",
-            "required": false,
-            "in": "query",
-            "type": "string",
-            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
-          },
-          {
-            "name": "limit",
-            "description": "The maximum number of records to",
-            "required": false,
-            "in": "query",
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "example": {
-                "error": "Only one of query parameters (iamid, iamids) may be provided."
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/accounts/{id}": {
-      "get": {
-        "description": "Returns a specific account by ID",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "object"
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
+            "Oauth2": []
           }
         ]
       }
@@ -218,7 +123,7 @@
         },
         "security": [
           {
-            "oauth_2_0": []
+            "Oauth2": []
           }
         ]
       }
@@ -537,123 +442,7 @@
         },
         "security": [
           {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/people/employees": {
-      "get": {
-        "description": "Returns a collection of all employees",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/people/employees/{id}": {
-      "get": {
-        "description": "Returns a specific employee by ID",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "object"
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/people/students": {
-      "get": {
-        "description": "Returns a collection of all students",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/people/students/{id}": {
-      "get": {
-        "description": "Returns a specific student by ID",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "object"
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
+            "Oauth2": []
           }
         ]
       }
@@ -709,7 +498,7 @@
         },
         "security": [
           {
-            "oauth_2_0": []
+            "Oauth2": []
           }
         ]
       }
@@ -777,104 +566,7 @@
         },
         "security": [
           {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/me": {
-      "get": {
-        "description": "Returns information about the currently logged in user",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "object"
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/groups": {
-      "get": {
-        "description": "Returns a collection of all groups",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/organizations": {
-      "get": {
-        "description": "Returns a collection of all organizations",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
-          }
-        ]
-      }
-    },
-    "/roles": {
-      "get": {
-        "description": "Returns a collection of all roles",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "x-amf-mediaType": "application/json",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "oauth_2_0": []
+            "Oauth2": []
           }
         ]
       }
@@ -1135,25 +827,19 @@
     }
   },
   "securityDefinitions": {
-    "oauth_2_0": {
+    "Oauth2": {
       "type": "oauth2",
       "x-amf-describedBy": {
         "headers": {
           "Authorization": {
-            "description": "Used to send a valid OAuth 2 access token. Format: Bearer {token}",
+            "description": "Used to send a valid OAuth 2.0 access token.\n\nExample:\n  Authorization: Bearer {token}\n\nThe token must contain the scopes required by each operation\n(see the \"scopes\" list in this security scheme).\n",
             "type": "string",
             "pattern": "Bearer .+"
           }
         },
-        "queryParameters": {
-          "access_token": {
-            "description": "Used to send a valid OAuth 2 access token. Do not use together with the \"Authorization\" header.",
-            "type": "string"
-          }
-        },
         "responses": {
           "401": {
-            "description": "Unauthorized - Bad or expired token. This can happen if the user or IAM team has revoked or expired an access token. To fix, you should re-authenticate the user.\n",
+            "description": "Unauthorized - Bad or expired token. This can happen if the user or IAM\nteam has revoked or expired an access token. To fix, you should obtain\na new token from the token endpoint.\n",
             "body": {
               "application/json": {
                 "example": {
@@ -1166,14 +852,14 @@
             }
           },
           "403": {
-            "description": "Forbidden - Bad OAuth request or insufficient scopes. The token may not have the required permissions for this resource.\n",
+            "description": "Forbidden - The access token is valid but does not contain the required\nscopes for this resource. Check the \"scopes\" defined in this security\nscheme and ensure the client requests the correct ones.\n",
             "body": {
               "application/json": {
                 "example": {
                   "error": "forbidden",
                   "message": "Insufficient scopes for this resource",
                   "requiredScopes": [
-                    "iam:read"
+                    "read:campaign"
                   ],
                   "timestamp": "2025-07-28T10:30:00Z"
                 },
@@ -1186,7 +872,12 @@
       "tokenUrl": "https://iam-mulesoft-oauth-provider.us-w1.cloudhub.io/token",
       "flow": "application",
       "scopes": {
-        "*": ""
+        "admin:all": "null",
+        "read:public": "null",
+        "read:sensitive": "null",
+        "read:campaign": "null",
+        "write:public": "null",
+        "write:sensitive": "null"
       },
       "x-amf-settings": {
         "authorizationGrants": [

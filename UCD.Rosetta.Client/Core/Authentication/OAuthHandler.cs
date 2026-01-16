@@ -87,7 +87,8 @@ public class OAuthHandler : DelegatingHandler
         request.Headers.Authorization = new AuthenticationHeaderValue("Basic", credentials);
         request.Content = new FormUrlEncodedContent(new[]
         {
-            new KeyValuePair<string, string>("grant_type", "client_credentials")
+            new KeyValuePair<string, string>("grant_type", "client_credentials"),
+            new KeyValuePair<string, string>("scope", _options.Scope)
         });
 
         var response = await tokenClient.SendAsync(request, cancellationToken);
@@ -109,7 +110,7 @@ public class OAuthHandler : DelegatingHandler
 
         // Cache the token (default is 24 hours per Python example, but we'll use expires_in if provided)
         _cachedToken = tokenData.AccessToken;
-        
+
         // Set expiration with 5 minute buffer to ensure we refresh before it actually expires
         var expiresInSeconds = tokenData.ExpiresIn ?? 86400; // Default to 24 hours if not specified
         _tokenExpiration = DateTimeOffset.UtcNow.AddSeconds(expiresInSeconds - 300);
