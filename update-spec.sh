@@ -40,6 +40,8 @@ if command -v jq &>/dev/null; then
         | awk '/```graphql/{found=1; next} found && /```/{exit} found{print}' \
         | sed 's/^    //' \
         > "${GRAPHQL_FILE}"
+    # Append schema root declaration required by ZeroQL codegen
+    printf '\nschema {\n  query: Query\n}\n' >> "${GRAPHQL_FILE}"
     echo "✅ GraphQL schema extracted: ${GRAPHQL_FILE}"
 else
     echo "⚠️  jq not found — skipping GraphQL schema extraction (install with: brew install jq)"

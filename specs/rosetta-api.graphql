@@ -145,3 +145,7 @@ type Query {
     limit: Int = 10000
   ): [Person]
 }
+
+schema {
+  query: Query
+}

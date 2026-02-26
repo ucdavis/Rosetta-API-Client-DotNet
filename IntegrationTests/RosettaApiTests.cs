@@ -1,4 +1,5 @@
 using Shouldly;
+using UCD.Rosetta.Client.GraphQL;
 
 namespace IntegrationTests;
 
@@ -128,6 +129,64 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         // Assert
         Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task GraphQL_TypedPeopleQuery_ReturnsResults()
+    {
+        // Act — strongly-typed ZeroQL query; no raw JSON strings
+        var response = await _fixture.Client.GraphQL.Query(
+            q => q.People(limit: 5, selector: o => new
+            {
+                o.Iam_id,
+                o.Displayname,
+                Email = o.Email(e => e.Primary)
+            }));
+
+        // Assert
+        response.ShouldNotBeNull();
+        response.Data.ShouldNotBeNull();
+        response.Data.ShouldNotBeEmpty();
+        response.Data[0]!.Iam_id?.Value.ShouldNotBeNullOrEmpty();
+    }
+
+    [SkippableFact]
+    public async Task GraphQL_TypedPeopleQuery_ByLoginId_ReturnsMatchingPerson()
+    {
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId),
+            "TestData:LoginId not configured in user secrets or environment variables");
+
+        // ZeroQL requires query arguments to be local variables — cannot capture field accesses
+        var loginId = _fixture.TestData.LoginId;
+
+        // Act
+        var response = await _fixture.Client.GraphQL.Query(
+            q => q.People(loginid: loginId, selector: o => new
+            {
+                o.Iam_id,
+                o.Displayname,
+                Name = o.Name(n => new { n.Lived_first_name, n.Lived_last_name }),
+                Email = o.Email(e => e.Primary)
+            }));
+
+        // Assert
+        response.Data.ShouldNotBeNull();
+        response.Data.ShouldNotBeEmpty();
+        response.Data[0]!.Iam_id?.Value.ShouldNotBeNullOrEmpty();
+        response.Data[0]!.Displayname.ShouldNotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task GraphQL_TypedCollegesQuery_ReturnsAllColleges()
+    {
+        // Act
+        var response = await _fixture.Client.GraphQL.Query(
+            q => q.Colleges(selector: o => new { o.College_code, o.College_title }));
+
+        // Assert
+        response.Data.ShouldNotBeNull();
+        response.Data.ShouldNotBeEmpty();
+        response.Data!.All(c => !string.IsNullOrEmpty(c?.College_code)).ShouldBeTrue();
     }
 
     #endregion

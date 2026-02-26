@@ -7,7 +7,8 @@ Official .NET client library for the UC Davis IAM Rosetta API. Provides easy acc
 ## Features
 
 - ✅ **Automatic OAuth 2.0 Authentication** - Client credentials flow handled automatically
-- ✅ **Strongly-Typed API** - Full IntelliSense support with auto-generated models
+- ✅ **Strongly-Typed REST API** - Full IntelliSense support with auto-generated models
+- ✅ **Strongly-Typed GraphQL Client** - Compile-time-checked queries via [ZeroQL](https://github.com/byme8/ZeroQL/wiki); no raw query strings required
 - ✅ **Modern .NET 8.0** - Built on the latest .NET with nullable reference types
 - ✅ **Dependency Injection Ready** - First-class support for ASP.NET Core DI
 - ✅ **IHttpClientFactory Support** - Proper HttpClient lifecycle management
@@ -50,17 +51,24 @@ var options = new RosettaClientOptions
 // Create and use the client
 using var client = new RosettaClient(options);
 
-// Get current user information
-var me = await client.Api.MeAsync();
+// Search for people by login ID
+var people = await client.Api.PeopleAsync(loginid: "jsmith");
 
-// Search for people by email
-var people = await client.Api.PeopleAllAsync(email: "someone@ucdavis.edu");
+// Search for people by IAM ID
+var person = await client.Api.PeopleAsync(iamid: "1234567890");
 
-// Get accounts for a specific IAM ID
-var accounts = await client.Api.AccountsAllAsync(iamid: "1234567890");
+// Get all colleges
+var colleges = await client.Api.CollegesAsync();
 
-// Get identities modified in the last 24 hours
-var identities = await client.Api.IdentitiesAsync(limit: 100);
+// Get active majors
+var majors = await client.Api.MajorsAsync(major_status: "A");
+
+// Strongly-typed GraphQL query (via ZeroQL)
+var loginId = "jsmith";
+var response = await client.GraphQL.Query(
+    q => q.People(loginid: loginId,
+        selector: o => new { o.Iam_id, o.Displayname, Email = o.Email(e => e.Primary) }));
+var firstPerson = response.Data?[0];
 ```
 
 ### ASP.NET Core Dependency Injection
@@ -133,97 +141,90 @@ builder.Services.AddRosettaClientWithFactory(options =>
 
 ## Available API Endpoints
 
-The client provides access to all Rosetta API endpoints through the `client.Api` property:
+The client exposes two complementary surfaces: a REST API via `client.Api` and a strongly-typed GraphQL client via `client.GraphQL`.
 
-### Identity & People
-
-```csharp
-// Get identities modified in last 24 hours
-await client.Api.IdentitiesAsync(limit: 100);
-
-// Search for people
-await client.Api.PeopleAllAsync(
-    email: "user@ucdavis.edu",
-    iamIds: "1234567890,0987654321",
-    userId: "kerberos-id",
-    employeeId: "123456",
-    studentId: "987654",
-    limit: 50
-);
-
-// Get specific person by IAM ID
-await client.Api.PeopleAsync("1234567890");
-
-// Get current authenticated user
-await client.Api.MeAsync();
-```
-
-### Accounts
+### People
 
 ```csharp
-// Get all accounts for an IAM ID
-await client.Api.AccountsAllAsync(iamid: "1234567890");
+// Search by a variety of identifiers
+await client.Api.PeopleAsync(loginid: "jsmith");
+await client.Api.PeopleAsync(iamid: "1234567890");
+await client.Api.PeopleAsync(email: "user@ucdavis.edu");
+await client.Api.PeopleAsync(employeeid: "123456");
+await client.Api.PeopleAsync(studentid: "987654");
+await client.Api.PeopleAsync(manager_iam_id: "0987654321");
 
-// Get accounts for multiple IAM IDs
-await client.Api.AccountsAllAsync(iamids: "1234567890,0987654321");
-
-// Get specific account by ID
-await client.Api.AccountsAsync("account-id");
-
-// Get base profiles
-await client.Api.BaseprofilesAsync();
-
-// Get employment status
-await client.Api.EmploymentstatusAsync();
-
-// Get UC Path entitlements
-await client.Api.UcpathentitlementsAsync();
-
-// Get student associations
-await client.Api.StudentassociationsAsync();
-```
-
-### Employees & Students
-
-```csharp
-// Get all employees
-await client.Api.EmployeesAllAsync(
-    email: "employee@ucdavis.edu",
-    employeeId: "123456",
-    limit: 50
-);
-
-// Get specific employee
-await client.Api.EmployeesAsync("1234567890");
-
-// Get all students
-await client.Api.StudentsAllAsync(
-    email: "student@ucdavis.edu",
-    studentId: "987654",
-    limit: 50
-);
-
-// Get specific student
-await client.Api.StudentsAsync("1234567890");
+// Pass a list of IAM IDs
+await client.Api.PeopleAsync(iamids: new[] { "1234567890", "0987654321" });
 ```
 
 ### Reference Data
 
 ```csharp
-// Get all groups
-await client.Api.GroupsAsync();
-
-// Get all organizations
-await client.Api.OrganizationsAsync();
-
-// Get all roles
-await client.Api.RolesAsync();
-
-// Get colleges
+// Colleges
 await client.Api.CollegesAsync();
+await client.Api.CollegesAsync(college_code: "EN");
 
-// Get majors
+// Majors
 await client.Api.MajorsAsync();
+await client.Api.MajorsAsync(major_status: "A"); // active majors only
+```
+
+### GraphQL (Strongly-Typed)
+
+The `client.GraphQL` property exposes a [ZeroQL](https://github.com/byme8/ZeroQL/wiki)-generated client. Queries are written as C# lambdas and validated at compile time — no raw query strings, full IntelliSense on every field.
+
+```csharp
+// People — select specific fields
+var loginId = "jsmith";
+var response = await client.GraphQL.Query(
+    q => q.People(
+        loginid: loginId,
+        selector: o => new
+        {
+            o.Iam_id,
+            o.Displayname,
+            Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+            Email = o.Email(e => e.Primary),
+            Phone = o.Phone(p => p.Primary),
+            Student = o.Student_association(s => new { s.College, s.Major, s.Class_level }),
+            Payroll = o.Payroll_association(p => new { p.Position_title, p.Employee_classification })
+        }));
+
+foreach (var person in response.Data ?? [])
+    Console.WriteLine($"{person.Iam_id?.Value}: {person.Displayname}");
+
+// Colleges
+var colleges = await client.GraphQL.Query(
+    q => q.Colleges(selector: o => new { o.College_code, o.College_title }));
+
+// Majors filtered by status
+var majors = await client.GraphQL.Query(
+    q => q.Majors(major_status: "A", selector: o => new { o.Major_code, o.Major_title }));
+```
+
+> **Note:** ZeroQL requires query arguments to be local variables (not property accesses like `_options.LoginId`).
+> Assign to a local first: `var id = _options.LoginId;`
+> See the [ZeroQL wiki](https://github.com/byme8/ZeroQL/wiki/Queries-and-mutations) for details.
+
+#### Using the request syntax for reusable queries
+
+For more complex or frequently reused queries, ZeroQL supports a `record`-based request style:
+
+```csharp
+using UCD.Rosetta.Client.GraphQL;
+using ZeroQL;
+
+public record GetPersonByLoginId(string LoginId) : GraphQL<Query, object?[]?>
+{
+    public override object?[]? Execute(Query query) =>
+        query.People(
+            loginid: LoginId,
+            selector: o => (object?)new { o.Iam_id, o.Displayname });
+}
+
+// Execute:
+var response = await client.GraphQL.Execute(new GetPersonByLoginId("jsmith"));
 ```
 
 ### Campaign Contacts (CSV Export)
@@ -315,33 +316,41 @@ UCD.Rosetta.Client/
 │   │   └── OAuthHandler.cs          # OAuth 2.0 authentication handler
 │   ├── Configuration/
 │   │   └── RosettaClientOptions.cs  # Configuration options
+│   ├── Converters/
+│   │   ├── DynamicObjectCollectionConverter.cs
+│   │   └── LenientTypedCollectionConverter.cs
 │   ├── Extensions/
+│   │   ├── ClientExtensions.cs      # Debug logging
 │   │   └── ServiceCollectionExtensions.cs  # DI extensions
-│   └── RosettaClient.cs             # Main client facade
+│   └── RosettaClient.cs             # Main client facade (REST + GraphQL)
 ├── Generated/
-│   └── RosettaApiClient.g.cs        # Auto-generated from OpenAPI spec
-└── specs/
-    └── rosetta-api.json             # OpenAPI specification
+│   └── RosettaApiClient.g.cs        # Auto-generated from OpenAPI spec (NSwag)
+├── rosetta.zeroql.json              # ZeroQL codegen config
+│                                    # → generates obj/ZeroQL/rosetta.zeroql.json.g.cs on build
+└── specs/                           # (downloaded and extracted by update-spec.sh)
+    ├── rosetta-api.json             # OpenAPI specification
+    └── rosetta-api.graphql          # GraphQL SDL schema
 ```
 
 ### Regenerating Client Code
 
-The client code is automatically regenerated from the OpenAPI specification during build. 
+The REST client (`RosettaApiClient.g.cs`) is regenerated from the OpenAPI spec by NSwag during Debug builds.
 
-To update the spec to a new version, use the convenience script:
+The GraphQL client (`obj/ZeroQL/rosetta.zeroql.json.g.cs`) is regenerated from `specs/rosetta-api.graphql` by ZeroQL on every build.
+
+To update both specs to a new API version, use the convenience script:
 ```bash
 ./update-spec.sh 1.0.12  # Replace with desired version
 ```
 
-This will download the latest spec from MuleSoft Exchange and save it as `specs/rosetta-api.json`, then run:
+This downloads the latest spec from MuleSoft Exchange, extracts the embedded GraphQL SDL schema into `specs/rosetta-api.graphql` (with the required `schema { query: Query }` root appended), and updates the README version badge. Then rebuild:
 ```bash
 dotnet clean && dotnet build
 ```
 
 ## Future Enhancements
 
-- 🔄 GraphQL API support (planned by IAM team)
-- 📊 Response caching options
+-  Response caching options
 - 🔄 Retry policies with Polly
 - 📝 Enhanced logging and diagnostics
 

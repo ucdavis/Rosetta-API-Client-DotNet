@@ -51,13 +51,37 @@ try
         Console.WriteLine($"  {major.Major_code}: {major.Major_title}");
     Console.WriteLine();
 
-    Console.WriteLine("Example 5: GraphQL query");
-    Console.WriteLine("------------------------");
+    Console.WriteLine("Example 5: GraphQL — raw (via client.Api.GraphqlAsync)");
+    Console.WriteLine("-------------------------------------------------------");
     var graphqlResult = await client.Api.GraphqlAsync(new
     {
         query = "{ people(limit: 5) { iam_id displayname email { primary } } }"
     });
-    Console.WriteLine($"✓ GraphQL query returned a result (inspect 'graphqlResult' for data)\n");
+    Console.WriteLine("✓ Raw GraphQL query returned a result\n");
+
+    // Example 6: Strongly-typed GraphQL via ZeroQL (client.GraphQL)
+    // Arguments must be local variables — ZeroQL analyses lambda closures at compile time.
+    // See https://github.com/byme8/ZeroQL/wiki/Queries-and-mutations for full documentation.
+    Console.WriteLine("Example 6: GraphQL — strongly-typed (via client.GraphQL, powered by ZeroQL)");
+    Console.WriteLine("----------------------------------------------------------------------------");
+    var typedResponse = await client.GraphQL.Query(
+        q => q.People(
+            limit: 5,
+            selector: o => new
+            {
+                o.Iam_id,
+                o.Displayname,
+                Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                Email = o.Email(e => e.Primary)
+            }));
+
+    if (typedResponse.Data is { } people)
+    {
+        Console.WriteLine($"✓ Typed GraphQL query returned {people.Length} people:");
+        foreach (var person in people.Take(3))
+            Console.WriteLine($"  [{person?.Iam_id?.Value}] {person?.Displayname} <{person?.Email?.FirstOrDefault() ?? "(no email)"}>");
+    }
+    Console.WriteLine();
 
     Console.WriteLine("✓ All examples completed successfully!");
 }

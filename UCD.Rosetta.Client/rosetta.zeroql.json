@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/byme8/ZeroQL/main/schema.verified.json",
+  "graphql": "../specs/rosetta-api.graphql",
+  "namespace": "UCD.Rosetta.Client.GraphQL",
+  "clientName": "RosettaGraphQLClient"
+}
