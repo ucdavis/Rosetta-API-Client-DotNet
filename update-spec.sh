@@ -32,6 +32,19 @@ cp /tmp/rosetta-spec/api.json "${SPEC_FILE}"
 # Clean up
 rm -rf /tmp/rosetta-spec /tmp/rosetta-spec.zip
 
+# Extract embedded GraphQL schema from externalDocs.description
+GRAPHQL_FILE="${SPEC_DIR}/rosetta-api.graphql"
+echo "📐 Extracting GraphQL schema..."
+if command -v jq &>/dev/null; then
+    jq -r '.externalDocs.description' "${SPEC_FILE}" \
+        | awk '/```graphql/{found=1; next} found && /```/{exit} found{print}' \
+        | sed 's/^    //' \
+        > "${GRAPHQL_FILE}"
+    echo "✅ GraphQL schema extracted: ${GRAPHQL_FILE}"
+else
+    echo "⚠️  jq not found — skipping GraphQL schema extraction (install with: brew install jq)"
+fi
+
 # Update README badge with new version
 echo "📝 Updating README badge..."
 README_FILE="./README.md"
