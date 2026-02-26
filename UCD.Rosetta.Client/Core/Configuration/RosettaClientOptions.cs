@@ -27,9 +27,11 @@ public class RosettaClientOptions
     public string ClientSecret { get; set; } = string.Empty;
 
     /// <summary>
-    /// The OAuth 2.0 scope for token requests.
+    /// Optional: Space-separated list of OAuth 2.0 scopes to request.
+    /// Available scopes: admin:all, read:public, read:sensitive, read:campaign, write:public, write:sensitive.
+    /// Example: "read:public read:sensitive"
     /// </summary>
-    public string Scope { get; set; } = string.Empty;
+    public string? Scope { get; set; }
 
     /// <summary>
     /// Optional: The API version to use (default is "v1").

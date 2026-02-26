@@ -42,6 +42,9 @@ bld/
 .idea/
 *.sln.iml
 
+# Debug output
+rosetta-debug.json
+
 # NuGet Packages
 *.nupkg
 *.snupkg

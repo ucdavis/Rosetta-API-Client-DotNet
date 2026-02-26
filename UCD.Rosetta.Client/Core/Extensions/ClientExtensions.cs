@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using UCD.Rosetta.Client.Core.Converters;
 
@@ -34,34 +35,55 @@ public partial class Client
             }
             
             response.Content = newContent;
-            
-            // Log response details to console
-            Console.WriteLine("=== DEBUG: API Response ===");
-            Console.WriteLine($"Request: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri?.PathAndQuery}");
-            Console.WriteLine($"Status: {(int)response.StatusCode} {response.StatusCode}");
-            Console.WriteLine($"Content-Type: {response.Content.Headers.ContentType}");
-            Console.WriteLine($"Body Length: {responseBody.Length} characters");
-            Console.WriteLine("Body:");
-            
-            if (DebugResponseMaxLength == -1 || responseBody.Length <= DebugResponseMaxLength)
+
+            var body = DebugResponseMaxLength == -1 || responseBody.Length <= DebugResponseMaxLength
+                ? responseBody
+                : responseBody.Substring(0, DebugResponseMaxLength) + $"... (truncated, showing {DebugResponseMaxLength} of {responseBody.Length} chars)";
+
+            var logPath = System.IO.Path.Combine(FindSolutionRoot() ?? System.IO.Path.GetTempPath(), "rosetta-debug.json");
+
+            var lines = new[]
             {
-                // Show full response
-                Console.WriteLine(responseBody);
-            }
-            else
-            {
-                // Truncate to specified length
-                Console.WriteLine(responseBody.Substring(0, DebugResponseMaxLength) + $"... (truncated, showing {DebugResponseMaxLength} of {responseBody.Length} chars)");
-            }
-            
-            Console.WriteLine("=========================\n");
+                "=== DEBUG: API Response ===",
+                $"Request: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri?.PathAndQuery}",
+                $"Status: {(int)response.StatusCode} {response.StatusCode}",
+                $"Content-Type: {response.Content.Headers.ContentType}",
+                $"Body Length: {responseBody.Length} characters",
+                $"Log file: {logPath}",
+                "Body:",
+                body,
+                "=========================\n"
+            };
+
+            // Write to Trace — visible in VS/VS Code Output > Debug window when debugging
+            foreach (var line in lines)
+                Trace.WriteLine(line);
+
+            // Write to a temp file — always accessible regardless of test runner output capture
+            System.IO.File.WriteAllText(logPath, string.Join(System.Environment.NewLine, lines));
         }
     }
     
+    private static string? FindSolutionRoot()
+    {
+        var dir = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
+        while (dir != null)
+        {
+            if (dir.GetFiles("*.sln").Length > 0)
+                return dir.FullName;
+            dir = dir.Parent;
+        }
+        return null;
+    }
+
     static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings)
     {
         // Add any custom JSON serialization settings here
         settings.PropertyNameCaseInsensitive = true;
+        
+        // Gracefully handle ICollection<T> arrays that may contain null or unexpected
+        // token types for some records in real API responses (e.g. student_association).
+        settings.Converters.Add(new LenientTypedCollectionConverterFactory());
         
         // Add custom converter for dynamic object collections
         settings.Converters.Add(new DynamicObjectCollectionConverter());

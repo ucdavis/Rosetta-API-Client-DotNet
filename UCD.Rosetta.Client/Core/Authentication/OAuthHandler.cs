@@ -82,14 +82,16 @@ public class OAuthHandler : DelegatingHandler
         var credentials = Convert.ToBase64String(
             Encoding.UTF8.GetBytes($"{_options.ClientId}:{_options.ClientSecret}"));
 
-        // Build token request (matching Python example)
+        // Build token request
         var request = new HttpRequestMessage(HttpMethod.Post, _options.TokenUrl);
         request.Headers.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-        request.Content = new FormUrlEncodedContent(new[]
+        var formParams = new List<KeyValuePair<string, string>>
         {
-            new KeyValuePair<string, string>("grant_type", "client_credentials"),
-            new KeyValuePair<string, string>("scope", _options.Scope)
-        });
+            new("grant_type", "client_credentials")
+        };
+        if (!string.IsNullOrWhiteSpace(_options.Scope))
+            formParams.Add(new("scope", _options.Scope));
+        request.Content = new FormUrlEncodedContent(formParams);
 
         var response = await tokenClient.SendAsync(request, cancellationToken);
 

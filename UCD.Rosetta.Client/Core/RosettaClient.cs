@@ -17,9 +17,10 @@ public class RosettaClient : IDisposable
     /// Gets the underlying API client that provides access to all Rosetta API endpoints.
     /// Use this property to call any API endpoint, for example:
     /// <code>
-    /// var identities = await rosettaClient.Api.IdentitiesAsync();
-    /// var accounts = await rosettaClient.Api.AccountsAllAsync(iamid: "1234567890");
-    /// var person = await rosettaClient.Api.PeopleAsync("1234567890");
+    /// var people = await rosettaClient.Api.PeopleAsync(iamid: "1234567890");
+    /// var colleges = await rosettaClient.Api.CollegesAsync();
+    /// var majors = await rosettaClient.Api.MajorsAsync(major_status: "A");
+    /// var graphqlResult = await rosettaClient.Api.GraphqlAsync(new { query = "{ people(limit:10) { iam_id displayname } }" });
     /// </code>
     /// </summary>
     public IClient Api { get; }
