@@ -203,28 +203,30 @@ var majors = await client.GraphQL.Query(
     q => q.Majors(major_status: "A", selector: o => new { o.Major_code, o.Major_title }));
 ```
 
-> **Note:** ZeroQL requires query arguments to be local variables (not property accesses like `_options.LoginId`).
-> Assign to a local first: `var id = _options.LoginId;`
-> See the [ZeroQL wiki](https://github.com/byme8/ZeroQL/wiki/Queries-and-mutations) for details.
+#### Query parameters (variables)
 
-#### Using the request syntax for reusable queries
-
-For more complex or frequently reused queries, ZeroQL supports a `record`-based request style:
+ZeroQL captures query arguments via lambda closure. The argument **must be a local variable or a method/constructor parameter** — it cannot be a property or field access. ZeroQL enforces this at compile time and will emit a build error if you pass a property directly.
 
 ```csharp
-using UCD.Rosetta.Client.GraphQL;
-using ZeroQL;
+// ✅ Local variable — works
+var loginId = _options.LoginId;
+var response = await client.GraphQL.Query(
+    q => q.People(loginid: loginId, selector: o => new { o.Iam_id, o.Displayname }));
 
-public record GetPersonByLoginId(string LoginId) : GraphQL<Query, object?[]?>
-{
-    public override object?[]? Execute(Query query) =>
-        query.People(
-            loginid: LoginId,
-            selector: o => (object?)new { o.Iam_id, o.Displayname });
-}
+// ❌ Property access — ZeroQL reports a compilation error
+var response = await client.GraphQL.Query(
+    q => q.People(loginid: _options.LoginId, selector: o => new { o.Iam_id, o.Displayname }));
+```
 
-// Execute:
-var response = await client.GraphQL.Execute(new GetPersonByLoginId("jsmith"));
+For `static` lambdas (or to make variable capture explicit), use the two-argument overload that takes a `variables` object:
+
+```csharp
+var variables = new { LoginId = "jsmith" };
+var response = await client.GraphQL.Query(
+    variables,
+    static (vars, q) => q.People(
+        loginid: vars.LoginId,
+        selector: o => new { o.Iam_id, o.Displayname }));
 ```
 
 ### Campaign Contacts (CSV Export)
@@ -264,9 +266,9 @@ The client automatically handles OAuth 2.0 client credentials authentication:
 2. **Token Caching** - Caches tokens for their lifetime (typically 24 hours)
 3. **Automatic Refresh** - Refreshes expired tokens automatically
 4. **Thread-Safe** - Token acquisition is thread-safe for concurrent requests
-5. **Shared Token Cache** - The REST and GraphQL clients share a single `OAuthTokenProvider` instance — only one token request is made on cold start regardless of which surface is called first
+5. **Shared Token Cache** - The default constructor and `AddRosettaClientWithFactory` wire REST and GraphQL through a shared `OAuthTokenProvider`, so only one token request is made on cold start
 
-A 5-minute buffer is applied before the token's actual expiry to ensure reliability.
+Tokens receive a buffer of up to 5 minutes, or half their lifetime if shorter.
 
 ## Advanced Configuration
 
@@ -407,7 +409,7 @@ client.DebugResponseMaxLength = 4096; // print up to 4KiB of response body for d
 
 Why this extra configuration exists
 
-- The Rosetta API spec models use typed arrays (e.g. `ICollection<Name>`, `ICollection<Email>`) for nested sub-objects on `Person`. In practice the API can return `null` elements or unexpected primitives inside those arrays for records with no data. A `LenientTypedCollectionConverter<T>` is registered at startup to silently skip such tokens rather than throwing a `JsonException`. This keeps the library compatible with `System.Text.Json` (no Newtonsoft dependency) while being resilient to inconsistent server payloads.
+- The Rosetta API spec models use typed arrays (e.g. `ICollection<Name>`, `ICollection<Email>`) for nested sub-objects on `Person`. In practice the API can return `null` elements or unexpected primitives inside those arrays for records with no data. A `LenientTypedCollectionConverter<T>` is registered in ClientExtensions.UpdateJsonSerializerSettings() during client initialization to silently skip such tokens rather than throwing a `JsonException`. This keeps the library compatible with `System.Text.Json` (no Newtonsoft dependency) while being resilient to inconsistent server payloads.
 
 CI notes
 

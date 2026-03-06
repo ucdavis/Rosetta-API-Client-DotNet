@@ -61,25 +61,6 @@ public partial class Client
         }
     }
     
-    private static string? FindSolutionRoot()
-    {
-        try
-        {
-            var dir = new DirectoryInfo(AppContext.BaseDirectory);
-            while (dir != null)
-            {
-                if (dir.GetFiles("*.sln").Length > 0)
-                    return dir.FullName;
-                dir = dir.Parent;
-            }
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine($"[RosettaClient] FindSolutionRoot failed: {ex.Message}");
-        }
-        return null;
-    }
-
     static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings)
     {
         // Add any custom JSON serialization settings here
