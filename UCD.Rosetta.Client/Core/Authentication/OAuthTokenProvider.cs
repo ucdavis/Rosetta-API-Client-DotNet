@@ -56,7 +56,10 @@ public sealed class OAuthTokenProvider : IDisposable
 
     private async Task<string> RequestNewTokenAsync(CancellationToken cancellationToken)
     {
-        using var tokenClient = new HttpClient();
+        using var tokenClient = new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(_options.TimeoutSeconds)
+        };
 
         var credentials = Convert.ToBase64String(
             Encoding.UTF8.GetBytes($"{_options.ClientId}:{_options.ClientSecret}"));
@@ -90,9 +93,11 @@ public sealed class OAuthTokenProvider : IDisposable
 
         _cachedToken = tokenData.AccessToken;
 
-        // Apply 5-minute buffer before actual expiry; default to 24 hours if not specified
+        // Apply a 5-minute early-refresh buffer, clamped so tokens shorter than
+        // 5 minutes are still cached for half their lifetime instead of expiring immediately.
         var expiresInSeconds = tokenData.ExpiresIn ?? 86400;
-        _tokenExpiration = DateTimeOffset.UtcNow.AddSeconds(expiresInSeconds - 300);
+        var bufferSeconds = Math.Min(300, expiresInSeconds / 2);
+        _tokenExpiration = DateTimeOffset.UtcNow.AddSeconds(expiresInSeconds - bufferSeconds);
 
         return _cachedToken;
     }

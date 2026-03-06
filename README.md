@@ -264,7 +264,7 @@ The client automatically handles OAuth 2.0 client credentials authentication:
 2. **Token Caching** - Caches tokens for their lifetime (typically 24 hours)
 3. **Automatic Refresh** - Refreshes expired tokens automatically
 4. **Thread-Safe** - Token acquisition is thread-safe for concurrent requests
-5. **Shared Cache** - The REST and GraphQL clients share a single `OAuthTokenProvider` instance, so only one token request is made on cold start regardless of which surface is called first
+5. **Shared Token Cache** - The REST and GraphQL clients share a single `OAuthTokenProvider` instance — only one token request is made on cold start regardless of which surface is called first
 
 A 5-minute buffer is applied before the token's actual expiry to ensure reliability.
 

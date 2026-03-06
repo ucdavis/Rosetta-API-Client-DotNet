@@ -12,6 +12,7 @@ namespace UCD.Rosetta.Client.Core.Authentication;
 public class OAuthHandler : DelegatingHandler
 {
     private readonly OAuthTokenProvider _tokenProvider;
+    private readonly bool _ownsTokenProvider;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OAuthHandler"/> class with its own
@@ -20,7 +21,7 @@ public class OAuthHandler : DelegatingHandler
     /// </summary>
     /// <param name="options">The Rosetta client configuration options.</param>
     public OAuthHandler(RosettaClientOptions options)
-        : this(new OAuthTokenProvider(options)) { }
+        : this(new OAuthTokenProvider(options), ownsProvider: true) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OAuthHandler"/> class with a shared
@@ -30,8 +31,20 @@ public class OAuthHandler : DelegatingHandler
     /// </summary>
     /// <param name="tokenProvider">Shared token provider.</param>
     public OAuthHandler(OAuthTokenProvider tokenProvider)
+        : this(tokenProvider, ownsProvider: false) { }
+
+    private OAuthHandler(OAuthTokenProvider tokenProvider, bool ownsProvider)
     {
         _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
+        _ownsTokenProvider = ownsProvider;
+    }
+
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && _ownsTokenProvider)
+            _tokenProvider.Dispose();
+        base.Dispose(disposing);
     }
 
     /// <inheritdoc />

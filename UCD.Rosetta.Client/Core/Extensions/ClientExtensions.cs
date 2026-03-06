@@ -43,16 +43,6 @@ public partial class Client
                 ? responseBody
                 : responseBody.Substring(0, DebugResponseMaxLength) + $"... (truncated, showing {DebugResponseMaxLength} of {responseBody.Length} chars)";
 
-            string? logPath = null;
-            try
-            {
-                logPath = Path.Combine(FindSolutionRoot() ?? Path.GetTempPath(), "rosetta-debug.json");
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"[RosettaClient] Could not determine debug log path: {ex.Message}");
-            }
-
             var lines = new[]
             {
                 "=== DEBUG: API Response ===",
@@ -60,7 +50,6 @@ public partial class Client
                 $"Status: {(int)response.StatusCode} {response.StatusCode}",
                 $"Content-Type: {response.Content.Headers.ContentType}",
                 $"Body Length: {responseBody.Length} characters",
-                logPath != null ? $"Log file: {logPath}" : "Log file: (unavailable)",
                 "Body:",
                 body,
                 "=========================\n"
@@ -69,19 +58,6 @@ public partial class Client
             // Write to Trace — visible in VS/VS Code Output > Debug window when debugging
             foreach (var line in lines)
                 Trace.WriteLine(line);
-
-            // Write to a file — always accessible regardless of test runner output capture
-            if (logPath != null)
-            {
-                try
-                {
-                    File.AppendAllText(logPath, string.Join(Environment.NewLine, lines));
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine($"[RosettaClient] Could not write debug log to '{logPath}': {ex.Message}");
-                }
-            }
         }
     }
     
