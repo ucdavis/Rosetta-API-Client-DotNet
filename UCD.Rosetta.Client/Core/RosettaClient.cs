@@ -14,6 +14,7 @@ public class RosettaClient : IDisposable
     private readonly HttpClient _httpClient;
     private readonly HttpClient _graphqlHttpClient;
     private readonly bool _disposeHttpClient;
+    private readonly bool _disposeGraphqlHttpClient;
 
     /// <summary>
     /// Gets the underlying API client that provides access to all Rosetta API endpoints.
@@ -87,6 +88,36 @@ public class RosettaClient : IDisposable
             BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/graphql"),
             Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds)
         };
+        _disposeGraphqlHttpClient = true;
+        GraphQL = new RosettaGraphQLClient(_graphqlHttpClient);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RosettaClient"/> class with pre-configured HttpClients.
+    /// Use this constructor when integrating with <see cref="IHttpClientFactory"/> in dependency injection scenarios
+    /// so that both the REST and GraphQL clients benefit from pooled handler management.
+    /// </summary>
+    /// <param name="httpClient">Pre-configured HttpClient for REST calls (should include OAuth handler via IHttpClientFactory).</param>
+    /// <param name="graphqlHttpClient">Pre-configured HttpClient for GraphQL calls, with <c>BaseAddress</c> pointing at the <c>/graphql</c> endpoint.</param>
+    /// <param name="options">Configuration options for the Rosetta API client.</param>
+    public RosettaClient(HttpClient httpClient, HttpClient graphqlHttpClient, RosettaClientOptions options)
+    {
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _graphqlHttpClient = graphqlHttpClient ?? throw new ArgumentNullException(nameof(graphqlHttpClient));
+
+        if (options == null)
+            throw new ArgumentNullException(nameof(options));
+
+        options.Validate();
+
+        var baseUrl = options.BaseUrl.Replace("{version}", options.ApiVersion);
+        Api = new Generated.Client(_httpClient)
+        {
+            BaseUrl = baseUrl
+        };
+
+        _disposeHttpClient = false;        // IHttpClientFactory owns the REST client
+        _disposeGraphqlHttpClient = false; // IHttpClientFactory owns the GraphQL client
         GraphQL = new RosettaGraphQLClient(_graphqlHttpClient);
     }
 
@@ -120,6 +151,7 @@ public class RosettaClient : IDisposable
             BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/graphql"),
             Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds)
         };
+        _disposeGraphqlHttpClient = true;
         GraphQL = new RosettaGraphQLClient(_graphqlHttpClient);
     }
 
@@ -129,10 +161,9 @@ public class RosettaClient : IDisposable
     public void Dispose()
     {
         if (_disposeHttpClient)
-        {
             _httpClient?.Dispose();
-        }
-        // _graphqlHttpClient is always owned by RosettaClient
-        _graphqlHttpClient?.Dispose();
+
+        if (_disposeGraphqlHttpClient)
+            _graphqlHttpClient?.Dispose();
     }
 }
