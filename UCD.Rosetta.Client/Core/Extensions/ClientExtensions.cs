@@ -16,7 +16,7 @@ public partial class Client
     /// </summary>
     public int DebugResponseMaxLength { get; set; } = 0;
 
-    partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response)
+    partial void ProcessResponse(HttpClient client, HttpResponseMessage response)
     {
         if (DebugResponseMaxLength != 0 && response.Content != null)
         {
@@ -24,7 +24,7 @@ public partial class Client
             var responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             
             // Re-create the content with the buffered string so it can be read again during deserialization
-            var newContent = new System.Net.Http.StringContent(responseBody, 
+            var newContent = new StringContent(responseBody, 
                 System.Text.Encoding.UTF8, 
                 response.Content.Headers.ContentType?.MediaType ?? "application/json");
             
@@ -40,7 +40,15 @@ public partial class Client
                 ? responseBody
                 : responseBody.Substring(0, DebugResponseMaxLength) + $"... (truncated, showing {DebugResponseMaxLength} of {responseBody.Length} chars)";
 
-            var logPath = System.IO.Path.Combine(FindSolutionRoot() ?? System.IO.Path.GetTempPath(), "rosetta-debug.json");
+            string? logPath = null;
+            try
+            {
+                logPath = Path.Combine(FindSolutionRoot() ?? Path.GetTempPath(), "rosetta-debug.json");
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"[RosettaClient] Could not determine debug log path: {ex.Message}");
+            }
 
             var lines = new[]
             {
@@ -49,7 +57,7 @@ public partial class Client
                 $"Status: {(int)response.StatusCode} {response.StatusCode}",
                 $"Content-Type: {response.Content.Headers.ContentType}",
                 $"Body Length: {responseBody.Length} characters",
-                $"Log file: {logPath}",
+                logPath != null ? $"Log file: {logPath}" : "Log file: (unavailable)",
                 "Body:",
                 body,
                 "=========================\n"
@@ -59,19 +67,36 @@ public partial class Client
             foreach (var line in lines)
                 Trace.WriteLine(line);
 
-            // Write to a temp file — always accessible regardless of test runner output capture
-            System.IO.File.WriteAllText(logPath, string.Join(System.Environment.NewLine, lines));
+            // Write to a file — always accessible regardless of test runner output capture
+            if (logPath != null)
+            {
+                try
+                {
+                    File.WriteAllText(logPath, string.Join(Environment.NewLine, lines));
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine($"[RosettaClient] Could not write debug log to '{logPath}': {ex.Message}");
+                }
+            }
         }
     }
     
     private static string? FindSolutionRoot()
     {
-        var dir = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
-        while (dir != null)
+        try
         {
-            if (dir.GetFiles("*.sln").Length > 0)
-                return dir.FullName;
-            dir = dir.Parent;
+            var dir = new DirectoryInfo(AppContext.BaseDirectory);
+            while (dir != null)
+            {
+                if (dir.GetFiles("*.sln").Length > 0)
+                    return dir.FullName;
+                dir = dir.Parent;
+            }
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine($"[RosettaClient] FindSolutionRoot failed: {ex.Message}");
         }
         return null;
     }
