@@ -231,7 +231,10 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         // First get all colleges to find a valid code
         var all = await _fixture.Client.Api.CollegesAsync();
         Skip.If(all.Count == 0, "No colleges returned from API");
-        var code = all.First().College_code;
+        var code = all.Where(c => !string.IsNullOrEmpty(c.College_code))
+            .Select(c => c.College_code)
+            .FirstOrDefault();
+        Skip.If(string.IsNullOrWhiteSpace(code), "No valid college_code found — cannot use as filter");
 
         // Act
         var result = await _fixture.Client.Api.CollegesAsync(college_code: code);
