@@ -18,17 +18,23 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
     #region People
 
-    [Fact]
+    [SkippableFact]
     public async Task PeopleAsync_WithEmail_ReturnsResults()
     {
-        // Arrange
-        var email = _fixture.TestData.TestEmail ?? "testemail@ucdavis.edu";
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.TestEmail),
+            "TestData:TestEmail not configured in user secrets or environment variables");
+
+        var email = _fixture.TestData.TestEmail!;
 
         // Act
         var result = await _fixture.Client.Api.PeopleAsync(email: email);
 
-        // Assert
-        Assert.NotNull(result);
+        // Assert — every returned person should have the searched email in at least one email field
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p =>
+            p.Email != null &&
+            p.Email.Any(e => e.Primary == email || e.Work == email || e.Personal == email));
     }
 
     [Fact]
@@ -72,46 +78,56 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     [SkippableFact]
     public async Task PeopleAsync_WithIamIds_ReturnsResults()
     {
-        // Skip if no test data configured
-        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds), 
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds),
             "TestData:IamIds not configured in user secrets or environment variables");
+
+        var requestedIds = _fixture.TestData.IamIds!
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .ToHashSet();
 
         // Act
         var result = await _fixture.Client.Api.PeopleAsync(iamids: _fixture.TestData.IamIds);
 
-        // Assert
-        Assert.NotNull(result);
+        // Assert — every returned person's IAM ID must be one of the requested IDs
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p => requestedIds.Contains(p.Iam_id));
     }
 
     [SkippableFact]
     public async Task PeopleAsync_WithLoginId_ReturnsResults()
     {
-        // Skip if no test data configured
         Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId),
             "TestData:LoginId not configured in user secrets or environment variables");
 
-        // Act
-        var result = await _fixture.Client.Api.PeopleAsync(loginid: _fixture.TestData.LoginId);
+        var loginId = _fixture.TestData.LoginId!;
 
-        // Assert
+        // Act
+        var result = await _fixture.Client.Api.PeopleAsync(loginid: loginId);
+
+        // Assert — every returned person should have the searched login ID in their identity IDs
         result.ShouldNotBeNull();
-        result.Count.ShouldBeGreaterThan(0);
-        result.ElementAt(0).Iam_id.ShouldNotBeNullOrEmpty();
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p =>
+            p.Id != null &&
+            p.Id.Any(id => id.Login_id == loginId));
     }
 
     [SkippableFact]
     public async Task PeopleAsync_WithManagerIamId_ReturnsResults()
     {
-        // Skip if no test data configured
         Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.ManagerIamId),
             "TestData:ManagerIamId not configured in user secrets or environment variables");
 
-        // Act
-        var result = await _fixture.Client.Api.PeopleAsync(manager_iam_id: _fixture.TestData.ManagerIamId);
+        var managerIamId = _fixture.TestData.ManagerIamId!;
 
-        // Assert
+        // Act
+        var result = await _fixture.Client.Api.PeopleAsync(manager_iam_id: managerIamId);
+
+        // Assert — every returned person should report the searched manager IAM ID
         result.ShouldNotBeNull();
-        result.Count.ShouldBeGreaterThan(0);
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p => p.Manager_iam_id == managerIamId);
     }
 
     #endregion
@@ -165,15 +181,18 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
             {
                 o.Iam_id,
                 o.Displayname,
-                Name = o.Name(n => new { n.Lived_first_name, n.Lived_last_name }),
-                Email = o.Email(e => e.Primary)
+                Name    = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                Email   = o.Email(e => e.Primary),
+                LoginId = o.Id(id => id.Login_id)
             }));
 
-        // Assert
+        // Assert — every returned person should have the searched login ID
         response.Data.ShouldNotBeNull();
         response.Data.ShouldNotBeEmpty();
-        response.Data[0]!.Iam_id?.Value.ShouldNotBeNullOrEmpty();
-        response.Data[0]!.Displayname.ShouldNotBeNullOrEmpty();
+        response.Data.ShouldAllBe(p =>
+            p != null &&
+            p.LoginId != null &&
+            p.LoginId.Any(id => id == loginId));
     }
 
     [Fact]
