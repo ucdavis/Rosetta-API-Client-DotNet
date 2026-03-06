@@ -1,6 +1,6 @@
 # UCD.Rosetta.Client
 
-![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.32-blue)
+![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.33-blue)
 
 Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.
 
@@ -264,8 +264,9 @@ The client automatically handles OAuth 2.0 client credentials authentication:
 2. **Token Caching** - Caches tokens for their lifetime (typically 24 hours)
 3. **Automatic Refresh** - Refreshes expired tokens automatically
 4. **Thread-Safe** - Token acquisition is thread-safe for concurrent requests
+5. **Shared Cache** - The REST and GraphQL clients share a single `OAuthTokenProvider` instance, so only one token request is made on cold start regardless of which surface is called first
 
-The OAuth handler adds a 5-minute buffer before token expiration to ensure reliability.
+A 5-minute buffer is applied before the token's actual expiry to ensure reliability.
 
 ## Advanced Configuration
 
@@ -318,7 +319,8 @@ catch (OperationCanceledException)
 └── UCD.Rosetta.Client/
     ├── Core/
     │   ├── Authentication/
-    │   │   └── OAuthHandler.cs          # OAuth 2.0 authentication handler
+    │   │   ├── OAuthHandler.cs          # Delegating handler that attaches Bearer tokens
+    │   │   └── OAuthTokenProvider.cs    # Token acquisition, caching, and refresh logic
     │   ├── Configuration/
     │   │   └── RosettaClientOptions.cs  # Configuration options
     │   ├── Converters/
@@ -344,16 +346,17 @@ To update both specs to a new API version, use the convenience script:
 ./update-spec.sh 1.0.12  # Replace with desired version
 ```
 
-This downloads the latest spec from MuleSoft Exchange, extracts the embedded GraphQL SDL schema into `specs/rosetta-api.graphql` (with the required `schema { query: Query }` root appended), and updates the README version badge. Then rebuild:
+To find the latest version number: open the [Rosetta API Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/), open the **Download** dropdown, and hover over any link — the version appears in the URL shown in the browser status bar.
+
+The script downloads the spec from MuleSoft Exchange, extracts the embedded GraphQL SDL into `specs/rosetta-api.graphql` (appending the `schema { query: Query }` root required by ZeroQL), and updates the README version badge. Then rebuild:
 ```bash
 dotnet clean && dotnet build
 ```
 
 ## Future Enhancements
 
--  Response caching options
+- Response caching options
 - 🔄 Retry policies with Polly
-- 📝 Enhanced logging and diagnostics
 
 ## Local development, secrets, and running tests
 

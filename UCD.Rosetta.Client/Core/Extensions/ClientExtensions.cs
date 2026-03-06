@@ -21,7 +21,10 @@ public partial class Client
         if (DebugResponseMaxLength != 0 && response.Content != null)
         {
             // Read the response body - we need to buffer it so it can be read again
-            var responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var responseBody = response.Content.ReadAsStringAsync()
+                .ConfigureAwait(false) // Avoid deadlocks in certain synchronization contexts
+                .GetAwaiter()
+                .GetResult();
             
             // Re-create the content with the buffered string so it can be read again during deserialization
             var newContent = new StringContent(responseBody, 
@@ -72,7 +75,7 @@ public partial class Client
             {
                 try
                 {
-                    File.WriteAllText(logPath, string.Join(Environment.NewLine, lines));
+                    File.AppendAllText(logPath, string.Join(Environment.NewLine, lines));
                 }
                 catch (Exception ex)
                 {

@@ -2,8 +2,11 @@
 # Script to update the OpenAPI specification from MuleSoft Exchange
 # Usage: ./update-spec.sh [version]
 # Example: ./update-spec.sh 1.0.11
-# Check for latest version at:
-# https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/
+#
+# To find the latest version:
+#   1. Open https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/
+#   2. Open the Download dropdown menu
+#   3. Hover over any download link — the version number appears in the URL shown in the browser status bar
 
 set -e
 

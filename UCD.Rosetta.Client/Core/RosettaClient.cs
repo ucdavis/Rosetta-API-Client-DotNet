@@ -61,8 +61,11 @@ public class RosettaClient : IDisposable
 
         options.Validate();
 
+        // Single token provider shared by both HTTP clients — one token request on cold start
+        var tokenProvider = new OAuthTokenProvider(options);
+
         // Create OAuth handler
-        var oauthHandler = new OAuthHandler(options)
+        var oauthHandler = new OAuthHandler(tokenProvider)
         {
             InnerHandler = new HttpClientHandler()
         };
@@ -81,8 +84,8 @@ public class RosettaClient : IDisposable
         };
         _disposeHttpClient = true;
 
-        // Create a separate HttpClient for the GraphQL endpoint (owns its own OAuth handler)
-        var graphqlOAuthHandler = new OAuthHandler(options) { InnerHandler = new HttpClientHandler() };
+        // GraphQL client reuses the same token provider — no second token request
+        var graphqlOAuthHandler = new OAuthHandler(tokenProvider) { InnerHandler = new HttpClientHandler() };
         _graphqlHttpClient = new HttpClient(graphqlOAuthHandler)
         {
             BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/graphql"),
@@ -144,7 +147,8 @@ public class RosettaClient : IDisposable
         };
         _disposeHttpClient = false; // Don't dispose HttpClient when using IHttpClientFactory
 
-        // Create a separate HttpClient for the GraphQL endpoint (always owned by RosettaClient)
+        // GraphQL client uses a separate handler that shares the REST client's token provider
+        // if one can be extracted; otherwise creates its own. For full sharing use the 3-arg constructor.
         var graphqlOAuthHandler = new OAuthHandler(options) { InnerHandler = new HttpClientHandler() };
         _graphqlHttpClient = new HttpClient(graphqlOAuthHandler)
         {

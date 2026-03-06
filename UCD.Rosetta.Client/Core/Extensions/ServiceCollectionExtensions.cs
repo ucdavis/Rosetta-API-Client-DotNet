@@ -60,17 +60,21 @@ public static class ServiceCollectionExtensions
         // Register options
         services.Configure(configureOptions);
 
+        // Single shared token provider — both named clients acquire tokens through the same
+        // cache, so only one token request is made on cold start rather than two.
+        services.AddSingleton<OAuthTokenProvider>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<RosettaClientOptions>>().Value;
+            return new OAuthTokenProvider(options);
+        });
+
         // Register named HttpClient for REST calls
         services.AddHttpClient("RosettaClient", (sp, client) =>
         {
             var options = sp.GetRequiredService<IOptions<RosettaClientOptions>>().Value;
             client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
         })
-        .AddHttpMessageHandler(sp =>
-        {
-            var options = sp.GetRequiredService<IOptions<RosettaClientOptions>>().Value;
-            return new OAuthHandler(options);
-        });
+        .AddHttpMessageHandler(sp => new OAuthHandler(sp.GetRequiredService<OAuthTokenProvider>()));
 
         // Register named HttpClient for GraphQL calls — shares the factory's handler pool
         services.AddHttpClient("RosettaGraphQLClient", (sp, client) =>
@@ -80,11 +84,7 @@ public static class ServiceCollectionExtensions
             client.BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/graphql");
             client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
         })
-        .AddHttpMessageHandler(sp =>
-        {
-            var options = sp.GetRequiredService<IOptions<RosettaClientOptions>>().Value;
-            return new OAuthHandler(options);
-        });
+        .AddHttpMessageHandler(sp => new OAuthHandler(sp.GetRequiredService<OAuthTokenProvider>()));
 
         // Register RosettaClient using both factory-managed clients
         services.AddScoped<RosettaClient>(sp =>
