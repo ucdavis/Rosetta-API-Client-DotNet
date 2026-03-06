@@ -61,8 +61,5 @@ public class RosettaClientOptions
 
         if (string.IsNullOrWhiteSpace(ClientSecret))
             throw new InvalidOperationException("RosettaClientOptions.ClientSecret is required.");
-
-        if (string.IsNullOrWhiteSpace(Scope))
-            throw new InvalidOperationException("RosettaClientOptions.Scope is required.");
     }
 }
