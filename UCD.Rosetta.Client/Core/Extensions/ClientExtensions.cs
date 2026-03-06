@@ -109,8 +109,5 @@ public partial class Client
         // Gracefully handle ICollection<T> arrays that may contain null or unexpected
         // token types for some records in real API responses (e.g. student_association).
         settings.Converters.Add(new LenientTypedCollectionConverterFactory());
-        
-        // Add custom converter for dynamic object collections
-        settings.Converters.Add(new DynamicObjectCollectionConverter());
     }
 }

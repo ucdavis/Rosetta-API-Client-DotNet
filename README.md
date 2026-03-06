@@ -98,9 +98,9 @@ public class MyService
         _rosettaClient = rosettaClient;
     }
 
-    public async Task<object> GetUserAccountsAsync(string iamId)
+    public async Task<ICollection<Person>> GetPersonByIamIdAsync(string iamId)
     {
-        return await _rosettaClient.Api.AccountsAllAsync(iamid: iamId);
+        return await _rosettaClient.Api.PeopleAsync(iamid: iamId);
     }
 }
 ```
@@ -154,8 +154,8 @@ await client.Api.PeopleAsync(employeeid: "123456");
 await client.Api.PeopleAsync(studentid: "987654");
 await client.Api.PeopleAsync(manager_iam_id: "0987654321");
 
-// Pass a list of IAM IDs
-await client.Api.PeopleAsync(iamids: new[] { "1234567890", "0987654321" });
+// Pass a comma-separated list of IAM IDs
+await client.Api.PeopleAsync(iamids: "1234567890,0987654321");
 ```
 
 ### Reference Data
@@ -288,7 +288,7 @@ var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
 try
 {
-    var people = await client.Api.PeopleAllAsync(
+    var people = await client.Api.PeopleAsync(
         limit: 1000,
         cancellationToken: cts.Token
     );
@@ -310,26 +310,27 @@ catch (OperationCanceledException)
 ### Project Structure
 
 ```
-UCD.Rosetta.Client/
-├── Core/
-│   ├── Authentication/
-│   │   └── OAuthHandler.cs          # OAuth 2.0 authentication handler
-│   ├── Configuration/
-│   │   └── RosettaClientOptions.cs  # Configuration options
-│   ├── Converters/
-│   │   ├── DynamicObjectCollectionConverter.cs
-│   │   └── LenientTypedCollectionConverter.cs
-│   ├── Extensions/
-│   │   ├── ClientExtensions.cs      # Debug logging
-│   │   └── ServiceCollectionExtensions.cs  # DI extensions
-│   └── RosettaClient.cs             # Main client facade (REST + GraphQL)
-├── Generated/
-│   └── RosettaApiClient.g.cs        # Auto-generated from OpenAPI spec (NSwag)
-├── rosetta.zeroql.json              # ZeroQL codegen config
-│                                    # → generates obj/ZeroQL/rosetta.zeroql.json.g.cs on build
-└── specs/                           # (downloaded and extracted by update-spec.sh)
-    ├── rosetta-api.json             # OpenAPI specification
-    └── rosetta-api.graphql          # GraphQL SDL schema
+<repo root>/
+├── specs/                           # Downloaded and extracted by update-spec.sh
+│   ├── rosetta-api.json             # OpenAPI specification
+│   └── rosetta-api.graphql          # GraphQL SDL schema (with schema root appended)
+├── update-spec.sh                   # Script to pull a new API spec version
+└── UCD.Rosetta.Client/
+    ├── Core/
+    │   ├── Authentication/
+    │   │   └── OAuthHandler.cs          # OAuth 2.0 authentication handler
+    │   ├── Configuration/
+    │   │   └── RosettaClientOptions.cs  # Configuration options
+    │   ├── Converters/
+    │   │   └── LenientTypedCollectionConverter.cs
+    │   ├── Extensions/
+    │   │   ├── ClientExtensions.cs      # Debug logging
+    │   │   └── ServiceCollectionExtensions.cs  # DI extensions
+    │   └── RosettaClient.cs             # Main client facade (REST + GraphQL)
+    ├── Generated/
+    │   └── RosettaApiClient.g.cs        # Auto-generated from OpenAPI spec (NSwag)
+    └── rosetta.zeroql.json              # ZeroQL codegen config
+                                         # → generates obj/ZeroQL/rosetta.zeroql.json.g.cs on build
 ```
 
 ### Regenerating Client Code
@@ -403,7 +404,7 @@ client.DebugResponseMaxLength = 4096; // print up to 4KiB of response body for d
 
 Why this extra configuration exists
 
-- The Rosetta API spec contains several endpoints typed as untyped objects (OpenAPI `type: object` or arrays of `object`). The generated client uses `System.Text.Json`. To handle runtime variations in responses (arrays, single objects, or plain strings) a small custom `JsonConverter` is registered at runtime which defensively parses these responses into an `ICollection<object>` safely. This keeps the library compatible with `System.Text.Json` (no Newtonsoft dependency) while being resilient to inconsistent server payloads.
+- The Rosetta API spec models use typed arrays (e.g. `ICollection<Name>`, `ICollection<Email>`) for nested sub-objects on `Person`. In practice the API can return `null` elements or unexpected primitives inside those arrays for records with no data. A `LenientTypedCollectionConverter<T>` is registered at startup to silently skip such tokens rather than throwing a `JsonException`. This keeps the library compatible with `System.Text.Json` (no Newtonsoft dependency) while being resilient to inconsistent server payloads.
 
 CI notes
 

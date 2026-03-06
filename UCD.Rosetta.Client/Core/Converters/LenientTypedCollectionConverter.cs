@@ -23,8 +23,8 @@ public class LenientTypedCollectionConverterFactory : JsonConverterFactory
 
         var elementType = typeToConvert.GetGenericArguments()[0];
 
-        // Only handle concrete classes that are not primitives, strings, or object itself.
-        // Those are handled by the default converters or DynamicObjectCollectionConverter.
+        // Only handle concrete classes that are not primitives, strings, or object itself;
+        // those are handled by the default System.Text.Json converters.
         return elementType.IsClass
             && elementType != typeof(string)
             && elementType != typeof(object);
