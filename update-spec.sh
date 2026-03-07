@@ -37,16 +37,32 @@ rm -rf /tmp/rosetta-spec /tmp/rosetta-spec.zip
 
 # Extract embedded GraphQL schema from externalDocs.description
 GRAPHQL_FILE="${SPEC_DIR}/rosetta-api.graphql"
+GRAPHQL_TMP="$(mktemp /tmp/rosetta-api.graphql.XXXXXX)"
 echo "📐 Extracting GraphQL schema..."
 if command -v jq &>/dev/null; then
     jq -r '.externalDocs.description' "${SPEC_FILE}" \
         | awk '/```graphql/{found=1; next} found && /```/{exit} found{print}' \
         | sed 's/^    //' \
-        > "${GRAPHQL_FILE}"
+        > "${GRAPHQL_TMP}"
     # Append schema root declaration required by ZeroQL codegen
-    printf '\nschema {\n  query: Query\n}\n' >> "${GRAPHQL_FILE}"
+    printf '\nschema {\n  query: Query\n}\n' >> "${GRAPHQL_TMP}"
+
+    # Validate: must be non-empty and contain at least one type definition
+    if [[ ! -s "${GRAPHQL_TMP}" ]]; then
+        echo "❌ GraphQL extraction produced an empty file — spec may not contain an embedded schema"
+        rm -f "${GRAPHQL_TMP}"
+        exit 1
+    fi
+    if ! grep -q '^type ' "${GRAPHQL_TMP}"; then
+        echo "❌ Extracted content does not look like a GraphQL schema (no 'type' definitions found)"
+        rm -f "${GRAPHQL_TMP}"
+        exit 1
+    fi
+
+    mv "${GRAPHQL_TMP}" "${GRAPHQL_FILE}"
     echo "✅ GraphQL schema extracted: ${GRAPHQL_FILE}"
 else
+    rm -f "${GRAPHQL_TMP}"
     echo "⚠️  jq not found — skipping GraphQL schema extraction (install with: brew install jq)"
 fi
 
