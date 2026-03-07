@@ -18,7 +18,7 @@ public class LenientTypedCollectionConverterFactory : JsonConverterFactory
             return false;
 
         var genericDef = typeToConvert.GetGenericTypeDefinition();
-        if (genericDef != typeof(ICollection<>) && genericDef != typeof(List<>))
+        if (genericDef != typeof(ICollection<>))
             return false;
 
         var elementType = typeToConvert.GetGenericArguments()[0];
