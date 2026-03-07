@@ -2,5 +2,5 @@ root = true
 
 # Suppress missing XML comment warnings (CS1591) for ZeroQL auto-generated code.
 # ZeroQL v8 does not emit XML docs on its generated types; this is a known limitation.
-[obj/ZeroQL/**/*.g.cs]
+[obj/ZeroQL/**.g.cs]
 dotnet_diagnostic.CS1591.severity = none
