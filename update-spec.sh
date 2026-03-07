@@ -63,7 +63,8 @@ if command -v jq &>/dev/null; then
     echo "✅ GraphQL schema extracted: ${GRAPHQL_FILE}"
 else
     rm -f "${GRAPHQL_TMP}"
-    echo "⚠️  jq not found — skipping GraphQL schema extraction (install with: brew install jq)"
+    echo "❌ jq not found — install it first: brew install jq"
+    exit 1
 fi
 
 # Update README badge with new version

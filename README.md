@@ -345,7 +345,7 @@ The GraphQL client (`obj/ZeroQL/rosetta.zeroql.json.g.cs`) is regenerated from `
 
 To update both specs to a new API version, use the convenience script:
 ```bash
-./update-spec.sh 1.0.12  # Replace with desired version
+./update-spec.sh <version>  # e.g. 1.0.33
 ```
 
 To find the latest version number: open the [Rosetta API Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/), open the **Download** dropdown, and hover over any link — the version appears in the URL shown in the browser status bar.

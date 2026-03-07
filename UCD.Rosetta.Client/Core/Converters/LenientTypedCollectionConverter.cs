@@ -48,7 +48,7 @@ internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>
     public override ICollection<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
-            return null;
+            return [];
 
         if (reader.TokenType != JsonTokenType.StartArray)
         {

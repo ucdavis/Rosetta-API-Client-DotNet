@@ -39,7 +39,7 @@ public partial class Client
             
             response.Content = newContent;
 
-            var body = DebugResponseMaxLength == -1 || responseBody.Length <= DebugResponseMaxLength
+            var body = DebugResponseMaxLength < 0 || responseBody.Length <= DebugResponseMaxLength
                 ? responseBody
                 : responseBody.Substring(0, DebugResponseMaxLength) + $"... (truncated, showing {DebugResponseMaxLength} of {responseBody.Length} chars)";
 
