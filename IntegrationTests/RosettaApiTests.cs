@@ -140,7 +140,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         // Act
         var result = await _fixture.Client.Api.GraphqlAsync(new
         {
-            query = "{ people(limit: 1) { iam_id displayname email { primary } } }"
+            query = "{ people(limit: 3) { iam_id displayname email { primary } } }"
         });
 
         // Assert
