@@ -1,4 +1,5 @@
 using Shouldly;
+using UCD.Rosetta.Client.GraphQL;
 
 namespace IntegrationTests;
 
@@ -15,34 +16,25 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         _fixture = fixture;
     }
 
-    #region Authentication & User
-
-    //[Fact]
-    //public async Task MeAsync_ReturnsCurrentUser()
-    //{
-    //    // Act
-    //    var result = await _fixture.Client.Api.MeAsync();
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    Assert.Fail($"MeAsync returns untyped 'object'. API spec incomplete. Response: {result}");
-    //}
-
-    #endregion
-
     #region People
 
-    [Fact]
+    [SkippableFact]
     public async Task PeopleAsync_WithEmail_ReturnsResults()
     {
-        // Arrange
-        var email = _fixture.TestData.TestEmail ?? "testemail@ucdavis.edu";
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.TestEmail),
+            "TestData:TestEmail not configured in user secrets or environment variables");
+
+        var email = _fixture.TestData.TestEmail!;
 
         // Act
         var result = await _fixture.Client.Api.PeopleAsync(email: email);
 
-        // Assert
-        Assert.NotNull(result);
+        // Assert — every returned person should have the searched email in at least one email field
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p =>
+            p.Email != null &&
+            p.Email.Any(e => e.Primary == email || e.Work == email || e.Personal == email));
     }
 
     [Fact]
@@ -86,186 +78,139 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     [SkippableFact]
     public async Task PeopleAsync_WithIamIds_ReturnsResults()
     {
-        // Skip if no test data configured
-        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds), 
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds),
             "TestData:IamIds not configured in user secrets or environment variables");
+
+        var requestedIds = _fixture.TestData.IamIds!
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .ToHashSet();
 
         // Act
         var result = await _fixture.Client.Api.PeopleAsync(iamids: _fixture.TestData.IamIds);
+
+        // Assert — every returned person's IAM ID must be one of the requested IDs
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p => requestedIds.Contains(p.Iam_id));
+    }
+
+    [SkippableFact]
+    public async Task PeopleAsync_WithLoginId_ReturnsResults()
+    {
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId),
+            "TestData:LoginId not configured in user secrets or environment variables");
+
+        var loginId = _fixture.TestData.LoginId!;
+
+        // Act
+        var result = await _fixture.Client.Api.PeopleAsync(loginid: loginId);
+
+        // Assert — every returned person should have the searched login ID in their identity IDs
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p =>
+            p.Id != null &&
+            p.Id.Any(id => id.Login_id == loginId));
+    }
+
+    [SkippableFact]
+    public async Task PeopleAsync_WithManagerIamId_ReturnsResults()
+    {
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.ManagerIamId),
+            "TestData:ManagerIamId not configured in user secrets or environment variables");
+
+        var managerIamId = _fixture.TestData.ManagerIamId!;
+
+        // Act
+        var result = await _fixture.Client.Api.PeopleAsync(manager_iam_id: managerIamId);
+
+        // Assert — every returned person should report the searched manager IAM ID
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.ShouldAllBe(p => p.Manager_iam_id == managerIamId);
+    }
+
+    #endregion
+
+    #region GraphQL
+
+    [Fact]
+    public async Task GraphqlAsync_WithPeopleQuery_ReturnsResult()
+    {
+        // Act
+        var result = await _fixture.Client.Api.GraphqlAsync(new
+        {
+            query = "{ people(limit: 3) { iam_id displayname email { primary } } }"
+        });
 
         // Assert
         Assert.NotNull(result);
     }
 
-    #endregion
+    [Fact]
+    public async Task GraphQL_TypedPeopleQuery_ReturnsResults()
+    {
+        // Act — strongly-typed ZeroQL query; no raw JSON strings
+        var response = await _fixture.Client.GraphQL.Query(
+            q => q.People(limit: 5, selector: o => new
+            {
+                o.Iam_id,
+                o.Displayname,
+                Email = o.Email(e => e.Primary)
+            }));
 
-    #region Accounts
+        // Assert
+        response.ShouldNotBeNull();
+        response.Data.ShouldNotBeNull();
+        response.Data.ShouldNotBeEmpty();
+        response.Data[0]!.Iam_id?.Value.ShouldNotBeNullOrEmpty();
+    }
 
-    //[SkippableFact]
-    //public async Task AccountsAllAsync_WithIamId_ReturnsResults()
-    //{
-    //    // Skip if no test data configured
-    //    Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamId), 
-    //        "TestData:IamId not configured in user secrets or environment variables");
+    [SkippableFact]
+    public async Task GraphQL_TypedPeopleQuery_ByLoginId_ReturnsMatchingPerson()
+    {
+        Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId),
+            "TestData:LoginId not configured in user secrets or environment variables");
 
-    //    // Act
-    //    var result = await _fixture.Client.Api.AccountsAllAsync(iamid: _fixture.TestData.IamId);
+        // ZeroQL requires query arguments to be local variables — cannot capture field accesses
+        var loginId = _fixture.TestData.LoginId;
 
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"AccountsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
+        // Act
+        var response = await _fixture.Client.GraphQL.Query(
+            q => q.People(loginid: loginId, selector: o => new
+            {
+                o.Iam_id,
+                o.Displayname,
+                Name    = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                Email   = o.Email(e => e.Primary),
+                LoginId = o.Id(id => id.Login_id)
+            }));
 
-    //[SkippableFact]
-    //public async Task AccountsAllAsync_WithIamIds_ReturnsResults()
-    //{
-    //    // Skip if no test data configured
-    //    Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds), 
-    //        "TestData:IamIds not configured in user secrets or environment variables");
+        // Assert — every returned person should have the searched login ID
+        response.Data.ShouldNotBeNull();
+        response.Data.ShouldNotBeEmpty();
+        response.Data.ShouldAllBe(p =>
+            p != null &&
+            p.LoginId != null &&
+            p.LoginId.Any(id => id == loginId));
+    }
 
-    //    // Act
-    //    var result = await _fixture.Client.Api.AccountsAllAsync(iamids: _fixture.TestData.IamIds);
+    [Fact]
+    public async Task GraphQL_TypedCollegesQuery_ReturnsAllColleges()
+    {
+        // Act
+        var response = await _fixture.Client.GraphQL.Query(
+            q => q.Colleges(selector: o => new { o.College_code, o.College_title }));
 
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"AccountsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
-
-    //[Fact]
-    //public async Task AccountsAllAsync_WithLimit_ReturnsResults()
-    //{
-    //    // Arrange
-    //    var limit = 10;
-
-    //    // Act
-    //    var result = await _fixture.Client.Api.AccountsAllAsync(limit: limit);
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    Assert.True(result.Count <= limit, 
-    //        $"Expected at most {limit} results, got {result.Count}");
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"AccountsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
-
-    //[SkippableFact]
-    //public async Task AccountsAsync_WithId_ReturnsResult()
-    //{
-    //    // Skip if no test data configured
-    //    Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.AccountId), 
-    //        "TestData:AccountId not configured in user secrets or environment variables");
-
-    //    // Act
-    //    var result = await _fixture.Client.Api.AccountsAsync(_fixture.TestData.AccountId!);
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    Assert.Fail($"AccountsAsync returns untyped 'object'. API spec incomplete. Response: {result}");
-    //}
-
-    #endregion
-
-    #region Employees
-
-    //[Fact]
-    //public async Task EmployeesAllAsync_ReturnsResults()
-    //{
-    //    // Act
-    //    var result = await _fixture.Client.Api.EmployeesAllAsync();
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"EmployeesAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
-
-    //[SkippableFact]
-    //public async Task EmployeesAsync_WithId_ReturnsResult()
-    //{
-    //    // Skip if no test data configured
-    //    Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.EmployeeId), 
-    //        "TestData:EmployeeId not configured in user secrets or environment variables");
-
-    //    // Act
-    //    var result = await _fixture.Client.Api.EmployeesAsync(_fixture.TestData.EmployeeId!);
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    Assert.Fail($"EmployeesAsync returns untyped 'object'. API spec incomplete. Response: {result}");
-    //}
-
-    #endregion
-
-    #region Students
-
-    //[Fact]
-    //public async Task StudentsAllAsync_ReturnsResults()
-    //{
-    //    // Act
-    //    var result = await _fixture.Client.Api.StudentsAllAsync();
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"StudentsAllAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
-
-    //[SkippableFact]
-    //public async Task StudentsAsync_WithId_ReturnsResult()
-    //{
-    //    // Skip if no test data configured
-    //    Skip.IfNot(!string.IsNullOrWhiteSpace(_fixture.TestData.StudentId), 
-    //        "TestData:StudentId not configured in user secrets or environment variables");
-
-    //    // Act
-    //    var result = await _fixture.Client.Api.StudentsAsync(_fixture.TestData.StudentId!);
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    Assert.Fail($"StudentsAsync returns untyped 'object'. API spec incomplete. Response: {result}");
-    //}
+        // Assert
+        response.Data.ShouldNotBeNull();
+        response.Data.ShouldNotBeEmpty();
+        response.Data!.All(c => !string.IsNullOrEmpty(c?.College_code)).ShouldBeTrue();
+    }
 
     #endregion
 
     #region Reference Data
-
-    //[Fact]
-    //public async Task GroupsAsync_ReturnsResults()
-    //{
-    //    // Act
-    //    var result = await _fixture.Client.Api.GroupsAsync();
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"GroupsAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
-
-    //[Fact]
-    //public async Task OrganizationsAsync_ReturnsResults()
-    //{
-    //    // Act
-    //    var result = await _fixture.Client.Api.OrganizationsAsync();
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"OrganizationsAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
-
-    //[Fact]
-    //public async Task RolesAsync_ReturnsResults()
-    //{
-    //    // Act
-    //    var result = await _fixture.Client.Api.RolesAsync();
-
-    //    // Assert
-    //    Assert.NotNull(result);
-    //    var first = result.FirstOrDefault();
-    //    Assert.Fail($"RolesAsync returns untyped 'ICollection<object>'. API spec incomplete. First result: {first}");
-    //}
 
     [Fact]
     public async Task CollegesAsync_ReturnsResults()
@@ -274,8 +219,30 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         var result = await _fixture.Client.Api.CollegesAsync();
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Fail($"CollegesAsync returns untyped 'object'. API spec incomplete. Response: {result}");
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(0);
+        result.All(c => !string.IsNullOrEmpty(c.College_code)).ShouldBeTrue("All colleges should have a college_code");
+        result.All(c => !string.IsNullOrEmpty(c.College_title)).ShouldBeTrue("All colleges should have a college_title");
+    }
+
+    [Fact]
+    public async Task CollegesAsync_WithCollegeCode_ReturnsMatchingCollege()
+    {
+        // First get all colleges to find a valid code
+        var all = await _fixture.Client.Api.CollegesAsync();
+        Skip.If(all.Count == 0, "No colleges returned from API");
+        var code = all.Where(c => !string.IsNullOrEmpty(c.College_code))
+            .Select(c => c.College_code)
+            .FirstOrDefault();
+        Skip.If(string.IsNullOrWhiteSpace(code), "No valid college_code found — cannot use as filter");
+
+        // Act
+        var result = await _fixture.Client.Api.CollegesAsync(college_code: code);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(0);
+        result.All(c => c.College_code == code).ShouldBeTrue();
     }
 
     [Fact]
@@ -285,79 +252,23 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         var result = await _fixture.Client.Api.MajorsAsync();
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Fail($"MajorsAsync returns untyped 'object'. API spec incomplete. Response: {result}");
-    }
-
-    #endregion
-
-    #region Campaign Contacts
-
-    [Fact]
-    public async Task CampaignContactsAsync_ReturnsFile()
-    {
-        // Arrange
-        var limit = 10;
-
-        // Act
-        var result = await _fixture.Client.Api.CampaignContactsAsync(limit: limit, save: false);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(200, result.StatusCode);
-        Assert.False(result.IsPartial, "Expected complete response, not partial (206)");
-        Assert.NotNull(result.Stream);
-        Assert.True(result.Stream.CanRead, "Expected readable stream");
-        Assert.True(result.Stream.Length > 0, 
-            $"Expected non-empty CSV stream, got {result.Stream.Length} bytes");
-        
-        // Verify Content-Type header suggests CSV
-        if (result.Headers.TryGetValue("Content-Type", out var contentTypes))
-        {
-            var contentType = string.Join(", ", contentTypes);
-            Assert.True(contentType.Contains("csv", StringComparison.OrdinalIgnoreCase) || 
-                       contentType.Contains("text", StringComparison.OrdinalIgnoreCase),
-                $"Expected CSV content type, got: {contentType}");
-        }
-
-        // Basic CSV format validation - read first few bytes to verify it looks like CSV
-        using var reader = new StreamReader(result.Stream, leaveOpen: false);
-        var firstLine = await reader.ReadLineAsync();
-        Assert.NotNull(firstLine);
-        Assert.True(firstLine.Contains(',') || firstLine.Contains('\t'),
-            $"Expected CSV-like content with delimiters, got: {firstLine.Substring(0, Math.Min(100, firstLine.Length))}");
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(0);
+        result.All(m => !string.IsNullOrEmpty(m.Major_code)).ShouldBeTrue("All majors should have a major_code");
+        result.All(m => !string.IsNullOrEmpty(m.Major_title)).ShouldBeTrue("All majors should have a major_title");
+        result.All(m => m.Major_status == "A" || m.Major_status == "I").ShouldBeTrue("Major status should be A or I");
     }
 
     [Fact]
-    public async Task CampaignContactsModifiedAsync_ReturnsFile()
+    public async Task MajorsAsync_FilterByStatus_ReturnsOnlyActive()
     {
         // Act
-        var result = await _fixture.Client.Api.CampaignContactsModifiedAsync();
+        var result = await _fixture.Client.Api.MajorsAsync(major_status: "A");
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal(200, result.StatusCode);
-        Assert.False(result.IsPartial, "Expected complete response, not partial (206)");
-        Assert.NotNull(result.Stream);
-        Assert.True(result.Stream.CanRead, "Expected readable stream");
-        Assert.True(result.Stream.Length > 0, 
-            $"Expected non-empty CSV stream, got {result.Stream.Length} bytes");
-        
-        // Verify Content-Type header suggests CSV
-        if (result.Headers.TryGetValue("Content-Type", out var contentTypes))
-        {
-            var contentType = string.Join(", ", contentTypes);
-            Assert.True(contentType.Contains("csv", StringComparison.OrdinalIgnoreCase) || 
-                       contentType.Contains("text", StringComparison.OrdinalIgnoreCase),
-                $"Expected CSV content type, got: {contentType}");
-        }
-
-        // Basic CSV format validation - read first few bytes to verify it looks like CSV
-        using var reader = new StreamReader(result.Stream, leaveOpen: false);
-        var firstLine = await reader.ReadLineAsync();
-        Assert.NotNull(firstLine);
-        Assert.True(firstLine.Contains(',') || firstLine.Contains('\t'),
-            $"Expected CSV-like content with delimiters, got: {firstLine.Substring(0, Math.Min(100, firstLine.Length))}");
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(0);
+        result.All(m => m.Major_status == "A").ShouldBeTrue("Expected only active majors");
     }
 
     #endregion

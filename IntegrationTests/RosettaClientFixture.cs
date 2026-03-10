@@ -1,12 +1,13 @@
 using Microsoft.Extensions.Configuration;
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
+using DotNetEnv;
 
 namespace IntegrationTests;
 
 /// <summary>
 /// Test fixture for integration tests that provides a configured RosettaClient.
-/// Loads configuration from appsettings.json and user secrets.
+/// Loads configuration from appsettings.json and .env file.
 /// </summary>
 public class RosettaClientFixture : IDisposable
 {
@@ -16,10 +17,16 @@ public class RosettaClientFixture : IDisposable
 
     public RosettaClientFixture()
     {
+        // Load .env file from the repository root
+        var envPath = Path.Combine(Directory.GetCurrentDirectory(), "../../../..", ".env");
+        if (File.Exists(envPath))
+        {
+            Env.Load(envPath);
+        }
+
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-            .AddUserSecrets(typeof(RosettaClientFixture).Assembly, optional: true)
-            .AddEnvironmentVariables(prefix: "ROSETTA_")
+            .AddEnvironmentVariables()
             .Build();
 
         Options = new RosettaClientOptions();

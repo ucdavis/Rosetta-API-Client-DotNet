@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using UCD.Rosetta.Client.Core.Converters;
 
@@ -15,15 +16,18 @@ public partial class Client
     /// </summary>
     public int DebugResponseMaxLength { get; set; } = 0;
 
-    partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response)
+    partial void ProcessResponse(HttpClient client, HttpResponseMessage response)
     {
         if (DebugResponseMaxLength != 0 && response.Content != null)
         {
             // Read the response body - we need to buffer it so it can be read again
-            var responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var responseBody = response.Content.ReadAsStringAsync()
+                .ConfigureAwait(false) // Avoid deadlocks in certain synchronization contexts
+                .GetAwaiter()
+                .GetResult();
             
             // Re-create the content with the buffered string so it can be read again during deserialization
-            var newContent = new System.Net.Http.StringContent(responseBody, 
+            var newContent = new StringContent(responseBody, 
                 System.Text.Encoding.UTF8, 
                 response.Content.Headers.ContentType?.MediaType ?? "application/json");
             
@@ -34,27 +38,26 @@ public partial class Client
             }
             
             response.Content = newContent;
-            
-            // Log response details to console
-            Console.WriteLine("=== DEBUG: API Response ===");
-            Console.WriteLine($"Request: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri?.PathAndQuery}");
-            Console.WriteLine($"Status: {(int)response.StatusCode} {response.StatusCode}");
-            Console.WriteLine($"Content-Type: {response.Content.Headers.ContentType}");
-            Console.WriteLine($"Body Length: {responseBody.Length} characters");
-            Console.WriteLine("Body:");
-            
-            if (DebugResponseMaxLength == -1 || responseBody.Length <= DebugResponseMaxLength)
+
+            var body = DebugResponseMaxLength < 0 || responseBody.Length <= DebugResponseMaxLength
+                ? responseBody
+                : responseBody.Substring(0, DebugResponseMaxLength) + $"... (truncated, showing {DebugResponseMaxLength} of {responseBody.Length} chars)";
+
+            var lines = new[]
             {
-                // Show full response
-                Console.WriteLine(responseBody);
-            }
-            else
-            {
-                // Truncate to specified length
-                Console.WriteLine(responseBody.Substring(0, DebugResponseMaxLength) + $"... (truncated, showing {DebugResponseMaxLength} of {responseBody.Length} chars)");
-            }
-            
-            Console.WriteLine("=========================\n");
+                "=== DEBUG: API Response ===",
+                $"Request: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri?.PathAndQuery}",
+                $"Status: {(int)response.StatusCode} {response.StatusCode}",
+                $"Content-Type: {response.Content.Headers.ContentType}",
+                $"Body Length: {responseBody.Length} characters",
+                "Body:",
+                body,
+                "=========================\n"
+            };
+
+            // Write to Trace — visible in VS/VS Code Output > Debug window when debugging
+            foreach (var line in lines)
+                Trace.WriteLine(line);
         }
     }
     
@@ -63,7 +66,8 @@ public partial class Client
         // Add any custom JSON serialization settings here
         settings.PropertyNameCaseInsensitive = true;
         
-        // Add custom converter for dynamic object collections
-        settings.Converters.Add(new DynamicObjectCollectionConverter());
+        // Gracefully handle ICollection<T> arrays that may contain null or unexpected
+        // token types for some records in real API responses (e.g. student_association).
+        settings.Converters.Add(new LenientTypedCollectionConverterFactory());
     }
 }

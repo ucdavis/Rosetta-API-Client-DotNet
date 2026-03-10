@@ -2,8 +2,11 @@
 # Script to update the OpenAPI specification from MuleSoft Exchange
 # Usage: ./update-spec.sh [version]
 # Example: ./update-spec.sh 1.0.11
-# Check for latest version at:
-# https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/
+#
+# To find the latest version:
+#   1. Open https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/
+#   2. Open the Download dropdown menu
+#   3. Hover over any download link — the version number appears in the URL shown in the browser status bar
 
 set -e
 
@@ -31,6 +34,38 @@ cp /tmp/rosetta-spec/api.json "${SPEC_FILE}"
 
 # Clean up
 rm -rf /tmp/rosetta-spec /tmp/rosetta-spec.zip
+
+# Extract embedded GraphQL schema from externalDocs.description
+GRAPHQL_FILE="${SPEC_DIR}/rosetta-api.graphql"
+GRAPHQL_TMP="$(mktemp /tmp/rosetta-api.graphql.XXXXXX)"
+echo "📐 Extracting GraphQL schema..."
+if command -v jq &>/dev/null; then
+    jq -r '.externalDocs.description' "${SPEC_FILE}" \
+        | awk '/```graphql/{found=1; next} found && /```/{exit} found{print}' \
+        | sed 's/^    //' \
+        > "${GRAPHQL_TMP}"
+    # Append schema root declaration required by ZeroQL codegen
+    printf '\nschema {\n  query: Query\n}\n' >> "${GRAPHQL_TMP}"
+
+    # Validate: must be non-empty and contain at least one type definition
+    if [[ ! -s "${GRAPHQL_TMP}" ]]; then
+        echo "❌ GraphQL extraction produced an empty file — spec may not contain an embedded schema"
+        rm -f "${GRAPHQL_TMP}"
+        exit 1
+    fi
+    if ! grep -q '^type ' "${GRAPHQL_TMP}"; then
+        echo "❌ Extracted content does not look like a GraphQL schema (no 'type' definitions found)"
+        rm -f "${GRAPHQL_TMP}"
+        exit 1
+    fi
+
+    mv "${GRAPHQL_TMP}" "${GRAPHQL_FILE}"
+    echo "✅ GraphQL schema extracted: ${GRAPHQL_FILE}"
+else
+    rm -f "${GRAPHQL_TMP}"
+    echo "❌ jq not found — install it first: brew install jq"
+    exit 1
+fi
 
 # Update README badge with new version
 echo "📝 Updating README badge..."

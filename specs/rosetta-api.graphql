@@ -1,0 +1,151 @@
+type ProvisioningStatus {
+  primary: String
+}
+
+type NameRecord {
+  lived_first_name: String
+  lived_middle_name: String
+  lived_last_name: String
+  legal_first_name: String
+  legal_middle_name: String
+  legal_last_name: String
+}
+
+type IdentityIds {
+  iam_id: String
+  login_id: String
+  student_id: String
+  mothra_id: String
+  employee_id: String
+  mail_id: String
+  pidm: String
+  pps_id: String
+  cosmos_id: String
+  cpe_id: String
+  health_affiliate_id: String
+  ucanr_id: String
+  usda_whnrc_id: String
+  affiliate_id: String
+  ucnet_id: String
+}
+
+type EmailAddresses {
+  primary: String
+  work: String
+  personal: String
+}
+
+type PhoneNumbers {
+  primary: String
+  work: String
+  personal: String
+}
+
+type StudentAssociation {
+  college: String
+  major: String
+  academic_level: String
+  class_level: String
+}
+
+type PayrollAssociation {
+  employee_record: String
+  employee_id: String
+  position_number: String
+  position_title: String
+  relationship_to_organization: String
+  employee_classification: String
+  employee_classification_description: String
+  status: String
+  hire_date: String
+  start_date: String
+  termination_date: String
+  fte_percentage: String
+  reports_to_position: String
+  job_type_id: String
+  job_type_description: String
+  job_family_id: String
+  job_family_description: String
+  organization_id: String
+  organization_title: String
+  division_id: String
+  division_title: String
+  subdivision_id: String
+  subdivision_title: String
+  business_unit_id: String
+  business_unit_title: String
+  department_id: String
+  department_title: String
+  department_short_title: String
+}
+
+type Person {
+  iam_id: ID
+  displayname: String
+  birth_date: String
+  manager_iam_id: String
+  provisioning_status: [ProvisioningStatus]
+  affiliation: [String]
+  employment_status: [String]
+  name: [NameRecord]
+  id: [IdentityIds]
+  email: [EmailAddresses]
+  phone: [PhoneNumbers]
+  student_association: [StudentAssociation]
+  payroll_association: [PayrollAssociation]
+  modified_date: String
+  create_date: String
+}
+
+type College {
+  college_code: String
+  college_title: String
+}
+
+type Major {
+  major_code: String
+  major_title: String
+  major_status: String
+}
+
+type Query {
+  colleges(
+    college_code: String
+    college_title: String
+  ): [College]
+  majors(
+    major_code: String
+    major_title: String
+    major_status: String
+  ): [Major]
+  people(
+    iamid: String
+    firstname: String
+    lastname: String
+    manager_iam_id: String
+    iamids: [String]
+    email: String
+    emails: [String]
+    loginid: String
+    employeeid: String
+    studentid: String
+    mailid: String
+    pidm: String
+    mothraid: String
+    pps_id: String
+    cosmos_id: String
+    cpe_id: String
+    health_affiliate_id: String
+    ucanr_id: String
+    usda_whnrc_id: String
+    affiliate_id: String
+    ucnet_id: String
+    affiliationContains: String
+    employmentStatus: String
+    limit: Int = 10000
+  ): [Person]
+}
+
+schema {
+  query: Query
+}

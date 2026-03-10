@@ -1,0 +1,6 @@
+<Project>
+  <!-- Ensure local .NET tools declared in .config/dotnet-tools.json are installed -->
+  <Target Name="RestoreDotNetTools" BeforeTargets="BeforeBuild">
+    <Exec Command="dotnet tool restore" />
+  </Target>
+</Project>

@@ -869,7 +869,7 @@
           }
         }
       },
-      "tokenUrl": "https://iam-mulesoft-oauth-provider.us-w1.cloudhub.io/token",
+      "tokenUrl": "https://iam-mulesoft-oauth-provider-2y5rmy.jrfxkn.usa-w2.cloudhub.io/token",
       "flow": "application",
       "scopes": {
         "admin:all": "null",

@@ -1,16 +1,23 @@
 ﻿using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
 using Microsoft.Extensions.Configuration;
+using DotNetEnv;
 
 // Example: Using the Rosetta API Client
 Console.WriteLine("UC Davis Rosetta API Client Example");
 Console.WriteLine("====================================\n");
 
-// Configuration - load from appsettings.json, user secrets and environment variables
+// Load .env file from the repository root
+var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", ".env");
+if (File.Exists(envPath))
+{
+    Env.Load(envPath);
+}
+
+// Configuration - load from appsettings.json and environment variables (including .env)
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddUserSecrets(System.Reflection.Assembly.GetEntryAssembly() ?? typeof(Program).Assembly, optional: true)
-    .AddEnvironmentVariables(prefix: "ROSETTA_")
+    .AddEnvironmentVariables()
     .Build();
 
 var options = new RosettaClientOptions();
@@ -25,26 +32,63 @@ client.DebugResponseMaxLength = 0;
 
 try
 {
-    //Console.WriteLine("Example 1: Get information about the authenticated user");
-    //Console.WriteLine("--------------------------------------------------------");
-    //var me = await client.Api.MeAsync();
-    //Console.WriteLine($"✓ Successfully retrieved user information");
-    //Console.WriteLine($"  (Inspect the 'me' object to see available properties)\n");
-
-    Console.WriteLine("Example 2: Search for a person by email");
+    Console.WriteLine("Example 1: Search for a person by email");
     Console.WriteLine("----------------------------------------");
     var peopleByEmail = await client.Api.PeopleAsync(email: "email-address@ucdavis.edu");
     Console.WriteLine($"✓ Found {peopleByEmail.Count} person/people\n");
 
-    //Console.WriteLine("Example 3: Get accounts for a specific IAM ID");
-    //Console.WriteLine("----------------------------------------------");
-    //var accounts = await client.Api.AccountsAllAsync(iamid: "1234567890");
-    //Console.WriteLine($"✓ Found {accounts.Count} account(s)\n");
+    Console.WriteLine("Example 2: Search for a person by login ID");
+    Console.WriteLine("-------------------------------------------");
+    var peopleByLogin = await client.Api.PeopleAsync(loginid: "jsmith");
+    Console.WriteLine($"✓ Found {peopleByLogin.Count} person/people\n");
 
-    //Console.WriteLine("Example 4: Get all groups");
-    //Console.WriteLine("-------------------------");
-    //var groups = await client.Api.GroupsAsync();
-    //Console.WriteLine($"✓ Retrieved {groups.Count} groups\n");
+    Console.WriteLine("Example 3: Get all colleges");
+    Console.WriteLine("--------------------------");
+    var colleges = await client.Api.CollegesAsync();
+    Console.WriteLine($"✓ Retrieved {colleges.Count} colleges");
+    foreach (var college in colleges.Take(3))
+        Console.WriteLine($"  {college.College_code}: {college.College_title}");
+    Console.WriteLine();
+
+    Console.WriteLine("Example 4: Get active majors");
+    Console.WriteLine("----------------------------");
+    var majors = await client.Api.MajorsAsync(major_status: "A");
+    Console.WriteLine($"✓ Retrieved {majors.Count} active majors");
+    foreach (var major in majors.Take(3))
+        Console.WriteLine($"  {major.Major_code}: {major.Major_title}");
+    Console.WriteLine();
+
+    Console.WriteLine("Example 5: GraphQL — raw (via client.Api.GraphqlAsync)");
+    Console.WriteLine("-------------------------------------------------------");
+    var graphqlResult = await client.Api.GraphqlAsync(new
+    {
+        query = "{ people(limit: 5) { iam_id displayname email { primary } } }"
+    });
+    Console.WriteLine("✓ Raw GraphQL query returned a result\n");
+
+    // Example 6: Strongly-typed GraphQL via ZeroQL (client.GraphQL)
+    // Arguments must be local variables — ZeroQL analyses lambda closures at compile time.
+    // See https://github.com/byme8/ZeroQL/wiki/Queries-and-mutations for full documentation.
+    Console.WriteLine("Example 6: GraphQL — strongly-typed (via client.GraphQL, powered by ZeroQL)");
+    Console.WriteLine("----------------------------------------------------------------------------");
+    var typedResponse = await client.GraphQL.Query(
+        q => q.People(
+            limit: 5,
+            selector: o => new
+            {
+                o.Iam_id,
+                o.Displayname,
+                Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                Email = o.Email(e => e.Primary)
+            }));
+
+    if (typedResponse.Data is { } people)
+    {
+        Console.WriteLine($"✓ Typed GraphQL query returned {people.Length} people:");
+        foreach (var person in people.Take(3))
+            Console.WriteLine($"  [{person?.Iam_id?.Value}] {person?.Displayname} <{person?.Email?.FirstOrDefault() ?? "(no email)"}>");
+    }
+    Console.WriteLine();
 
     Console.WriteLine("✓ All examples completed successfully!");
 }

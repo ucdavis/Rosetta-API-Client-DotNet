@@ -19,22 +19,16 @@ public class TestDataOptions
     public string? IamIds { get; set; }
 
     /// <summary>
-    /// Account ID for testing account lookups.
-    /// Example: "account-123"
+    /// UC Davis login ID (Kerberos) for testing person searches.
+    /// Example: "jsmith"
     /// </summary>
-    public string? AccountId { get; set; }
+    public string? LoginId { get; set; }
 
     /// <summary>
-    /// Employee ID for testing employee lookups.
-    /// Example: "123456"
+    /// IAM ID of a manager for testing manager-based person searches.
+    /// Example: "1000000002"
     /// </summary>
-    public string? EmployeeId { get; set; }
-
-    /// <summary>
-    /// Student ID for testing student lookups.
-    /// Example: "987654"
-    /// </summary>
-    public string? StudentId { get; set; }
+    public string? ManagerIamId { get; set; }
 
     /// <summary>
     /// Email address for testing person searches.
