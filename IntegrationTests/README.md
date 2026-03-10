@@ -12,48 +12,69 @@ Integration tests for the UCD.Rosetta.Client library that verify functionality a
 The tests load configuration from multiple sources (in priority order):
 
 1. **Default values** - `appsettings.json`
-2. **User secrets** - Local development (shared with example project)
+2. **.env file** - Local development (shared across projects)
 3. **Environment variables** - CI/CD pipelines (highest priority)
 
-### Option 1: User Secrets (Local Development)
+### Option 1: .env File (Local Development)
 
-The test project shares the same UserSecretsId with the example project, so you only need to configure once:
+Create a `.env` file in the repository root with your credentials. A `.env.example` template is provided:
+
+```bash
+# Copy the example file
+cp .env.example .env
+
+# Edit .env with your actual values
+```
+
+Your `.env` file should contain:
 
 ```bash
 # Required: API credentials
-dotnet user-secrets set "RosettaClient:ClientId" "your-client-id" --project Example
-dotnet user-secrets set "RosettaClient:ClientSecret" "your-client-secret" --project Example
+RosettaClient__TokenUrl=https://your-token-url/token
+RosettaClient__ClientId=your-client-id
+RosettaClient__ClientSecret=your-client-secret
+RosettaClient__BaseUrl=https://your-api-base-url/api/v1
+RosettaClient__ApiVersion=v1
+RosettaClient__Scope=read:public
+RosettaClient__TimeoutSeconds=30
 
 # Optional: Test data for specific ID-based tests
-dotnet user-secrets set "TestData:IamId" "1234567890" --project Example
-dotnet user-secrets set "TestData:IamIds" "1234567890,0987654321" --project Example
-dotnet user-secrets set "TestData:AccountId" "account-123" --project Example
-dotnet user-secrets set "TestData:EmployeeId" "123456" --project Example
-dotnet user-secrets set "TestData:StudentId" "987654" --project Example
-dotnet user-secrets set "TestData:TestEmail" "someone@ucdavis.edu" --project Example
+TestData__IamId=1234567890
+TestData__IamIds=1234567890,0987654321
+TestData__AccountId=account-123
+TestData__EmployeeId=123456
+TestData__StudentId=987654
+TestData__TestEmail=someone@ucdavis.edu
+TestData__TestDisplayName=Someone Name
+TestData__LoginId=somelogin
+TestData__ManagerIamId=1234567890
 ```
+
+**Note:** The `.env` file is already in `.gitignore` and will not be committed to source control.
 
 Without test data configured, tests that require specific IDs will be automatically skipped.
 
 ### Option 2: Environment Variables (CI/CD)
 
-For CI/CD pipelines or Docker environments, use environment variables with the `ROSETTA_` prefix:
+For CI/CD pipelines, Azure App Service, Docker, or other deployment environments, set environment variables directly:
 
 ```bash
 # Required: API credentials
-export ROSETTA_RosettaClient__ClientId="your-client-id"
-export ROSETTA_RosettaClient__ClientSecret="your-client-secret"
+export RosettaClient__ClientId="your-client-id"
+export RosettaClient__ClientSecret="your-client-secret"
+export RosettaClient__TokenUrl="https://your-token-url/token"
+export RosettaClient__BaseUrl="https://your-api-base-url/api/v1"
 
 # Optional: Test data
-export ROSETTA_TestData__IamId="1234567890"
-export ROSETTA_TestData__IamIds="1234567890,0987654321"
-export ROSETTA_TestData__AccountId="account-123"
-export ROSETTA_TestData__EmployeeId="123456"
-export ROSETTA_TestData__StudentId="987654"
-export ROSETTA_TestData__TestEmail="someone@ucdavis.edu"
+export TestData__IamId="1234567890"
+export TestData__IamIds="1234567890,0987654321"
+export TestData__AccountId="account-123"
+export TestData__EmployeeId="123456"
+export TestData__StudentId="987654"
+export TestData__TestEmail="someone@ucdavis.edu"
 ```
 
-**Note:** Use double underscores (`__`) to represent nested configuration sections in environment variables.
+**Note:** Use double underscores (`__`) to represent nested configuration sections in environment variables. This format is consistent with Azure App Service configuration.
 
 ## Debug Logging
 
@@ -66,18 +87,20 @@ When enabled, every API response will be logged to the console with:
 - Response body length
 - Response body content (full or truncated based on max length)
 
-### Enable via User Secrets (Local Development)
+### Enable via .env File (Local Development)
+
+Add these lines to your `.env` file:
 
 ```bash
-dotnet user-secrets set "TestData:EnableDebugLogging" "true" --project Example
-dotnet user-secrets set "TestData:DebugResponseMaxLength" "4000" --project Example  # Optional: default is 2000
+TestData__EnableDebugLogging=true
+TestData__DebugResponseMaxLength=4000  # Optional: default is 2000
 ```
 
 ### Enable via Environment Variables (CI/CD)
 
 ```bash
-export ROSETTA_TestData__EnableDebugLogging=true
-export ROSETTA_TestData__DebugResponseMaxLength=4000  # Optional
+export TestData__EnableDebugLogging=true
+export TestData__DebugResponseMaxLength=4000  # Optional
 ```
 
 ### Debug Response Max Length Options
@@ -139,7 +162,7 @@ dotnet test --verbosity normal
 
 Tests that require specific identifying data (IAM IDs, account IDs, etc.) will:
 - **Automatically skip** if the corresponding `TestData` configuration value is not set
-- **Run normally** when test data is provided via user secrets or environment variables
+- **Run normally** when test data is provided via .env file or environment variables
 
 This allows the test suite to run in environments without test data while still providing comprehensive coverage when test data is available.
 

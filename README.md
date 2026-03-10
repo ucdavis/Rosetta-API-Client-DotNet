@@ -135,7 +135,7 @@ builder.Services.AddRosettaClientWithFactory(options =>
 ```
 
 **⚠️ Security Warning:** Never commit secrets to source control. Use:
-- User Secrets for local development: `dotnet user-secrets set "Rosetta:ClientSecret" "your-secret"`
+- `.env` file for local development (already in `.gitignore`)
 - Azure Key Vault or similar for production
 - Environment variables for containerized deployments
 
@@ -364,17 +364,21 @@ dotnet clean && dotnet build
 
 ## Local development, secrets, and running tests
 
-The repository includes a small example app and an xUnit integration test project. The example and tests load configuration from `appsettings.json` and then override sensitive values from user secrets or environment variables.
+The repository includes a small example app and an xUnit integration test project. The example and tests load configuration from `appsettings.json` and a `.env` file.
 
 Quick steps to run the example locally:
 
-1. Add your Rosetta credentials to user secrets for the example project (the example project uses UserSecretsId `db36e8a1-703d-48f0-af34-05f22ba84854`):
+1. Create a `.env` file in the repository root with your Rosetta credentials:
 
 ```bash
-cd Example
-dotnet user-secrets set "RosettaClient:ClientId" "<your-client-id>"
-dotnet user-secrets set "RosettaClient:ClientSecret" "<your-client-secret>"
-dotnet user-secrets set "RosettaClient:TokenUrl" "https://your-oauth-server.com/token"
+# Copy the example template
+cp .env.example .env
+
+# Edit .env and add your credentials:
+# RosettaClient__ClientId=<your-client-id>
+# RosettaClient__ClientSecret=<your-client-secret>
+# RosettaClient__TokenUrl=https://your-oauth-server.com/token
+# RosettaClient__BaseUrl=https://your-api-base-url/api/v1
 ```
 
 2. Run the example:
@@ -385,8 +389,9 @@ dotnet run --project Example
 
 Running integration tests:
 
-- The integration test project `IntegrationTests` shares the same UserSecretsId as the example project so the commands above are sufficient for tests as well.
-- Tests also read environment variables, which is useful for CI. The supported environment variable names mirror the configuration keys (for example: `RosettaClient__ClientId` and `RosettaClient__ClientSecret`).
+- The integration test project `IntegrationTests` uses the same `.env` file as the example project.
+- Tests also read environment variables, which is useful for CI. The supported environment variable names use double underscores for hierarchy (for example: `RosettaClient__ClientId` and `RosettaClient__ClientSecret`).
+- See [IntegrationTests/README.md](IntegrationTests/README.md) for more details.
 
 Run tests locally with:
 
