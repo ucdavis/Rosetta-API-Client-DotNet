@@ -1,16 +1,23 @@
 ﻿using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
 using Microsoft.Extensions.Configuration;
+using DotNetEnv;
 
 // Example: Using the Rosetta API Client
 Console.WriteLine("UC Davis Rosetta API Client Example");
 Console.WriteLine("====================================\n");
 
-// Configuration - load from appsettings.json, user secrets and environment variables
+// Load .env file from the repository root
+var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", ".env");
+if (File.Exists(envPath))
+{
+    Env.Load(envPath);
+}
+
+// Configuration - load from appsettings.json and environment variables (including .env)
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddUserSecrets(System.Reflection.Assembly.GetEntryAssembly() ?? typeof(Program).Assembly, optional: true)
-    .AddEnvironmentVariables(prefix: "ROSETTA_")
+    .AddEnvironmentVariables()
     .Build();
 
 var options = new RosettaClientOptions();
