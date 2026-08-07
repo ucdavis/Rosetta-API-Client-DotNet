@@ -15,7 +15,8 @@ public class RosettaClientFixture : IDisposable
     public RosettaClient Client { get; }
     public RosettaClientOptions Options { get; }
     public TestDataOptions TestData { get; }
-    private readonly Lazy<Task<ICollection<Person>>> _peopleSample;
+    private readonly object _peopleSampleLock = new();
+    private Lazy<Task<ICollection<Person>>> _peopleSample;
 
     public RosettaClientFixture()
     {
@@ -39,7 +40,7 @@ public class RosettaClientFixture : IDisposable
 
         // Create the client
         Client = new RosettaClient(Options);
-        _peopleSample = new Lazy<Task<ICollection<Person>>>(() => Client.Api.PeopleAsync(limit: 25));
+        _peopleSample = CreatePeopleSampleLazy();
 
         // Configure debug logging if enabled
         if (TestData.EnableDebugLogging)
@@ -49,7 +50,43 @@ public class RosettaClientFixture : IDisposable
         }
     }
 
-    public Task<ICollection<Person>> GetPeopleSampleAsync() => _peopleSample.Value;
+    public async Task<ICollection<Person>> GetPeopleSampleAsync()
+    {
+        var peopleSample = _peopleSample;
+        try
+        {
+            return await peopleSample.Value;
+        }
+        catch
+        {
+            ResetPeopleSample(peopleSample);
+        }
+
+        peopleSample = _peopleSample;
+        try
+        {
+            return await peopleSample.Value;
+        }
+        catch
+        {
+            ResetPeopleSample(peopleSample);
+            return [];
+        }
+    }
+
+    private Lazy<Task<ICollection<Person>>> CreatePeopleSampleLazy()
+    {
+        return new Lazy<Task<ICollection<Person>>>(() => Client.Api.PeopleAsync(limit: 25));
+    }
+
+    private void ResetPeopleSample(Lazy<Task<ICollection<Person>>> failedPeopleSample)
+    {
+        lock (_peopleSampleLock)
+        {
+            if (ReferenceEquals(_peopleSample, failedPeopleSample))
+                _peopleSample = CreatePeopleSampleLazy();
+        }
+    }
 
     public void Dispose()
     {

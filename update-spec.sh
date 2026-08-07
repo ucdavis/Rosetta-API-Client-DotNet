@@ -44,8 +44,8 @@ if command -v jq &>/dev/null; then
         | awk '{
             sub(/\r$/, "")
             sub(/[[:blank:]]+$/, "")
-            if (!found && $0 ~ /^```[[:space:]]*(graphql)?[[:space:]]*$/) { found=1; next }
-            if (found && $0 ~ /^```[[:space:]]*$/) { exit }
+            if (!found && $0 ~ /^[[:blank:]]*```[[:space:]]*(graphql)?[[:space:]]*$/) { found=1; next }
+            if (found && $0 ~ /^[[:blank:]]*```[[:space:]]*$/) { exit }
             if (found) { print }
         }' \
         | sed 's/^    //' \

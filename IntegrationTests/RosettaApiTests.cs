@@ -229,7 +229,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
     #region GraphQL
 
-    [Fact]
+    [SkippableFact]
     public async Task GraphqlAsync_WithPeopleQuery_ReturnsResult()
     {
         // Act
@@ -242,7 +242,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         Assert.NotNull(result);
     }
 
-    [Fact]
+    [SkippableFact]
     public async Task GraphQL_TypedPeopleQuery_ReturnsResults()
     {
         var filter = new PeopleFilterInput { Limit = 5 };
@@ -292,7 +292,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
             p.LoginId.Any(id => id == loginId));
     }
 
-    [Fact]
+    [SkippableFact]
     public async Task GraphQL_TypedCollegesQuery_ReturnsAllColleges()
     {
         // Act
@@ -329,6 +329,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     private static async Task<TResponse> TypedGraphqlQueryWithQuotaSkip<TResponse>(Func<Task<TResponse>> query)
+        where TResponse : ZeroQL.IGraphQLResult
     {
         for (var attempt = 1; attempt <= 2; attempt++)
         {
@@ -352,10 +353,15 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     private static bool IsQuotaExceeded<TResponse>(TResponse response)
+        where TResponse : ZeroQL.IGraphQLResult
     {
-        var responseJson = JsonSerializer.Serialize(response);
-        return responseJson.Contains("status code 429", StringComparison.OrdinalIgnoreCase)
-            || responseJson.Contains("Quota has been exceeded", StringComparison.OrdinalIgnoreCase);
+        return response.Errors?.Any(error => IsQuotaExceededMessage(error.Message)) == true;
+    }
+
+    private static bool IsQuotaExceededMessage(string? message)
+    {
+        return message?.Contains("status code 429", StringComparison.OrdinalIgnoreCase) == true
+            || message?.Contains("Quota has been exceeded", StringComparison.OrdinalIgnoreCase) == true;
     }
 
     #region Reference Data

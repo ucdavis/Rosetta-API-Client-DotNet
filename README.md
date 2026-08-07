@@ -217,8 +217,8 @@ var filter = new PeopleFilterInput { Loginid = _options.LoginId };
 var response = await client.GraphQL.Query(
     q => q.People(filter: filter, selector: result => result.Results(o => new { o.Iam_id, o.Displayname })));
 
-// ❌ Property access — ZeroQL reports a compilation error
-var response = await client.GraphQL.Query(
+// ❌ Captured property access — ZeroQL reports a compilation error on _options.LoginId
+var propertyAccessResponse = await client.GraphQL.Query(
     q => q.People(
         filter: new PeopleFilterInput { Loginid = _options.LoginId },
         selector: result => result.Results(o => new { o.Iam_id, o.Displayname })));

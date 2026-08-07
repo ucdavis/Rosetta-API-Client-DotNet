@@ -61,12 +61,6 @@ internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>
                 continue;
             }
 
-            if (!CanReadCurrentTokenAsElement(reader.TokenType))
-            {
-                reader.Skip();
-                continue;
-            }
-
             if (TryReadElement(ref reader, options, out var item))
                 list.Add(item);
         }
@@ -84,46 +78,32 @@ internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>
 
     private static ICollection<T> ReadSingleValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
     {
-        if (!CanReadCurrentTokenAsElement(reader.TokenType))
-        {
-            reader.Skip();
-            return new List<T>();
-        }
-
         return TryReadElement(ref reader, options, out var item)
             ? [item]
             : [];
     }
 
-    private static bool CanReadCurrentTokenAsElement(JsonTokenType tokenType)
-    {
-        if (typeof(T) == typeof(string))
-            return tokenType == JsonTokenType.String;
-
-        if (typeof(T).IsClass || Nullable.GetUnderlyingType(typeof(T)) != null)
-            return tokenType == JsonTokenType.StartObject;
-
-        return tokenType
-            is JsonTokenType.Number
-            or JsonTokenType.True
-            or JsonTokenType.False;
-    }
-
     private static bool TryReadElement(ref Utf8JsonReader reader, JsonSerializerOptions options, out T item)
     {
         item = default!;
+        var readerCopy = reader;
 
         try
         {
-            var value = JsonSerializer.Deserialize<T>(ref reader, options);
+            var value = JsonSerializer.Deserialize<T>(ref readerCopy, options);
             if (value == null)
+            {
+                reader.Skip();
                 return false;
+            }
 
             item = value;
+            reader = readerCopy;
             return true;
         }
         catch (JsonException)
         {
+            reader.Skip();
             return false;
         }
     }
