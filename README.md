@@ -1,6 +1,6 @@
 # UCD.Rosetta.Client
 
-![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.33-blue)
+![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.40-blue)
 
 Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.
 
@@ -37,6 +37,7 @@ Install-Package UCD.Rosetta.Client
 ```csharp
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
+using UCD.Rosetta.Client.GraphQL;
 
 // Configure the client
 var options = new RosettaClientOptions
@@ -65,9 +66,10 @@ var majors = await client.Api.MajorsAsync(major_status: "A");
 
 // Strongly-typed GraphQL query (via ZeroQL)
 var loginId = "jsmith";
+var filter = new PeopleFilterInput { Loginid = loginId };
 var response = await client.GraphQL.Query(
-    q => q.People(loginid: loginId,
-        selector: o => new { o.Iam_id, o.Displayname, Email = o.Email(e => e.Primary) }));
+    q => q.People(filter: filter,
+        selector: result => result.Results(o => new { o.Iam_id, o.Displayname, Email = o.Email(e => e.Primary) })));
 var firstPerson = response.Data?[0];
 ```
 
@@ -177,30 +179,32 @@ The `client.GraphQL` property exposes a [ZeroQL](https://github.com/byme8/ZeroQL
 ```csharp
 // People — select specific fields
 var loginId = "jsmith";
+var filter = new PeopleFilterInput { Loginid = loginId };
 var response = await client.GraphQL.Query(
     q => q.People(
-        loginid: loginId,
-        selector: o => new
-        {
-            o.Iam_id,
-            o.Displayname,
-            Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
-            Email = o.Email(e => e.Primary),
-            Phone = o.Phone(p => p.Primary),
-            Student = o.Student_association(s => new { s.College, s.Major, s.Class_level }),
-            Payroll = o.Payroll_association(p => new { p.Position_title, p.Employee_classification })
-        }));
+        filter: filter,
+        selector: result => result.Results(o => new
+            {
+                o.Iam_id,
+                o.Displayname,
+                Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                Email = o.Email(e => e.Primary),
+                Phone = o.Phone(p => p.Primary),
+                Student = o.Student_association(s => new { s.College, s.Major, s.Class_level }),
+                Payroll = o.Payroll_association(p => new { p.Position_title, p.Employee_classification })
+            })));
 
 foreach (var person in response.Data ?? [])
     Console.WriteLine($"{person.Iam_id?.Value}: {person.Displayname}");
 
 // Colleges
 var colleges = await client.GraphQL.Query(
-    q => q.Colleges(selector: o => new { o.College_code, o.College_title }));
+    q => q.Colleges(selector: result => result.Results(o => new { o.College_code, o.College_title })));
 
 // Majors filtered by status
+var majorFilter = new MajorsFilterInput { Major_status = "A" };
 var majors = await client.GraphQL.Query(
-    q => q.Majors(major_status: "A", selector: o => new { o.Major_code, o.Major_title }));
+    q => q.Majors(filter: majorFilter, selector: result => result.Results(o => new { o.Major_code, o.Major_title })));
 ```
 
 #### Query parameters (variables)
@@ -209,13 +213,15 @@ ZeroQL captures query arguments via lambda closure. The argument **must be a loc
 
 ```csharp
 // ✅ Local variable — works
-var loginId = _options.LoginId;
+var filter = new PeopleFilterInput { Loginid = _options.LoginId };
 var response = await client.GraphQL.Query(
-    q => q.People(loginid: loginId, selector: o => new { o.Iam_id, o.Displayname }));
+    q => q.People(filter: filter, selector: result => result.Results(o => new { o.Iam_id, o.Displayname })));
 
 // ❌ Property access — ZeroQL reports a compilation error
 var response = await client.GraphQL.Query(
-    q => q.People(loginid: _options.LoginId, selector: o => new { o.Iam_id, o.Displayname }));
+    q => q.People(
+        filter: new PeopleFilterInput { Loginid = _options.LoginId },
+        selector: result => result.Results(o => new { o.Iam_id, o.Displayname })));
 ```
 
 For `static` lambdas (or to make variable capture explicit), use the two-argument overload that takes a `variables` object:
@@ -225,8 +231,8 @@ var variables = new { LoginId = "jsmith" };
 var response = await client.GraphQL.Query(
     variables,
     static (vars, q) => q.People(
-        loginid: vars.LoginId,
-        selector: o => new { o.Iam_id, o.Displayname }));
+        filter: new PeopleFilterInput { Loginid = vars.LoginId },
+        selector: result => result.Results(o => new { o.Iam_id, o.Displayname })));
 ```
 
 ### Campaign Contacts (CSV Export)
@@ -245,7 +251,7 @@ using UCD.Rosetta.Client.Generated;
 
 try
 {
-    var person = await client.Api.PeopleAsync("invalid-id");
+    var person = await client.Api.PeopleAsync(iamid: "invalid-id");
 }
 catch (RosettaApiException ex)
 {

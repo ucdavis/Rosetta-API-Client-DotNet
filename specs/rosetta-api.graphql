@@ -1,3 +1,40 @@
+###TYPES###
+
+##Groups##
+type GroupBucket {
+  sourceName: String
+  sourceId: String
+  groups: [String]
+}
+
+type GroupSource {
+  sourceName: String
+  sourceId: String
+}
+
+type GroupMembership {
+  name: String
+  iamid: String
+  loginId: String
+  employeeId: String
+  email: String
+  groups: [GroupBucket]
+}
+
+type GroupMember {
+  name: String
+  iamid: String
+  email: String
+}
+
+type GroupById {
+  groupName: String
+  groupSource: String
+  groupId: String
+  groupMembers: [GroupMember]
+}
+
+##People##
 type ProvisioningStatus {
   primary: String
 }
@@ -77,6 +114,8 @@ type PayrollAssociation {
   department_id: String
   department_title: String
   department_short_title: String
+  reports_to_iam_id: String
+  reports_to_employee_id: String
 }
 
 type Person {
@@ -97,53 +136,243 @@ type Person {
   create_date: String
 }
 
+##Position Association##
+
+type PpsAssociationRecord {
+  iam_id: String
+  reports_to_iam_id: String
+  reports_to_employee_id: String
+  employee_id: String
+  employee_record: String
+  position_number: String
+  position_title: String
+  relationship_to_organization: String
+  employee_classification: String
+  employee_classification_description: String
+  status: String
+  hire_date: String
+  start_date: String
+  termination_date: String
+  fte_percentage: String
+  reports_to_position: String
+  job_type_id: String
+  job_type_description: String
+  job_family_id: String
+  job_family_description: String
+  organization_id: String
+  organization_title: String
+  division_id: String
+  division_title: String
+  subdivision_id: String
+  subdivision_title: String
+  business_unit_id: String
+  business_unit_title: String
+  department_id: String
+  department_title: String
+  department_short_title: String
+  is_health_employee: String
+  is_campus_employee: String
+  modified_date: String
+  create_date: String
+}
+
+##Student Association##
+type SisAssociationRecord {
+  iam_id: String
+  pidm: String
+  student_id: String
+  college_code: String
+  college_title: String
+  major_code: String
+  major_title: String
+  lvl_affiliation_code: String
+  cls_affiliation_code: String
+  rank: String
+  modified_date: String
+  create_date: String
+}
+
+##College Info##
 type College {
   college_code: String
   college_title: String
 }
 
+##Major Info##
 type Major {
   major_code: String
   major_title: String
   major_status: String
 }
 
+##Meta Info##
+type Meta {
+  x_total_count: Int
+  x_response_count: Int
+}
+
+###INPUTS###
+###Query parameter / filters for queries###
+input PeopleFilterInput {
+  iamid: String
+  firstname: String
+  lastname: String
+  manager_iam_id: String
+  iamids: [String]
+  email: String
+  emails: [String]
+  loginid: String
+  employeeid: String
+  studentid: String
+  mailid: String
+  pidm: String
+  mothraid: String
+  pps_id: String
+  cosmos_id: String
+  cpe_id: String
+  health_affiliate_id: String
+  ucanr_id: String
+  usda_whnrc_id: String
+  affiliate_id: String
+  ucnet_id: String
+  affiliationContains: String
+  employmentStatus: String
+  count: Boolean = false
+  modifiedsince: String
+  limit: Int = 10000
+  offset: Int = 0
+}
+
+input CollegesFilterInput {
+  college_code: String
+  college_title: String
+}
+
+input MajorsFilterInput {
+  major_code: String
+  major_title: String
+  major_status: String
+}
+
+input GroupsFilterInput {
+  source: String
+  limit: Int = 10000
+}
+
+input GroupMembershipFilterInput {
+  iamid: String
+  iamids: [String]
+  email: String
+  loginid: String
+  employeeid: String
+  source: String
+  limit: Int = 10000
+}
+
+input GroupsByIdFilterInput {
+id: String!
+limit: Int = 10000
+}
+
+input PpsAssociationFilterInput {
+iamid: String
+iamids: [String]
+loginid: String
+employeeid: String
+jobtypeid: String
+organizationid: String
+departmentid: String
+divisionid: String
+subdivisionid: String
+count: Boolean = false
+modifiedsince: String
+sortBy: String
+SearchAfter: String
+offset: Int = 0
+limit: Int = 1000
+}
+
+input SisAssociationFilterInput {
+iamid: String
+iamids: [String]
+pidm: String
+studentid: String
+majorcode: String
+collegecode: String
+count: Boolean = false
+modifiedsince: String
+sortBy: String
+SearchAfter: String
+offset: Int = 0
+limit: Int = 1000
+}
+
+##Results##
+type PeopleResult {
+  results: [Person]
+  meta: Meta
+}
+
+type PpsAssociationResult {
+  results: [PpsAssociationRecord]
+  meta: Meta
+}
+
+type SisAssociationResult {
+  results: [SisAssociationRecord]
+  meta: Meta
+}
+
+type MajorsResult {
+  results: [Major]
+}
+
+type CollegeResult {
+  results: [College]
+}
+
+type GroupsResult {
+  results: [GroupBucket]
+}
+
+type GroupSourceResults {
+  results: [GroupSource]
+}
+
+type GroupMembershipResult {
+  results: [GroupMembership]
+}
+
+type GroupByIdResult {
+  results: GroupById
+}
+
+##Query types##
 type Query {
-  colleges(
-    college_code: String
-    college_title: String
-  ): [College]
-  majors(
-    major_code: String
-    major_title: String
-    major_status: String
-  ): [Major]
-  people(
-    iamid: String
-    firstname: String
-    lastname: String
-    manager_iam_id: String
-    iamids: [String]
-    email: String
-    emails: [String]
-    loginid: String
-    employeeid: String
-    studentid: String
-    mailid: String
-    pidm: String
-    mothraid: String
-    pps_id: String
-    cosmos_id: String
-    cpe_id: String
-    health_affiliate_id: String
-    ucanr_id: String
-    usda_whnrc_id: String
-    affiliate_id: String
-    ucnet_id: String
-    affiliationContains: String
-    employmentStatus: String
-    limit: Int = 10000
-  ): [Person]
+  #Colleges
+  colleges(filter: CollegesFilterInput): CollegeResult
+
+  #Majors
+  majors(filter: MajorsFilterInput): MajorsResult
+
+  #People
+  people(filter: PeopleFilterInput): PeopleResult
+  people_students(filter: PeopleFilterInput): PeopleResult
+  people_employees(filter: PeopleFilterInput): PeopleResult
+  people_faculty(filter: PeopleFilterInput): PeopleResult
+  people_external(filter: PeopleFilterInput): PeopleResult
+
+  #Groups
+  groups(filter: GroupsFilterInput): GroupsResult
+  groupSources: GroupSourceResults
+  groupMembership(filter: GroupMembershipFilterInput): GroupMembershipResult
+  groupById(filter: GroupsByIdFilterInput): GroupByIdResult
+
+  #Position Association
+  ppsassociation(filter: PpsAssociationFilterInput): PpsAssociationResult
+
+  #Student Association
+  sisassociation(filter: SisAssociationFilterInput): SisAssociationResult
 }
 
 schema {

@@ -4,10 +4,10 @@ using System.Text.Json.Serialization;
 namespace UCD.Rosetta.Client.Core.Converters;
 
 /// <summary>
-/// A JsonConverterFactory that wraps ICollection&lt;T&gt; deserialization for model types,
-/// gracefully skipping null tokens or unexpected non-object values rather than throwing.
+/// A JsonConverterFactory that wraps ICollection&lt;T&gt; deserialization,
+/// gracefully handling null tokens, scalar values, or unexpected element values rather than throwing.
 /// This handles real-world API responses where arrays may contain null placeholders
-/// or unexpected primitives for entries with no data.
+/// or where collection properties may occasionally be returned as a single scalar value.
 /// </summary>
 public class LenientTypedCollectionConverterFactory : JsonConverterFactory
 {
@@ -21,13 +21,7 @@ public class LenientTypedCollectionConverterFactory : JsonConverterFactory
         if (genericDef != typeof(ICollection<>))
             return false;
 
-        var elementType = typeToConvert.GetGenericArguments()[0];
-
-        // Only handle concrete classes that are not primitives, strings, or object itself;
-        // those are handled by the default System.Text.Json converters.
-        return elementType.IsClass
-            && elementType != typeof(string)
-            && elementType != typeof(object);
+        return true;
     }
 
     /// <inheritdoc />
@@ -40,10 +34,9 @@ public class LenientTypedCollectionConverterFactory : JsonConverterFactory
 }
 
 /// <summary>
-/// Deserializes ICollection&lt;T&gt; from a JSON array, skipping any elements that are not
-/// JSON objects (e.g. null tokens, strings, or numbers) instead of throwing.
+/// Deserializes ICollection&lt;T&gt; from a JSON array or compatible scalar value.
 /// </summary>
-internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>> where T : class
+internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>>
 {
     public override ICollection<T>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -51,11 +44,7 @@ internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>
             return [];
 
         if (reader.TokenType != JsonTokenType.StartArray)
-        {
-            // Non-array value where an array was expected; skip and return empty
-            reader.Skip();
-            return new List<T>();
-        }
+            return ReadSingleValue(ref reader, options);
 
         // CanConvert only matches ICollection<T>, never T itself, so no recursion risk
         // when we call Deserialize<T> below.
@@ -66,16 +55,19 @@ internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>
             if (reader.TokenType == JsonTokenType.EndArray)
                 return list;
 
-            if (reader.TokenType == JsonTokenType.Null
-                || reader.TokenType != JsonTokenType.StartObject)
+            if (reader.TokenType == JsonTokenType.Null)
             {
-                // Skip unexpected tokens (null elements, strings, numbers, booleans)
                 reader.Skip();
                 continue;
             }
 
-            var item = JsonSerializer.Deserialize<T>(ref reader, options);
-            if (item != null)
+            if (!CanReadCurrentTokenAsElement(reader.TokenType))
+            {
+                reader.Skip();
+                continue;
+            }
+
+            if (TryReadElement(ref reader, options, out var item))
                 list.Add(item);
         }
 
@@ -88,5 +80,51 @@ internal class LenientTypedCollectionConverter<T> : JsonConverter<ICollection<T>
         foreach (var item in value)
             JsonSerializer.Serialize(writer, item, options);
         writer.WriteEndArray();
+    }
+
+    private static ICollection<T> ReadSingleValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
+    {
+        if (!CanReadCurrentTokenAsElement(reader.TokenType))
+        {
+            reader.Skip();
+            return new List<T>();
+        }
+
+        return TryReadElement(ref reader, options, out var item)
+            ? [item]
+            : [];
+    }
+
+    private static bool CanReadCurrentTokenAsElement(JsonTokenType tokenType)
+    {
+        if (typeof(T) == typeof(string))
+            return tokenType == JsonTokenType.String;
+
+        if (typeof(T).IsClass || Nullable.GetUnderlyingType(typeof(T)) != null)
+            return tokenType == JsonTokenType.StartObject;
+
+        return tokenType
+            is JsonTokenType.Number
+            or JsonTokenType.True
+            or JsonTokenType.False;
+    }
+
+    private static bool TryReadElement(ref Utf8JsonReader reader, JsonSerializerOptions options, out T item)
+    {
+        item = default!;
+
+        try
+        {
+            var value = JsonSerializer.Deserialize<T>(ref reader, options);
+            if (value == null)
+                return false;
+
+            item = value;
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
     }
 }

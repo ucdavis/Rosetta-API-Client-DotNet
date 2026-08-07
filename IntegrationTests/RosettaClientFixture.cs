@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
 using DotNetEnv;
+using UCD.Rosetta.Client.Generated;
 
 namespace IntegrationTests;
 
@@ -14,6 +15,7 @@ public class RosettaClientFixture : IDisposable
     public RosettaClient Client { get; }
     public RosettaClientOptions Options { get; }
     public TestDataOptions TestData { get; }
+    private readonly Lazy<Task<ICollection<Person>>> _peopleSample;
 
     public RosettaClientFixture()
     {
@@ -37,6 +39,7 @@ public class RosettaClientFixture : IDisposable
 
         // Create the client
         Client = new RosettaClient(Options);
+        _peopleSample = new Lazy<Task<ICollection<Person>>>(() => Client.Api.PeopleAsync(limit: 25));
 
         // Configure debug logging if enabled
         if (TestData.EnableDebugLogging)
@@ -45,6 +48,8 @@ public class RosettaClientFixture : IDisposable
             Console.WriteLine($"[Debug] Response logging enabled (max length: {(TestData.DebugResponseMaxLength == -1 ? "unlimited" : TestData.DebugResponseMaxLength.ToString())})");
         }
     }
+
+    public Task<ICollection<Person>> GetPeopleSampleAsync() => _peopleSample.Value;
 
     public void Dispose()
     {

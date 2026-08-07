@@ -1,5 +1,6 @@
 ﻿using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
+using UCD.Rosetta.Client.GraphQL;
 using Microsoft.Extensions.Configuration;
 using DotNetEnv;
 
@@ -62,7 +63,7 @@ try
     Console.WriteLine("-------------------------------------------------------");
     var graphqlResult = await client.Api.GraphqlAsync(new
     {
-        query = "{ people(limit: 5) { iam_id displayname email { primary } } }"
+        query = "{ people(filter: { limit: 5 }) { results { iam_id displayname email { primary } } } }"
     });
     Console.WriteLine("✓ Raw GraphQL query returned a result\n");
 
@@ -71,16 +72,17 @@ try
     // See https://github.com/byme8/ZeroQL/wiki/Queries-and-mutations for full documentation.
     Console.WriteLine("Example 6: GraphQL — strongly-typed (via client.GraphQL, powered by ZeroQL)");
     Console.WriteLine("----------------------------------------------------------------------------");
+    var peopleFilter = new PeopleFilterInput { Limit = 5 };
     var typedResponse = await client.GraphQL.Query(
         q => q.People(
-            limit: 5,
-            selector: o => new
-            {
-                o.Iam_id,
-                o.Displayname,
-                Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
-                Email = o.Email(e => e.Primary)
-            }));
+            filter: peopleFilter,
+            selector: result => result.Results(o => new
+                {
+                    o.Iam_id,
+                    o.Displayname,
+                    Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                    Email = o.Email(e => e.Primary)
+                })));
 
     if (typedResponse.Data is { } people)
     {

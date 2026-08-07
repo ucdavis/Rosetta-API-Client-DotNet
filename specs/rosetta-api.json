@@ -12,7 +12,7 @@
   ],
   "externalDocs": {
     "url": "http://",
-    "description": "  ```graphql\n    type ProvisioningStatus {\n      primary: String\n    }\n\n    type NameRecord {\n      lived_first_name: String\n      lived_middle_name: String\n      lived_last_name: String\n      legal_first_name: String\n      legal_middle_name: String\n      legal_last_name: String\n    }\n\n    type IdentityIds {\n      iam_id: String\n      login_id: String\n      student_id: String\n      mothra_id: String\n      employee_id: String\n      mail_id: String\n      pidm: String\n      pps_id: String\n      cosmos_id: String\n      cpe_id: String\n      health_affiliate_id: String\n      ucanr_id: String\n      usda_whnrc_id: String\n      affiliate_id: String\n      ucnet_id: String\n    }\n\n    type EmailAddresses {\n      primary: String\n      work: String\n      personal: String\n    }\n\n    type PhoneNumbers {\n      primary: String\n      work: String\n      personal: String\n    }\n\n    type StudentAssociation {\n      college: String\n      major: String\n      academic_level: String\n      class_level: String\n    }\n\n    type PayrollAssociation {\n      employee_record: String\n      employee_id: String\n      position_number: String\n      position_title: String\n      relationship_to_organization: String\n      employee_classification: String\n      employee_classification_description: String\n      status: String\n      hire_date: String\n      start_date: String\n      termination_date: String\n      fte_percentage: String\n      reports_to_position: String\n      job_type_id: String\n      job_type_description: String\n      job_family_id: String\n      job_family_description: String\n      organization_id: String\n      organization_title: String\n      division_id: String\n      division_title: String\n      subdivision_id: String\n      subdivision_title: String\n      business_unit_id: String\n      business_unit_title: String\n      department_id: String\n      department_title: String\n      department_short_title: String\n    }\n\n    type Person {\n      iam_id: ID\n      displayname: String\n      birth_date: String\n      manager_iam_id: String\n      provisioning_status: [ProvisioningStatus]\n      affiliation: [String]\n      employment_status: [String]\n      name: [NameRecord]\n      id: [IdentityIds]\n      email: [EmailAddresses]\n      phone: [PhoneNumbers]\n      student_association: [StudentAssociation]\n      payroll_association: [PayrollAssociation]\n      modified_date: String\n      create_date: String\n    }\n\n    type College {\n      college_code: String\n      college_title: String\n    }\n\n    type Major {\n      major_code: String\n      major_title: String\n      major_status: String\n    }\n\n    type Query {\n      colleges(\n        college_code: String\n        college_title: String\n      ): [College]\n      majors(\n        major_code: String\n        major_title: String\n        major_status: String\n      ): [Major]\n      people(\n        iamid: String\n        firstname: String\n        lastname: String\n        manager_iam_id: String\n        iamids: [String]\n        email: String\n        emails: [String]\n        loginid: String\n        employeeid: String\n        studentid: String\n        mailid: String\n        pidm: String\n        mothraid: String\n        pps_id: String\n        cosmos_id: String\n        cpe_id: String\n        health_affiliate_id: String\n        ucanr_id: String\n        usda_whnrc_id: String\n        affiliate_id: String\n        ucnet_id: String\n        affiliationContains: String\n        employmentStatus: String\n        limit: Int = 10000\n      ): [Person]\n    }\n```",
+    "description": "```\r\n###TYPES###\r\n\r\n##Groups##\r\ntype GroupBucket {\r\n  sourceName: String\r\n  sourceId: String\r\n  groups: [String]\r\n}\r\n\r\ntype GroupSource {\r\n  sourceName: String\r\n  sourceId: String\r\n}\r\n\r\ntype GroupMembership {\r\n  name: String\r\n  iamid: String\r\n  loginId: String\r\n  employeeId: String\r\n  email: String\r\n  groups: [GroupBucket]\r\n}\r\n\r\ntype GroupMember {\r\n  name: String\r\n  iamid: String\r\n  email: String\r\n}\r\n\r\ntype GroupById {\r\n  groupName: String\r\n  groupSource: String\r\n  groupId: String\r\n  groupMembers: [GroupMember]\r\n}\r\n\r\n##People##\r\ntype ProvisioningStatus {\r\n  primary: String\r\n}\r\n\r\ntype NameRecord {\r\n  lived_first_name: String\r\n  lived_middle_name: String\r\n  lived_last_name: String\r\n  legal_first_name: String\r\n  legal_middle_name: String\r\n  legal_last_name: String\r\n}\r\n\r\ntype IdentityIds {\r\n  iam_id: String\r\n  login_id: String\r\n  student_id: String\r\n  mothra_id: String\r\n  employee_id: String\r\n  mail_id: String\r\n  pidm: String\r\n  pps_id: String\r\n  cosmos_id: String\r\n  cpe_id: String\r\n  health_affiliate_id: String\r\n  ucanr_id: String\r\n  usda_whnrc_id: String\r\n  affiliate_id: String\r\n  ucnet_id: String\r\n}\r\n\r\ntype EmailAddresses {\r\n  primary: String\r\n  work: String\r\n  personal: String\r\n}\r\n\r\ntype PhoneNumbers {\r\n  primary: String\r\n  work: String\r\n  personal: String\r\n}\r\n\r\ntype StudentAssociation {\r\n  college: String\r\n  major: String\r\n  academic_level: String\r\n  class_level: String\r\n}\r\n\r\ntype PayrollAssociation {\r\n  employee_record: String\r\n  employee_id: String\r\n  position_number: String\r\n  position_title: String\r\n  relationship_to_organization: String\r\n  employee_classification: String\r\n  employee_classification_description: String\r\n  status: String\r\n  hire_date: String\r\n  start_date: String\r\n  termination_date: String\r\n  fte_percentage: String\r\n  reports_to_position: String\r\n  job_type_id: String\r\n  job_type_description: String\r\n  job_family_id: String\r\n  job_family_description: String\r\n  organization_id: String\r\n  organization_title: String\r\n  division_id: String\r\n  division_title: String\r\n  subdivision_id: String\r\n  subdivision_title: String\r\n  business_unit_id: String\r\n  business_unit_title: String\r\n  department_id: String\r\n  department_title: String\r\n  department_short_title: String\r\n  reports_to_iam_id: String\r\n  reports_to_employee_id: String\r\n}\r\n\r\ntype Person {\r\n  iam_id: ID\r\n  displayname: String\r\n  birth_date: String\r\n  manager_iam_id: String\r\n  provisioning_status: [ProvisioningStatus]\r\n  affiliation: [String]\r\n  employment_status: [String]\r\n  name: [NameRecord]\r\n  id: [IdentityIds]\r\n  email: [EmailAddresses]\r\n  phone: [PhoneNumbers]\r\n  student_association: [StudentAssociation]\r\n  payroll_association: [PayrollAssociation]\r\n  modified_date: String\r\n  create_date: String\r\n}\r\n\r\n##Position Association##\r\n\r\ntype PpsAssociationRecord {\r\n  iam_id: String\r\n  reports_to_iam_id: String\r\n  reports_to_employee_id: String\r\n  employee_id: String\r\n  employee_record: String\r\n  position_number: String\r\n  position_title: String\r\n  relationship_to_organization: String\r\n  employee_classification: String\r\n  employee_classification_description: String\r\n  status: String\r\n  hire_date: String\r\n  start_date: String\r\n  termination_date: String\r\n  fte_percentage: String\r\n  reports_to_position: String\r\n  job_type_id: String\r\n  job_type_description: String\r\n  job_family_id: String\r\n  job_family_description: String\r\n  organization_id: String\r\n  organization_title: String\r\n  division_id: String\r\n  division_title: String\r\n  subdivision_id: String\r\n  subdivision_title: String\r\n  business_unit_id: String\r\n  business_unit_title: String\r\n  department_id: String\r\n  department_title: String\r\n  department_short_title: String\r\n  is_health_employee: String\r\n  is_campus_employee: String\r\n  modified_date: String\r\n  create_date: String\r\n}\r\n\r\n##Student Association##\r\ntype SisAssociationRecord {\r\n  iam_id: String\r\n  pidm: String\r\n  student_id: String\r\n  college_code: String\r\n  college_title: String\r\n  major_code: String\r\n  major_title: String\r\n  lvl_affiliation_code: String\r\n  cls_affiliation_code: String\r\n  rank: String\r\n  modified_date: String\r\n  create_date: String\r\n}\r\n\r\n##College Info##\r\ntype College {\r\n  college_code: String\r\n  college_title: String\r\n}\r\n\r\n##Major Info##\r\ntype Major {\r\n  major_code: String\r\n  major_title: String\r\n  major_status: String\r\n}\r\n\r\n##Meta Info##\r\ntype Meta {\r\n  x_total_count: Int\r\n  x_response_count: Int\r\n}\r\n\r\n###INPUTS###\r\n###Query parameter / filters for queries###\r\ninput PeopleFilterInput {\r\n  iamid: String\r\n  firstname: String\r\n  lastname: String\r\n  manager_iam_id: String\r\n  iamids: [String]\r\n  email: String\r\n  emails: [String]\r\n  loginid: String\r\n  employeeid: String\r\n  studentid: String\r\n  mailid: String\r\n  pidm: String\r\n  mothraid: String\r\n  pps_id: String\r\n  cosmos_id: String\r\n  cpe_id: String\r\n  health_affiliate_id: String\r\n  ucanr_id: String\r\n  usda_whnrc_id: String\r\n  affiliate_id: String\r\n  ucnet_id: String\r\n  affiliationContains: String\r\n  employmentStatus: String\r\n  count: Boolean = false\r\n  modifiedsince: String\r\n  limit: Int = 10000\r\n  offset: Int = 0\r\n}\r\n\r\ninput CollegesFilterInput {\r\n  college_code: String\r\n  college_title: String\r\n}\r\n\r\ninput MajorsFilterInput {\r\n  major_code: String\r\n  major_title: String\r\n  major_status: String\r\n}\r\n\r\ninput GroupsFilterInput {\r\n  source: String\r\n  limit: Int = 10000\r\n}\r\n\r\ninput GroupMembershipFilterInput {\r\n  iamid: String\r\n  iamids: [String]\r\n  email: String\r\n  loginid: String\r\n  employeeid: String\r\n  source: String\r\n  limit: Int = 10000\r\n}\r\n\r\ninput GroupsByIdFilterInput {\r\n    id: String!\r\n    limit: Int = 10000\r\n}\r\n\r\ninput PpsAssociationFilterInput {\r\n    iamid: String\r\n    iamids: [String]\r\n    loginid: String\r\n    employeeid: String\r\n    jobtypeid: String\r\n    organizationid: String\r\n    departmentid: String\r\n    divisionid: String\r\n    subdivisionid: String\r\n    count: Boolean = false\r\n    modifiedsince: String\r\n    sortBy: String\r\n    SearchAfter: String\r\n    offset: Int = 0\r\n    limit: Int = 1000\r\n}\r\n\r\ninput SisAssociationFilterInput {\r\n    iamid: String\r\n    iamids: [String]\r\n    pidm: String\r\n    studentid: String\r\n    majorcode: String\r\n    collegecode: String\r\n    count: Boolean = false\r\n    modifiedsince: String\r\n    sortBy: String\r\n    SearchAfter: String\r\n    offset: Int = 0\r\n    limit: Int = 1000\r\n}\r\n\r\n##Results##\r\ntype PeopleResult {\r\n  results: [Person]\r\n  meta: Meta\r\n}\r\n\r\ntype PpsAssociationResult {\r\n  results: [PpsAssociationRecord]\r\n  meta: Meta\r\n}\r\n\r\ntype SisAssociationResult {\r\n  results: [SisAssociationRecord]\r\n  meta: Meta\r\n}\r\n\r\ntype MajorsResult {\r\n  results: [Major]\r\n}\r\n\r\ntype CollegeResult {\r\n  results: [College]\r\n}\r\n\r\ntype GroupsResult {\r\n  results: [GroupBucket]\r\n}\r\n\r\ntype GroupSourceResults {\r\n  results: [GroupSource]\r\n}\r\n\r\ntype GroupMembershipResult {\r\n  results: [GroupMembership]\r\n}\r\n\r\ntype GroupByIdResult {\r\n  results: GroupById\r\n}\r\n\r\n##Query types##\r\ntype Query {\r\n  #Colleges\r\n  colleges(filter: CollegesFilterInput): CollegeResult\r\n\r\n  #Majors\r\n  majors(filter: MajorsFilterInput): MajorsResult\r\n  \r\n  #People\r\n  people(filter: PeopleFilterInput): PeopleResult\r\n  people_students(filter: PeopleFilterInput): PeopleResult\r\n  people_employees(filter: PeopleFilterInput): PeopleResult\r\n  people_faculty(filter: PeopleFilterInput): PeopleResult\r\n  people_external(filter: PeopleFilterInput): PeopleResult\r\n  \r\n  #Groups\r\n  groups(filter: GroupsFilterInput): GroupsResult\r\n  groupSources: GroupSourceResults\r\n  groupMembership(filter: GroupMembershipFilterInput): GroupMembershipResult\r\n  groupById(filter: GroupsByIdFilterInput): GroupByIdResult\r\n\r\n  #Position Association\r\n  ppsassociation(filter: PpsAssociationFilterInput): PpsAssociationResult\r\n\r\n  #Student Association\r\n  sisassociation(filter: SisAssociationFilterInput): SisAssociationResult\r\n}\r\n```",
     "x-amf-title": "GraphQL Schema"
   },
   "paths": {
@@ -80,6 +80,62 @@
         ]
       }
     },
+    "/colleges": {
+      "get": {
+        "description": "Returns a list of all colleges",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "college_code",
+            "description": "Return college information for the specified 2 character college code",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "maxLength": 2
+          },
+          {
+            "name": "college_title",
+            "description": "Return college information for colleges matching the specified college title",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "maxLength": 64
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "college_code": "LS",
+                  "college_title": "College of Letters and Science"
+                },
+                {
+                  "college_code": "AG",
+                  "college_title": "College of Agricultural and Environmental Sciences"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/College"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
     "/graphql": {
       "post": {
         "description": "GraphQL endpoint for IAM.\n\nIt supports queries on `Person` as defined in the GraphQL Schema under Documentation.\n\nExamples:\n\nSingle Data Source:\n      {\n          \"query\": \"{ people(limit: 10) { iam_id displayname email { primary } } }\"\n      }\n      \nMultiple Data Sources:\n      {\n      \"query\": \"{ \n          people( limit: 1 affiliationContains: \\\"student\\\" ) \n          { \n              iam_id        \n              name {lived_first_name lived_last_name}\n              id {login_id}\n              email {primary}\n              phone {primary}\n              student_association {college major academic_level class_level}\n          }\n          colleges\n          {\n              college_code\n              college_title\n          }\n          majors\n          {\n              major_title\n              major_code\n          }\n          }\"\n      }\n",
@@ -128,6 +184,366 @@
         ]
       }
     },
+    "/groups": {
+      "get": {
+        "description": "Returns a collection of group associations for identities defined in the request",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "source",
+            "description": "Return all groups from selected source",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "sortBy",
+            "description": "Set a field to sort the results by",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "searchAfter",
+            "description": "Set a field value to start the search after. Requires sortBy to be set.",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "sourceName": "Google Workspace",
+                  "sourceId": "08a982055ab14d9593a2422019f01de1",
+                  "groups": [
+                    "00zu0gcz0glqi6axxxxx",
+                    "engineering-staff",
+                    "iam-developers"
+                  ]
+                },
+                {
+                  "sourceName": "Active Directory",
+                  "sourceId": "2c91808375d8e80a0175e1f88a570000",
+                  "groups": [
+                    "AD-APP-TEAM",
+                    "AD-IAM-USERS"
+                  ]
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Group"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/groups/{id}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "$ref": "#/definitions/type"
+            }
+          },
+          "404": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/groups/membership": {
+      "get": {
+        "description": "Returns a collection of group associations for identities defined in the request",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "email",
+            "description": "Return user info for a UC Davis email address",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "loginid",
+            "description": "Return user info for a UC Davis login id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "employeeid",
+            "description": "Filter by employee ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "source",
+            "description": "Return all groups from selected source",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 10000,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "name": "Alex Rivera",
+                  "iamid": "1000000123",
+                  "loginId": "arivera",
+                  "employeeId": "E123456",
+                  "email": "alex.rivera@example.edu",
+                  "groups": [
+                    {
+                      "sourceName": "Google Workspace",
+                      "sourceId": "08a982055ab14d9593a2422019f01de1",
+                      "groups": [
+                        "iam-developers",
+                        "engineering-staff"
+                      ]
+                    },
+                    {
+                      "sourceName": "Active Directory",
+                      "sourceId": "2c91808375d8e80a0175e1f88a570000",
+                      "groups": [
+                        "AD-IAM-USERS"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Taylor Chen",
+                  "iamid": "1000000456",
+                  "loginId": "tchen",
+                  "employeeId": "E654321",
+                  "email": "taylor.chen@example.edu",
+                  "groups": [
+                    {
+                      "sourceName": "Google Workspace",
+                      "sourceId": "08a982055ab14d9593a2422019f01de1",
+                      "groups": [
+                        "00zu0gcz0glqi6axxxxx"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GroupMembership"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/groups/sources": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "sourceName": "Active Directory",
+                  "sourceId": "2c91808375d8e80a0175e1f88a570000"
+                },
+                {
+                  "sourceName": "Google Workspace",
+                  "sourceId": "08a982055ab14d9593a2422019f01de1"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Source"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/majors": {
+      "get": {
+        "description": "Returns a list of all majors",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "major_code",
+            "description": "Return major information for the specified 4 character major code",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z]{4}$"
+          },
+          {
+            "name": "major_title",
+            "description": "Return major information for the specified major title",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9&';,\\-()/ ]+$",
+            "maxLength": 64
+          },
+          {
+            "name": "major_status",
+            "description": "Return majors with the specified status (Active = 'A', Inactive = 'I')",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[AaIi]$",
+            "maxLength": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "major_code": "GMDI",
+                  "major_title": "Medical Informatics",
+                  "major_status": "A"
+                },
+                {
+                  "major_code": "CSCI",
+                  "major_title": "Computer Science",
+                  "major_status": "A"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Major"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
     "/people": {
       "get": {
         "description": "Returns a collection of people or a person.\n",
@@ -138,6 +554,37 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "modifiedsince",
+            "description": "Return records modified within the given interval.\n\nFormat: <integer><unit> where:\n- integer is 1–3 digits (0–999)\n- unit is one of: d (days), w (weeks), m (months), y (years)\n\nExamples:\n- 7d  (last 7 days)\n- 2w  (last 2 weeks)\n- 12m (last 12 months)\n- 1y  (last 1 year)\n",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{1,3}[dmwy]$"
+          },
+          {
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
           {
             "name": "firstname",
             "description": "Return all accounts for specified first name",
@@ -281,7 +728,7 @@
             "required": false,
             "in": "query",
             "type": "string",
-            "pattern": "^\\s*(?:employee|student|faculty)(?:\\s*,\\s*(?:employee|student|faculty))*\\s*$"
+            "pattern": "^\\s*(?:employee|student|faculty|external)(?:\\s*,\\s*(?:employee|student|faculty|external))*\\s*$"
           },
           {
             "name": "employmentStatus",
@@ -290,14 +737,6 @@
             "in": "query",
             "type": "string",
             "pattern": "^\\s*(?:is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(?:\\s*,\\s*(?:is_ssp|is_campus_employee|is_health_employee))*\\s*$"
-          },
-          {
-            "name": "limit",
-            "description": "The maximum number of records to",
-            "required": false,
-            "in": "query",
-            "default": 10000,
-            "type": "integer"
           }
         ],
         "responses": {
@@ -307,10 +746,10 @@
             "schema": {
               "example": [
                 {
-                  "iam_id": "1000000001",
+                  "iam_id": "1234567890",
                   "displayname": "Alice Example",
                   "birth_date": "1975-01-23",
-                  "manager_iam_id": "1000000002",
+                  "manager_iam_id": "1234567891",
                   "provisioning_status": [
                     {
                       "primary": "active"
@@ -348,7 +787,7 @@
                   ],
                   "id": [
                     {
-                      "iam_id": "1000000001"
+                      "iam_id": "1234567890"
                     },
                     {
                       "login_id": "aexample"
@@ -429,8 +868,74 @@
                       "class_level": "JR"
                     }
                   ],
-                  "modified_date": "2025-11-07T12:55:31Z",
-                  "create_date": "2023-08-14T09:22:10Z"
+                  "payroll_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "reports_to_position": "P000001",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "reports_to_position": "P100001",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
                 }
               ],
               "type": "array",
@@ -447,9 +952,9 @@
         ]
       }
     },
-    "/colleges": {
+    "/people/students": {
       "get": {
-        "description": "Returns a list of all colleges",
+        "description": "Returns a collection of person records for students.",
         "consumes": [
           "application/json"
         ],
@@ -458,20 +963,188 @@
         ],
         "parameters": [
           {
-            "name": "college_code",
-            "description": "Return college information for the specified 2 character college code",
+            "name": "modifiedsince",
+            "description": "Return records modified within the given interval.\n\nFormat: <integer><unit> where:\n- integer is 1–3 digits (0–999)\n- unit is one of: d (days), w (weeks), m (months), y (years)\n\nExamples:\n- 7d  (last 7 days)\n- 2w  (last 2 weeks)\n- 12m (last 12 months)\n- 1y  (last 1 year)\n",
             "required": false,
             "in": "query",
             "type": "string",
-            "maxLength": 2
+            "pattern": "^\\d{1,3}[dmwy]$"
           },
           {
-            "name": "college_title",
-            "description": "Return college information for colleges matching the specified college title",
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "firstname",
+            "description": "Return all accounts for specified first name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "description": "Return all accounts for specified last name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
             "required": false,
             "in": "query",
             "type": "string",
-            "maxLength": 64
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "manager_iam_id",
+            "description": "Return all accounts for a specific 10-digit manager_iam_id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "email",
+            "description": "Return user info for a UC Davis email address",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "loginid",
+            "description": "Return user info for a UC Davis login id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "employeeid",
+            "description": "Filter by employee ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "studentid",
+            "description": "Filter by student ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mailid",
+            "description": "Filter by mail ID (pre-@ part)",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pidm",
+            "description": "Filter by PIDM",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mothraid",
+            "description": "Filter by Mothra ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pps_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cosmos_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cpe_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "health_affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucanr_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "usda_whnrc_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucnet_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliationContains",
+            "description": "Comma-separated list of possible affiltion values",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:employee|student|faculty|external)(?:\\s*,\\s*(?:employee|student|faculty|external))*\\s*$"
+          },
+          {
+            "name": "employmentStatus",
+            "description": "Comma separated list of possible employment status codes",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(?:\\s*,\\s*(?:is_ssp|is_campus_employee|is_health_employee))*\\s*$"
           }
         ],
         "responses": {
@@ -481,17 +1154,201 @@
             "schema": {
               "example": [
                 {
-                  "college_code": "LS",
-                  "college_title": "College of Letters and Science"
-                },
-                {
-                  "college_code": "AG",
-                  "college_title": "College of Agricultural and Environmental Sciences"
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active"
+                    }
+                  ],
+                  "affiliation": [
+                    "employee",
+                    "student",
+                    "affiliate"
+                  ],
+                  "employment_status": [
+                    "is_msp",
+                    "is_msp_career",
+                    "is_campus_employee"
+                  ],
+                  "name": [
+                    {
+                      "lived_first_name": "Alice"
+                    },
+                    {
+                      "lived_middle_name": "Beth"
+                    },
+                    {
+                      "lived_last_name": "Example"
+                    },
+                    {
+                      "legal_first_name": "Alicia"
+                    },
+                    {
+                      "legal_middle_name": "B."
+                    },
+                    {
+                      "legal_last_name": "Exampleton"
+                    }
+                  ],
+                  "id": [
+                    {
+                      "iam_id": "1234567890"
+                    },
+                    {
+                      "login_id": "aexample"
+                    },
+                    {
+                      "student_id": "01234567"
+                    },
+                    {
+                      "mothra_id": "00123456"
+                    },
+                    {
+                      "employee_id": "10987654"
+                    },
+                    {
+                      "mail_id": "aexample"
+                    },
+                    {
+                      "pidm": "9876543"
+                    },
+                    {
+                      "pps_id": "76543210"
+                    },
+                    {
+                      "cosmos_id": "COS123456"
+                    },
+                    {
+                      "cpe_id": "CPE98765"
+                    },
+                    {
+                      "health_affiliate_id": "HA12345"
+                    },
+                    {
+                      "ucanr_id": "UCANR54321"
+                    },
+                    {
+                      "usda_whnrc_id": "USDA9999"
+                    },
+                    {
+                      "affiliate_id": "AFF12345"
+                    },
+                    {
+                      "ucnet_id": "UCNET123456"
+                    }
+                  ],
+                  "email": [
+                    {
+                      "primary": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "work": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "personal": "alice.personal@example.com"
+                    }
+                  ],
+                  "phone": [
+                    {
+                      "primary": "+1-530-555-0100"
+                    },
+                    {
+                      "work": "+1-530-555-0199"
+                    },
+                    {
+                      "personal": "+1-916-555-0123"
+                    }
+                  ],
+                  "student_association": [
+                    {
+                      "college": "ENGR",
+                      "major": "CSE",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "college": "L&S",
+                      "major": "MATH",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "payroll_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "reports_to_position": "P000001",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "reports_to_position": "P100001",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
                 }
               ],
               "type": "array",
               "items": {
-                "$ref": "#/definitions/College"
+                "$ref": "#/definitions/Person"
               }
             }
           }
@@ -503,9 +1360,9 @@
         ]
       }
     },
-    "/majors": {
+    "/people/employees": {
       "get": {
-        "description": "Returns a list of all majors",
+        "description": "Returns a collection of person records for employees.",
         "consumes": [
           "application/json"
         ],
@@ -514,30 +1371,188 @@
         ],
         "parameters": [
           {
-            "name": "major_code",
-            "description": "Return major information for the specified 4 character major code",
+            "name": "modifiedsince",
+            "description": "Return records modified within the given interval.\n\nFormat: <integer><unit> where:\n- integer is 1–3 digits (0–999)\n- unit is one of: d (days), w (weeks), m (months), y (years)\n\nExamples:\n- 7d  (last 7 days)\n- 2w  (last 2 weeks)\n- 12m (last 12 months)\n- 1y  (last 1 year)\n",
             "required": false,
             "in": "query",
             "type": "string",
-            "pattern": "^[A-Za-z]{4}$"
+            "pattern": "^\\d{1,3}[dmwy]$"
           },
           {
-            "name": "major_title",
-            "description": "Return major information for the specified major title",
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
             "required": false,
             "in": "query",
-            "type": "string",
-            "pattern": "^[A-Za-z0-9&';,\\-()/ ]+$",
-            "maxLength": 64
+            "default": false,
+            "type": "boolean"
           },
           {
-            "name": "major_status",
-            "description": "Return majors with the specified status (Active = 'A', Inactive = 'I')",
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "firstname",
+            "description": "Return all accounts for specified first name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "description": "Return all accounts for specified last name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
             "required": false,
             "in": "query",
             "type": "string",
-            "pattern": "^[AaIi]$",
-            "maxLength": 1
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "manager_iam_id",
+            "description": "Return all accounts for a specific 10-digit manager_iam_id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "email",
+            "description": "Return user info for a UC Davis email address",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "loginid",
+            "description": "Return user info for a UC Davis login id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "employeeid",
+            "description": "Filter by employee ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "studentid",
+            "description": "Filter by student ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mailid",
+            "description": "Filter by mail ID (pre-@ part)",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pidm",
+            "description": "Filter by PIDM",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mothraid",
+            "description": "Filter by Mothra ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pps_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cosmos_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cpe_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "health_affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucanr_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "usda_whnrc_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucnet_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliationContains",
+            "description": "Comma-separated list of possible affiltion values",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:employee|student|faculty|external)(?:\\s*,\\s*(?:employee|student|faculty|external))*\\s*$"
+          },
+          {
+            "name": "employmentStatus",
+            "description": "Comma separated list of possible employment status codes",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(?:\\s*,\\s*(?:is_ssp|is_campus_employee|is_health_employee))*\\s*$"
           }
         ],
         "responses": {
@@ -547,19 +1562,1479 @@
             "schema": {
               "example": [
                 {
-                  "major_code": "GMDI",
-                  "major_title": "Medical Informatics",
-                  "major_status": "A"
-                },
-                {
-                  "major_code": "CSCI",
-                  "major_title": "Computer Science",
-                  "major_status": "A"
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active"
+                    }
+                  ],
+                  "affiliation": [
+                    "employee",
+                    "student",
+                    "affiliate"
+                  ],
+                  "employment_status": [
+                    "is_msp",
+                    "is_msp_career",
+                    "is_campus_employee"
+                  ],
+                  "name": [
+                    {
+                      "lived_first_name": "Alice"
+                    },
+                    {
+                      "lived_middle_name": "Beth"
+                    },
+                    {
+                      "lived_last_name": "Example"
+                    },
+                    {
+                      "legal_first_name": "Alicia"
+                    },
+                    {
+                      "legal_middle_name": "B."
+                    },
+                    {
+                      "legal_last_name": "Exampleton"
+                    }
+                  ],
+                  "id": [
+                    {
+                      "iam_id": "1234567890"
+                    },
+                    {
+                      "login_id": "aexample"
+                    },
+                    {
+                      "student_id": "01234567"
+                    },
+                    {
+                      "mothra_id": "00123456"
+                    },
+                    {
+                      "employee_id": "10987654"
+                    },
+                    {
+                      "mail_id": "aexample"
+                    },
+                    {
+                      "pidm": "9876543"
+                    },
+                    {
+                      "pps_id": "76543210"
+                    },
+                    {
+                      "cosmos_id": "COS123456"
+                    },
+                    {
+                      "cpe_id": "CPE98765"
+                    },
+                    {
+                      "health_affiliate_id": "HA12345"
+                    },
+                    {
+                      "ucanr_id": "UCANR54321"
+                    },
+                    {
+                      "usda_whnrc_id": "USDA9999"
+                    },
+                    {
+                      "affiliate_id": "AFF12345"
+                    },
+                    {
+                      "ucnet_id": "UCNET123456"
+                    }
+                  ],
+                  "email": [
+                    {
+                      "primary": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "work": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "personal": "alice.personal@example.com"
+                    }
+                  ],
+                  "phone": [
+                    {
+                      "primary": "+1-530-555-0100"
+                    },
+                    {
+                      "work": "+1-530-555-0199"
+                    },
+                    {
+                      "personal": "+1-916-555-0123"
+                    }
+                  ],
+                  "student_association": [
+                    {
+                      "college": "ENGR",
+                      "major": "CSE",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "college": "L&S",
+                      "major": "MATH",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "payroll_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "reports_to_position": "P000001",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "reports_to_position": "P100001",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
                 }
               ],
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Major"
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/people/faculty": {
+      "get": {
+        "description": "Returns a collection of person records for faculy.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "modifiedsince",
+            "description": "Return records modified within the given interval.\n\nFormat: <integer><unit> where:\n- integer is 1–3 digits (0–999)\n- unit is one of: d (days), w (weeks), m (months), y (years)\n\nExamples:\n- 7d  (last 7 days)\n- 2w  (last 2 weeks)\n- 12m (last 12 months)\n- 1y  (last 1 year)\n",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{1,3}[dmwy]$"
+          },
+          {
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "firstname",
+            "description": "Return all accounts for specified first name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "description": "Return all accounts for specified last name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "manager_iam_id",
+            "description": "Return all accounts for a specific 10-digit manager_iam_id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "email",
+            "description": "Return user info for a UC Davis email address",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "loginid",
+            "description": "Return user info for a UC Davis login id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "employeeid",
+            "description": "Filter by employee ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "studentid",
+            "description": "Filter by student ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mailid",
+            "description": "Filter by mail ID (pre-@ part)",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pidm",
+            "description": "Filter by PIDM",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mothraid",
+            "description": "Filter by Mothra ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pps_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cosmos_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cpe_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "health_affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucanr_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "usda_whnrc_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucnet_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliationContains",
+            "description": "Comma-separated list of possible affiltion values",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:employee|student|faculty|external)(?:\\s*,\\s*(?:employee|student|faculty|external))*\\s*$"
+          },
+          {
+            "name": "employmentStatus",
+            "description": "Comma separated list of possible employment status codes",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(?:\\s*,\\s*(?:is_ssp|is_campus_employee|is_health_employee))*\\s*$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active"
+                    }
+                  ],
+                  "affiliation": [
+                    "employee",
+                    "student",
+                    "affiliate"
+                  ],
+                  "employment_status": [
+                    "is_msp",
+                    "is_msp_career",
+                    "is_campus_employee"
+                  ],
+                  "name": [
+                    {
+                      "lived_first_name": "Alice"
+                    },
+                    {
+                      "lived_middle_name": "Beth"
+                    },
+                    {
+                      "lived_last_name": "Example"
+                    },
+                    {
+                      "legal_first_name": "Alicia"
+                    },
+                    {
+                      "legal_middle_name": "B."
+                    },
+                    {
+                      "legal_last_name": "Exampleton"
+                    }
+                  ],
+                  "id": [
+                    {
+                      "iam_id": "1234567890"
+                    },
+                    {
+                      "login_id": "aexample"
+                    },
+                    {
+                      "student_id": "01234567"
+                    },
+                    {
+                      "mothra_id": "00123456"
+                    },
+                    {
+                      "employee_id": "10987654"
+                    },
+                    {
+                      "mail_id": "aexample"
+                    },
+                    {
+                      "pidm": "9876543"
+                    },
+                    {
+                      "pps_id": "76543210"
+                    },
+                    {
+                      "cosmos_id": "COS123456"
+                    },
+                    {
+                      "cpe_id": "CPE98765"
+                    },
+                    {
+                      "health_affiliate_id": "HA12345"
+                    },
+                    {
+                      "ucanr_id": "UCANR54321"
+                    },
+                    {
+                      "usda_whnrc_id": "USDA9999"
+                    },
+                    {
+                      "affiliate_id": "AFF12345"
+                    },
+                    {
+                      "ucnet_id": "UCNET123456"
+                    }
+                  ],
+                  "email": [
+                    {
+                      "primary": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "work": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "personal": "alice.personal@example.com"
+                    }
+                  ],
+                  "phone": [
+                    {
+                      "primary": "+1-530-555-0100"
+                    },
+                    {
+                      "work": "+1-530-555-0199"
+                    },
+                    {
+                      "personal": "+1-916-555-0123"
+                    }
+                  ],
+                  "student_association": [
+                    {
+                      "college": "ENGR",
+                      "major": "CSE",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "college": "L&S",
+                      "major": "MATH",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "payroll_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "reports_to_position": "P000001",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "reports_to_position": "P100001",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/people/external": {
+      "get": {
+        "description": "Returns a collection of person records for external associates.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "modifiedsince",
+            "description": "Return records modified within the given interval.\n\nFormat: <integer><unit> where:\n- integer is 1–3 digits (0–999)\n- unit is one of: d (days), w (weeks), m (months), y (years)\n\nExamples:\n- 7d  (last 7 days)\n- 2w  (last 2 weeks)\n- 12m (last 12 months)\n- 1y  (last 1 year)\n",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{1,3}[dmwy]$"
+          },
+          {
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "firstname",
+            "description": "Return all accounts for specified first name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "description": "Return all accounts for specified last name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "manager_iam_id",
+            "description": "Return all accounts for a specific 10-digit manager_iam_id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "email",
+            "description": "Return user info for a UC Davis email address",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "loginid",
+            "description": "Return user info for a UC Davis login id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "employeeid",
+            "description": "Filter by employee ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "studentid",
+            "description": "Filter by student ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mailid",
+            "description": "Filter by mail ID (pre-@ part)",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pidm",
+            "description": "Filter by PIDM",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mothraid",
+            "description": "Filter by Mothra ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pps_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cosmos_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cpe_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "health_affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucanr_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "usda_whnrc_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucnet_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliationContains",
+            "description": "Comma-separated list of possible affiltion values",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:employee|student|faculty|external)(?:\\s*,\\s*(?:employee|student|faculty|external))*\\s*$"
+          },
+          {
+            "name": "employmentStatus",
+            "description": "Comma separated list of possible employment status codes",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(?:\\s*,\\s*(?:is_ssp|is_campus_employee|is_health_employee))*\\s*$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active"
+                    }
+                  ],
+                  "affiliation": [
+                    "employee",
+                    "student",
+                    "affiliate"
+                  ],
+                  "employment_status": [
+                    "is_msp",
+                    "is_msp_career",
+                    "is_campus_employee"
+                  ],
+                  "name": [
+                    {
+                      "lived_first_name": "Alice"
+                    },
+                    {
+                      "lived_middle_name": "Beth"
+                    },
+                    {
+                      "lived_last_name": "Example"
+                    },
+                    {
+                      "legal_first_name": "Alicia"
+                    },
+                    {
+                      "legal_middle_name": "B."
+                    },
+                    {
+                      "legal_last_name": "Exampleton"
+                    }
+                  ],
+                  "id": [
+                    {
+                      "iam_id": "1234567890"
+                    },
+                    {
+                      "login_id": "aexample"
+                    },
+                    {
+                      "student_id": "01234567"
+                    },
+                    {
+                      "mothra_id": "00123456"
+                    },
+                    {
+                      "employee_id": "10987654"
+                    },
+                    {
+                      "mail_id": "aexample"
+                    },
+                    {
+                      "pidm": "9876543"
+                    },
+                    {
+                      "pps_id": "76543210"
+                    },
+                    {
+                      "cosmos_id": "COS123456"
+                    },
+                    {
+                      "cpe_id": "CPE98765"
+                    },
+                    {
+                      "health_affiliate_id": "HA12345"
+                    },
+                    {
+                      "ucanr_id": "UCANR54321"
+                    },
+                    {
+                      "usda_whnrc_id": "USDA9999"
+                    },
+                    {
+                      "affiliate_id": "AFF12345"
+                    },
+                    {
+                      "ucnet_id": "UCNET123456"
+                    }
+                  ],
+                  "email": [
+                    {
+                      "primary": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "work": "aexample@ucdavis.edu"
+                    },
+                    {
+                      "personal": "alice.personal@example.com"
+                    }
+                  ],
+                  "phone": [
+                    {
+                      "primary": "+1-530-555-0100"
+                    },
+                    {
+                      "work": "+1-530-555-0199"
+                    },
+                    {
+                      "personal": "+1-916-555-0123"
+                    }
+                  ],
+                  "student_association": [
+                    {
+                      "college": "ENGR",
+                      "major": "CSE",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "college": "L&S",
+                      "major": "MATH",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "payroll_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "reports_to_position": "P000001",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "reports_to_position": "P100001",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "manager_iam_id": "1234567890",
+                      "manager_employee_id": "12345678"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/ppsassociation": {
+      "get": {
+        "description": "Returns a collection of pps associations for identities defined in the request",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "loginid",
+            "description": "Return user info for a UC Davis login id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "employeeid",
+            "description": "Filter by employee ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "jobtypeid",
+            "description": "Filter by job type ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "organizationid",
+            "description": "Filter by organization ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "departmentid",
+            "description": "Filter by department ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "divisionid",
+            "description": "Filter by division ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "subdivisionid",
+            "description": "Filter by sub division ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "modifiedsince",
+            "description": "Return records modified within the given interval.\n\nFormat: <integer><unit> where:\n- integer is 1–3 digits (0–999)\n- unit is one of: d (days), w (weeks), m (months), y (years)\n\nExamples:\n- 7d  (last 7 days)\n- 2w  (last 2 weeks)\n- 12m (last 12 months)\n- 1y  (last 1 year)\n",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{1,3}[dmwy]$"
+          },
+          {
+            "name": "firstname",
+            "description": "Return all accounts for specified first name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastname",
+            "description": "Return all accounts for specified last name",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_iam_id",
+            "description": "Return all accounts for a specific 10-digit manager_iam_id",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "email",
+            "description": "Return user info for a UC Davis email address",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\.)*ucdavis\\.edu$"
+          },
+          {
+            "name": "studentid",
+            "description": "Filter by student ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mailid",
+            "description": "Filter by mail ID (pre-@ part)",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pidm",
+            "description": "Filter by PIDM",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "mothraid",
+            "description": "Filter by Mothra ID",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pps_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cosmos_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cpe_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "health_affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucanr_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "usda_whnrc_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliate_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ucnet_id",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "affiliationContains",
+            "description": "Comma-separated list of possible affiltion values",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:employee|student|faculty|external)(?:\\s*,\\s*(?:employee|student|faculty|external))*\\s*$"
+          },
+          {
+            "name": "employmentStatus",
+            "description": "Comma separated list of possible employment status codes",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\s*(?:is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(?:\\s*,\\s*(?:is_ssp|is_campus_employee|is_health_employee))*\\s*$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "reports_to_iam_id": "1000123456",
+                  "reports_to_employee_id": "1000000",
+                  "employee_id": "E123456",
+                  "employee_record": "0",
+                  "position_number": "12345678",
+                  "position_title": "Application Developer",
+                  "relationship_to_organization": "EMPLOYEE",
+                  "employee_classification": "P",
+                  "employee_classification_description": "Professional",
+                  "status": "A",
+                  "hire_date": "2019-06-10",
+                  "start_date": "2019-06-10",
+                  "termination_date": "",
+                  "fte_percentage": "1.00",
+                  "reports_to_position": "87654321",
+                  "job_type_id": "123",
+                  "job_type_description": "Career",
+                  "job_family_id": "456",
+                  "job_family_description": "Information Technology",
+                  "organization_id": "7-123456",
+                  "organization_title": "Information and Educational Technology",
+                  "division_id": "DIV-001",
+                  "division_title": "Enterprise Applications",
+                  "subdivision_id": "SUBDIV-010",
+                  "subdivision_title": "Integration Services",
+                  "business_unit_id": "BU-100",
+                  "business_unit_title": "IT Services",
+                  "department_id": "DEP-220",
+                  "department_title": "IAM",
+                  "department_short_title": "Identity & Access Mgmt",
+                  "is_health_employee": "N",
+                  "is_campus_employee": "Y",
+                  "modified_date": "2026-03-04T15:22:10Z",
+                  "create_date": "2019-06-10T08:00:00Z"
+                },
+                {
+                  "iam_id": "1234567891",
+                  "reports_to_iam_id": "1000654321",
+                  "reports_to_employee_id": "1000000",
+                  "employee_id": "E123456",
+                  "employee_record": "1",
+                  "position_number": "22334455",
+                  "position_title": "Integration Engineer",
+                  "relationship_to_organization": "EMPLOYEE",
+                  "employee_classification": "P",
+                  "employee_classification_description": "Professional",
+                  "status": "A",
+                  "hire_date": "2022-01-03",
+                  "start_date": "2022-01-03",
+                  "termination_date": "",
+                  "fte_percentage": "0.50",
+                  "reports_to_position": "99887766",
+                  "job_type_id": "123",
+                  "job_type_description": "Career",
+                  "job_family_id": "456",
+                  "job_family_description": "Information Technology",
+                  "organization_id": "7-123456",
+                  "organization_title": "Information and Educational Technology",
+                  "division_id": "DIV-001",
+                  "division_title": "Enterprise Applications",
+                  "subdivision_id": "SUBDIV-010",
+                  "subdivision_title": "Integration Services",
+                  "business_unit_id": "BU-100",
+                  "business_unit_title": "IT Services",
+                  "department_id": "DEP-220",
+                  "department_title": "IAM",
+                  "department_short_title": "Identity & Access Mgmt",
+                  "is_health_employee": "N",
+                  "is_campus_employee": "Y",
+                  "modified_date": "2026-03-04T15:22:10Z",
+                  "create_date": "2022-01-03T08:00:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PPSAssociation"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      }
+    },
+    "/sisassociation": {
+      "get": {
+        "description": "Returns a collection of sis associations for identities defined in the request",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "iamid",
+            "description": "Return all accounts for a specific 10-digit IAM ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          {
+            "name": "iamids",
+            "description": "Comma-separated list of 10-digit IAM IDs",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?:\\d{10})(?:\\s*,\\s*\\d{10})*$"
+          },
+          {
+            "name": "studentid",
+            "description": "Filter by student ID",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "majorcode",
+            "description": "Filter by major code",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "collegecode",
+            "description": "Filter by college code",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          },
+          {
+            "name": "count",
+            "description": "When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).\n",
+            "required": false,
+            "in": "query",
+            "default": false,
+            "type": "boolean"
+          },
+          {
+            "name": "limit",
+            "description": "The maximum number of records to return",
+            "required": false,
+            "in": "query",
+            "default": 1000,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "The number of records to start the current search after",
+            "required": false,
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "modifiedsince",
+            "description": "Return records modified within the given interval.\n\nFormat: <integer><unit> where:\n- integer is 1–3 digits (0–999)\n- unit is one of: d (days), w (weeks), m (months), y (years)\n\nExamples:\n- 7d  (last 7 days)\n- 2w  (last 2 weeks)\n- 12m (last 12 months)\n- 1y  (last 1 year)\n",
+            "required": false,
+            "in": "query",
+            "type": "string",
+            "pattern": "^\\d{1,3}[dmwy]$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567891",
+                  "student_id": "1234567890",
+                  "pidm": "12345678",
+                  "college_code": "ENG",
+                  "college_title": "College of Engineering",
+                  "major_code": "CSCI",
+                  "major_title": "Computer Science",
+                  "lvl_affiliation_code": "UG",
+                  "cls_affiliation_code": "SO",
+                  "rank": "1",
+                  "modified_date": "2026-03-04T15:22:10Z",
+                  "create_date": "2024-09-23T18:10:00Z"
+                },
+                {
+                  "iam_id": "1234567890",
+                  "student_id": "1234567891",
+                  "pidm": "12345678",
+                  "college_code": "LNS",
+                  "college_title": "College of Letters and Science",
+                  "major_code": "MATH",
+                  "major_title": "Mathematics",
+                  "lvl_affiliation_code": "UG",
+                  "cls_affiliation_code": "JR",
+                  "rank": "2",
+                  "modified_date": "2026-02-12T09:01:33Z",
+                  "create_date": "2025-01-15T08:00:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SISAssociation"
               }
             }
           }
@@ -573,6 +3048,165 @@
     }
   },
   "definitions": {
+    "College": {
+      "description": "College metadata.",
+      "type": "object",
+      "required": [
+        "college_code",
+        "college_title"
+      ],
+      "properties": {
+        "college_code": {
+          "description": "2-character college code",
+          "example": "LS",
+          "type": "string",
+          "maxLength": 2
+        },
+        "college_title": {
+          "description": "College title",
+          "example": "College of Letters and Science",
+          "type": "string",
+          "maxLength": 64
+        }
+      }
+    },
+    "Group": {
+      "type": "object",
+      "required": [
+        "sourceName",
+        "sourceId",
+        "groups"
+      ],
+      "properties": {
+        "sourceName": {
+          "description": "Human-friendly source system name (e.g., \"Google Workspace\", \"Active Directory\").",
+          "type": "string"
+        },
+        "sourceId": {
+          "description": "Identifier for the source system (typically an application/tenant id).",
+          "type": "string"
+        },
+        "groups": {
+          "description": "List of group identifiers/names from the source system.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "type": {
+      "example": {
+        "groupName": "iam-developers",
+        "groupSource": "Google Workspace",
+        "groupId": "2c9180867b2f3a2b017b3a8f2a1b1234",
+        "groupMembers": [
+          {
+            "name": "Alex Rivera",
+            "iamid": "1000000123",
+            "email": "alex.rivera@example.edu"
+          },
+          {
+            "name": "Taylor Chen",
+            "iamid": "1000000456",
+            "email": "taylor.chen@example.edu"
+          }
+        ]
+      },
+      "type": "object",
+      "required": [
+        "groupName",
+        "groupId",
+        "groupMembers"
+      ],
+      "properties": {
+        "groupName": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "groupMembers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/items"
+          }
+        }
+      }
+    },
+    "GroupMembership": {
+      "type": "object",
+      "required": [
+        "groups"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "iamid": {
+          "type": "string"
+        },
+        "loginId": {
+          "type": "string"
+        },
+        "employeeId": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/items_1"
+          }
+        }
+      }
+    },
+    "Source": {
+      "type": "object",
+      "required": [
+        "sourceName",
+        "sourceId"
+      ],
+      "properties": {
+        "sourceName": {
+          "type": "string"
+        },
+        "sourceId": {
+          "type": "string"
+        }
+      }
+    },
+    "Major": {
+      "description": "Major metadata.",
+      "type": "object",
+      "required": [
+        "major_code",
+        "major_title",
+        "major_status"
+      ],
+      "properties": {
+        "major_code": {
+          "description": "4-character major code",
+          "example": "GMDI",
+          "type": "string",
+          "maxLength": 4
+        },
+        "major_title": {
+          "description": "Major title",
+          "example": "Medical Informatics",
+          "type": "string",
+          "maxLength": 64
+        },
+        "major_status": {
+          "description": "Major status (A=Active, I=Inactive)",
+          "example": "A",
+          "type": "string",
+          "maxLength": 1
+        }
+      }
+    },
     "Person": {
       "description": "An object containing identity data about a user.",
       "type": "object",
@@ -589,6 +3223,7 @@
         "email",
         "phone",
         "student_association",
+        "payroll_association",
         "modified_date",
         "create_date"
       ],
@@ -764,6 +3399,98 @@
             }
           }
         },
+        "payroll_association": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "employee_record": {
+                "type": "string"
+              },
+              "employee_id": {
+                "type": "string"
+              },
+              "position_number": {
+                "type": "string"
+              },
+              "position_title": {
+                "type": "string"
+              },
+              "relationship_to_organization": {
+                "type": "string"
+              },
+              "employee_classification": {
+                "type": "string"
+              },
+              "employee_classification_description": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "hire_date": {
+                "type": "string"
+              },
+              "start_date": {
+                "type": "string"
+              },
+              "termination_date": {
+                "type": "string"
+              },
+              "fte_percentage": {
+                "type": "string"
+              },
+              "reports_to_position": {
+                "type": "string"
+              },
+              "job_type_id": {
+                "type": "string"
+              },
+              "job_type_description": {
+                "type": "string"
+              },
+              "job_family_id": {
+                "type": "string"
+              },
+              "job_family_description": {
+                "type": "string"
+              },
+              "organization_id": {
+                "type": "string"
+              },
+              "organization_title": {
+                "type": "string"
+              },
+              "division_id": {
+                "type": "string"
+              },
+              "division_title": {
+                "type": "string"
+              },
+              "subdivision_id": {
+                "type": "string"
+              },
+              "subdivision_title": {
+                "type": "string"
+              },
+              "business_unit_id": {
+                "type": "string"
+              },
+              "business_unit_title": {
+                "type": "string"
+              },
+              "department_id": {
+                "type": "string"
+              },
+              "department_title": {
+                "type": "string"
+              },
+              "department_short_title": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "modified_date": {
           "type": "string",
           "format": "date-time"
@@ -774,54 +3501,198 @@
         }
       }
     },
-    "College": {
-      "description": "College metadata.",
+    "PPSAssociation": {
+      "description": "An object describing a payroll association",
       "type": "object",
       "required": [
-        "college_code",
-        "college_title"
+        "iam_id"
       ],
       "properties": {
-        "college_code": {
-          "description": "2-character college code",
-          "example": "LS",
-          "type": "string",
-          "maxLength": 2
+        "iam_id": {
+          "type": "string"
         },
-        "college_title": {
-          "description": "College title",
-          "example": "College of Letters and Science",
-          "type": "string",
-          "maxLength": 64
+        "reports_to_iam_id": {
+          "type": "string"
+        },
+        "reports_to_employee_id": {
+          "type": "string"
+        },
+        "employee_record": {
+          "type": "string"
+        },
+        "employee_id": {
+          "type": "string"
+        },
+        "position_number": {
+          "type": "string"
+        },
+        "position_title": {
+          "type": "string"
+        },
+        "relationship_to_organization": {
+          "type": "string"
+        },
+        "employee_classification": {
+          "type": "string"
+        },
+        "employee_classification_description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "hire_date": {
+          "type": "string"
+        },
+        "start_date": {
+          "type": "string"
+        },
+        "termination_date": {
+          "type": "string"
+        },
+        "fte_percentage": {
+          "type": "string"
+        },
+        "reports_to_position": {
+          "type": "string"
+        },
+        "job_type_id": {
+          "type": "string"
+        },
+        "job_type_description": {
+          "type": "string"
+        },
+        "job_family_id": {
+          "type": "string"
+        },
+        "job_family_description": {
+          "type": "string"
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "organization_title": {
+          "type": "string"
+        },
+        "division_id": {
+          "type": "string"
+        },
+        "division_title": {
+          "type": "string"
+        },
+        "subdivision_id": {
+          "type": "string"
+        },
+        "subdivision_title": {
+          "type": "string"
+        },
+        "business_unit_id": {
+          "type": "string"
+        },
+        "business_unit_title": {
+          "type": "string"
+        },
+        "department_id": {
+          "type": "string"
+        },
+        "department_title": {
+          "type": "string"
+        },
+        "department_short_title": {
+          "type": "string"
+        },
+        "is_health_employee": {
+          "type": "string"
+        },
+        "is_campus_employee": {
+          "type": "string"
         }
       }
     },
-    "Major": {
-      "description": "Major metadata.",
+    "SISAssociation": {
+      "description": "An object describing a student association",
       "type": "object",
       "required": [
-        "major_code",
-        "major_title",
-        "major_status"
+        "iam_id",
+        "student_id"
       ],
       "properties": {
+        "iam_id": {
+          "type": "string"
+        },
+        "student_id": {
+          "type": "string"
+        },
+        "pidm": {
+          "type": "string"
+        },
+        "college_code": {
+          "type": "string"
+        },
+        "college_title": {
+          "type": "string"
+        },
         "major_code": {
-          "description": "4-character major code",
-          "example": "GMDI",
-          "type": "string",
-          "maxLength": 4
+          "type": "string"
         },
         "major_title": {
-          "description": "Major title",
-          "example": "Medical Informatics",
-          "type": "string",
-          "maxLength": 64
+          "type": "string"
         },
-        "major_status": {
-          "description": "Major status (A=Active, I=Inactive)",
-          "example": "A",
+        "lvl_affiliation_code": {
+          "type": "string"
+        },
+        "cls_affiliation_code": {
+          "type": "string"
+        },
+        "rank": {
+          "type": "string"
+        },
+        "modified_date": {
           "type": "string",
-          "maxLength": 1
+          "format": "date-time"
+        },
+        "create_date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "items": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "iamid": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "items_1": {
+      "type": "object",
+      "required": [
+        "sourceName",
+        "sourceId",
+        "groups"
+      ],
+      "properties": {
+        "sourceName": {
+          "type": "string"
+        },
+        "sourceId": {
+          "type": "string"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }
