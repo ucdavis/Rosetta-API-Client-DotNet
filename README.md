@@ -37,6 +37,7 @@ Install-Package UCD.Rosetta.Client
 ```csharp
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
+using UCD.Rosetta.Client.Generated;
 using UCD.Rosetta.Client.GraphQL;
 
 // Configure the client
@@ -77,7 +78,7 @@ var response = await client.GraphQL.Query(
                 Email = p.Email(e => e.Campus)
             })
         }));
-var firstPerson = response.Data?.Results?[0];
+var firstPerson = response.Data?.Results?.FirstOrDefault();
 ```
 
 ### ASP.NET Core Dependency Injection
@@ -87,6 +88,7 @@ var firstPerson = response.Data?.Results?[0];
 ```csharp
 // Program.cs or Startup.cs
 using UCD.Rosetta.Client.Core.Extensions;
+using UCD.Rosetta.Client.Generated;
 
 builder.Services.AddRosettaClient(options =>
 {
@@ -155,6 +157,8 @@ The client exposes two complementary surfaces: a REST API via `client.Api` and a
 ### People
 
 ```csharp
+using UCD.Rosetta.Client.Generated;
+
 // Search by a variety of identifiers
 await client.Api.PeopleGETAsync(loginid: "jsmith");
 await client.Api.PeopleGETAsync(iamid: "1234567890");
@@ -176,7 +180,11 @@ var accountSources = await client.Api.Sources2Async();
 var accounts = await client.Api.LookupAsync(loginid: "jsmith");
 
 var roles = await client.Api.RolesAllAsync(limit: 10);
-var role = await client.Api.RolesAsync(roles.First().RoleId, limit: 25);
+var roleSummary = roles.FirstOrDefault(role => !string.IsNullOrWhiteSpace(role?.RoleId));
+if (roleSummary is not null)
+{
+    var role = await client.Api.RolesAsync(roleSummary.RoleId, limit: 25);
+}
 
 var groups = await client.Api.GroupsAllAsync(limit: 10);
 var groupSources = await client.Api.SourcesAsync();
@@ -222,7 +230,12 @@ var response = await client.GraphQL.Query(
         }));
 
 foreach (var person in response.Data?.Results ?? [])
+{
+    if (person is null)
+        continue;
+
     Console.WriteLine($"{person.Iam_id?.Value}: {person.Displayname}");
+}
 
 // Colleges
 var colleges = await client.GraphQL.Query(
@@ -277,7 +290,7 @@ var response = await client.GraphQL.Query(
 
 ```csharp
 // Get campaign contacts as CSV
-var csvFile = await client.Api.CampaignContactsAsync(limit: 1000, save: true);
+using var csvFile = await client.Api.CampaignContactsAsync(limit: 1000, save: true);
 ```
 
 ## Error Handling

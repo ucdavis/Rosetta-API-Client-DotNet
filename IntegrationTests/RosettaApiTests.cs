@@ -2,6 +2,7 @@ using System.Text.Json;
 using Shouldly;
 using UCD.Rosetta.Client.Generated;
 using UCD.Rosetta.Client.GraphQL;
+using GeneratedPerson = UCD.Rosetta.Client.Generated.Person;
 
 namespace IntegrationTests;
 
@@ -127,92 +128,119 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
     private async Task<string> GetIamIdForPeopleFilterAsync()
     {
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamId)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamid: _fixture.TestData.IamId))).Count > 0)
-        {
-            return _fixture.TestData.IamId;
-        }
-
-        var iamId = (await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync()))
-            .FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Iam_id))
-            ?.Iam_id;
-
-        Skip.If(string.IsNullOrWhiteSpace(iamId), "No people with iam_id returned from API sample");
-        return iamId!;
+        return await ResolveFilterValueAsync(
+            _fixture.TestData.IamId,
+            NormalizeFilterValue,
+            iamId => _fixture.Client.Api.PeopleGETAsync(iamid: iamId),
+            sample => sample.FirstOrDefault(p => !string.IsNullOrWhiteSpace(p.Iam_id))?.Iam_id,
+            HasFilterValue,
+            "No people with iam_id returned from API sample");
     }
 
     private async Task<string> GetIamIdsForPeopleFilterAsync()
     {
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamids: _fixture.TestData.IamIds))).Count > 0)
-        {
-            return _fixture.TestData.IamIds;
-        }
+        return await ResolveFilterValueAsync(
+            _fixture.TestData.IamIds,
+            NormalizeIamIdsFilterValue,
+            iamIds => _fixture.Client.Api.PeopleGETAsync(iamids: iamIds),
+            sample =>
+            {
+                var iamIds = sample
+                    .Select(p => p.Iam_id)
+                    .Where(id => !string.IsNullOrWhiteSpace(id))
+                    .Distinct()
+                    .Take(2)
+                    .ToArray();
 
-        var iamIds = (await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync()))
-            .Select(p => p.Iam_id)
-            .Where(id => !string.IsNullOrWhiteSpace(id))
-            .Distinct()
-            .Take(2)
-            .ToArray();
-
-        Skip.If(iamIds.Length == 0, "No people with iam_id returned from API sample");
-        return string.Join(",", iamIds);
+                return iamIds.Length >= 2 ? string.Join(",", iamIds) : null;
+            },
+            HasFilterValue,
+            "Fewer than two distinct people with iam_id returned from API sample");
     }
 
     private async Task<string> GetEmailForPeopleFilterAsync()
     {
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.TestEmail)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(email: _fixture.TestData.TestEmail))).Count > 0)
-        {
-            return _fixture.TestData.TestEmail;
-        }
-
-        var email = (await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync()))
-            .SelectMany(GetEmails)
-            .FirstOrDefault();
-
-        Skip.If(string.IsNullOrWhiteSpace(email), "No people with email addresses returned from API sample");
-        return email!;
+        return await ResolveFilterValueAsync(
+            _fixture.TestData.TestEmail,
+            NormalizeFilterValue,
+            email => _fixture.Client.Api.PeopleGETAsync(email: email),
+            sample => sample.SelectMany(GetEmails).FirstOrDefault(),
+            HasFilterValue,
+            "No people with email addresses returned from API sample");
     }
 
     private async Task<string> GetLoginIdForPeopleFilterAsync()
     {
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(loginid: _fixture.TestData.LoginId))).Count > 0)
-        {
-            return _fixture.TestData.LoginId;
-        }
-
-        var loginId = (await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync()))
-            .Select(p => p.Id?.Login_id)
-            .FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
-
-        Skip.If(string.IsNullOrWhiteSpace(loginId), "No people with login_id returned from API sample");
-        return loginId!;
+        return await ResolveFilterValueAsync(
+            _fixture.TestData.LoginId,
+            NormalizeFilterValue,
+            loginId => _fixture.Client.Api.PeopleGETAsync(loginid: loginId),
+            sample => sample.Select(p => p.Id?.Login_id).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id)),
+            HasFilterValue,
+            "No people with login_id returned from API sample");
     }
 
     private async Task<string> GetManagerIamIdForPeopleFilterAsync()
     {
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.ManagerIamId)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(manager_iam_id: _fixture.TestData.ManagerIamId))).Count > 0)
-        {
-            return _fixture.TestData.ManagerIamId;
-        }
-
-        var managerIamId = (await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync()))
-            .Select(p => p.Manager_iam_id)
-            .FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
-
-        Skip.If(string.IsNullOrWhiteSpace(managerIamId), "No people with manager_iam_id returned from API sample");
-        return managerIamId!;
+        return await ResolveFilterValueAsync(
+            _fixture.TestData.ManagerIamId,
+            NormalizeFilterValue,
+            managerIamId => _fixture.Client.Api.PeopleGETAsync(manager_iam_id: managerIamId),
+            sample => sample.Select(p => p.Manager_iam_id).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id)),
+            HasFilterValue,
+            "No people with manager_iam_id returned from API sample");
     }
 
-    private static IEnumerable<string> GetEmails(UCD.Rosetta.Client.Generated.Person person)
+    private static IEnumerable<string> GetEmails(GeneratedPerson person)
     {
         return new[] { person.Email?.Campus, person.Email?.Health, person.Email?.Personal }
             .Where(email => !string.IsNullOrWhiteSpace(email))
             .Select(email => email!);
+    }
+
+    private async Task<TValue> ResolveFilterValueAsync<TValue>(
+        string? configuredValue,
+        Func<string, TValue?> configuredSelector,
+        Func<TValue, Task<ICollection<GeneratedPerson>>> queryFactory,
+        Func<ICollection<GeneratedPerson>, TValue?> sampleSelector,
+        Func<TValue?, bool> hasValue,
+        string sampleSkipReason)
+    {
+        if (!string.IsNullOrWhiteSpace(configuredValue))
+        {
+            var configuredFilterValue = configuredSelector(configuredValue);
+            if (hasValue(configuredFilterValue)
+                && (await SkipEnvironmentLimitations(() => queryFactory(configuredFilterValue!))).Count > 0)
+            {
+                return configuredFilterValue!;
+            }
+        }
+
+        var sampleFilterValue = sampleSelector(await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync()));
+
+        Skip.If(!hasValue(sampleFilterValue), sampleSkipReason);
+        return sampleFilterValue!;
+    }
+
+    private static string? NormalizeFilterValue(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? null : value;
+    }
+
+    private static string? NormalizeIamIdsFilterValue(string value)
+    {
+        var iamIds = value
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Distinct()
+            .ToArray();
+
+        return iamIds.Length >= 2 ? string.Join(",", iamIds) : null;
+    }
+
+    private static bool HasFilterValue(string? value)
+    {
+        return !string.IsNullOrWhiteSpace(value);
     }
 
     #region GraphQL
@@ -227,7 +255,22 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         }));
 
         // Assert
-        Assert.NotNull(result);
+        result.ShouldBeOfType<JsonElement>();
+        var json = (JsonElement)result;
+
+        if (json.TryGetProperty("errors", out var errors) && errors.ValueKind != JsonValueKind.Null)
+        {
+            errors.ValueKind.ShouldBe(JsonValueKind.Array, $"GraphQL errors should be absent or an empty array, got: {errors}");
+            errors.GetArrayLength().ShouldBe(0, $"GraphQL errors: {errors}");
+        }
+
+        json.TryGetProperty("data", out var data).ShouldBeTrue("GraphQL response should include a data object.");
+        data.ValueKind.ShouldBe(JsonValueKind.Object);
+        data.TryGetProperty("people", out var people).ShouldBeTrue("GraphQL response data should include people.");
+        people.ValueKind.ShouldBe(JsonValueKind.Object);
+        people.TryGetProperty("results", out var results).ShouldBeTrue("GraphQL people data should include results.");
+        results.ValueKind.ShouldBe(JsonValueKind.Array);
+        results.GetArrayLength().ShouldBeGreaterThan(0, "GraphQL people results should contain at least one result.");
     }
 
     [SkippableFact]
@@ -425,7 +468,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Api.SourcesAsync());
         sources.ShouldNotBeNull();
 
-        var groupId = groups.SelectMany(g => g.Groups).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
+        var groupId = groups.SelectMany(g => g.Groups ?? []).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
         if (!string.IsNullOrWhiteSpace(groupId))
         {
             var group = await SkipEnvironmentLimitations(() => _fixture.Client.Api.GroupsAsync(groupId));
