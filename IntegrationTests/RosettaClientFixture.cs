@@ -2,7 +2,6 @@ using Microsoft.Extensions.Configuration;
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
 using DotNetEnv;
-using UCD.Rosetta.Client.Core.Domain;
 using UCD.Rosetta.Client.Generated;
 
 namespace IntegrationTests;
@@ -74,7 +73,7 @@ public class RosettaClientFixture : IDisposable
     private Lazy<Task<ICollection<Person>>> CreatePeopleSampleLazy()
     {
         return new Lazy<Task<ICollection<Person>>>(() =>
-            Client.People.SearchAsync(new PeopleQuery { Limit = 25 }));
+            Client.Api.PeopleGETAsync(limit: 25));
     }
 
     private void ResetPeopleSample(Lazy<Task<ICollection<Person>>> failedPeopleSample)

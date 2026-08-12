@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Shouldly;
-using UCD.Rosetta.Client.Core.Domain;
 using UCD.Rosetta.Client.Generated;
 using UCD.Rosetta.Client.GraphQL;
 
@@ -22,12 +21,12 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     #region People
 
     [SkippableFact]
-    public async Task PeopleSearchAsync_WithEmail_ReturnsResults()
+    public async Task PeopleGETAsync_WithEmail_ReturnsResults()
     {
         var email = await GetEmailForPeopleFilterAsync();
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { Email = email }));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(email: email));
 
         // Assert — every returned person should have the searched email in at least one email field
         result.ShouldNotBeNull();
@@ -38,13 +37,13 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task PeopleSearchAsync_WithLimit_ReturnsResults()
+    public async Task PeopleGETAsync_WithLimit_ReturnsResults()
     {
         // Arrange
         var limit = 5;
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { Limit = limit }));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(limit: limit));
 
         // Assert
         Assert.NotNull(result);
@@ -53,12 +52,12 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task PeopleSearchAsync_WithIamId_ReturnsResults()
+    public async Task PeopleGETAsync_WithIamId_ReturnsResults()
     {
         var iamId = await GetIamIdForPeopleFilterAsync();
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { IamId = iamId }));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamid: iamId));
 
         // Assert
         Assert.NotNull(result);
@@ -77,7 +76,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task PeopleSearchAsync_WithIamIds_ReturnsResults()
+    public async Task PeopleGETAsync_WithIamIds_ReturnsResults()
     {
         var iamIds = await GetIamIdsForPeopleFilterAsync();
 
@@ -86,7 +85,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
             .ToHashSet();
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { IamIds = iamIds }));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamids: iamIds));
 
         // Assert — every returned person's IAM ID must be one of the requested IDs
         result.ShouldNotBeNull();
@@ -95,12 +94,12 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task PeopleSearchAsync_WithLoginId_ReturnsResults()
+    public async Task PeopleGETAsync_WithLoginId_ReturnsResults()
     {
         var loginId = await GetLoginIdForPeopleFilterAsync();
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { LoginId = loginId }));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(loginid: loginId));
 
         // Assert — every returned person should have the searched login ID in their identity IDs
         result.ShouldNotBeNull();
@@ -111,12 +110,12 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task PeopleSearchAsync_WithManagerIamId_ReturnsResults()
+    public async Task PeopleGETAsync_WithManagerIamId_ReturnsResults()
     {
         var managerIamId = await GetManagerIamIdForPeopleFilterAsync();
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { ManagerIamId = managerIamId }));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(manager_iam_id: managerIamId));
 
         // Assert — every returned person should report the searched manager IAM ID
         result.ShouldNotBeNull();
@@ -129,7 +128,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     private async Task<string> GetIamIdForPeopleFilterAsync()
     {
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamId)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { IamId = _fixture.TestData.IamId }))).Count > 0)
+            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamid: _fixture.TestData.IamId))).Count > 0)
         {
             return _fixture.TestData.IamId;
         }
@@ -145,7 +144,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     private async Task<string> GetIamIdsForPeopleFilterAsync()
     {
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { IamIds = _fixture.TestData.IamIds }))).Count > 0)
+            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamids: _fixture.TestData.IamIds))).Count > 0)
         {
             return _fixture.TestData.IamIds;
         }
@@ -164,7 +163,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     private async Task<string> GetEmailForPeopleFilterAsync()
     {
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.TestEmail)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { Email = _fixture.TestData.TestEmail }))).Count > 0)
+            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(email: _fixture.TestData.TestEmail))).Count > 0)
         {
             return _fixture.TestData.TestEmail;
         }
@@ -180,7 +179,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     private async Task<string> GetLoginIdForPeopleFilterAsync()
     {
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { LoginId = _fixture.TestData.LoginId }))).Count > 0)
+            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(loginid: _fixture.TestData.LoginId))).Count > 0)
         {
             return _fixture.TestData.LoginId;
         }
@@ -196,7 +195,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     private async Task<string> GetManagerIamIdForPeopleFilterAsync()
     {
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.ManagerIamId)
-            && (await SkipEnvironmentLimitations(() => _fixture.Client.People.SearchAsync(new PeopleQuery { ManagerIamId = _fixture.TestData.ManagerIamId }))).Count > 0)
+            && (await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(manager_iam_id: _fixture.TestData.ManagerIamId))).Count > 0)
         {
             return _fixture.TestData.ManagerIamId;
         }
@@ -219,7 +218,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     #region GraphQL
 
     [SkippableFact]
-    public async Task GraphqlAsync_WithPeopleQuery_ReturnsResult()
+    public async Task GraphqlAsync_WithPeopleFilter_ReturnsResult()
     {
         // Act
         var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.GraphqlAsync(new
@@ -232,7 +231,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task GraphQL_TypedPeopleQuery_ReturnsResults()
+    public async Task GraphQL_TypedPeopleFilter_ReturnsResults()
     {
         // Act — strongly-typed ZeroQL query; no raw JSON strings
         var filter = new PeopleFilterInput { Limit = 5 };
@@ -257,7 +256,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
-    public async Task GraphQL_TypedPeopleQuery_ByLoginId_ReturnsMatchingPerson()
+    public async Task GraphQL_TypedPeopleFilter_ByLoginId_ReturnsMatchingPerson()
     {
         // ZeroQL requires query arguments to be local variables — cannot capture field accesses
         var loginId = await GetLoginIdForPeopleFilterAsync();
@@ -312,7 +311,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     public async Task CollegesAsync_ReturnsResults()
     {
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.ReferenceData.GetCollegesAsync());
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.CollegesAsync());
 
         // Assert
         result.ShouldNotBeNull();
@@ -325,7 +324,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     public async Task CollegesAsync_WithCollegeCode_ReturnsMatchingCollege()
     {
         // First get all colleges to find a valid code
-        var all = await SkipEnvironmentLimitations(() => _fixture.Client.ReferenceData.GetCollegesAsync());
+        var all = await SkipEnvironmentLimitations(() => _fixture.Client.Api.CollegesAsync());
         Skip.If(all.Count == 0, "No colleges returned from API");
         var code = all.Where(c => !string.IsNullOrEmpty(c.College_code))
             .Select(c => c.College_code)
@@ -333,7 +332,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         Skip.If(string.IsNullOrWhiteSpace(code), "No valid college_code found — cannot use as filter");
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.ReferenceData.GetCollegesAsync(collegeCode: code));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.CollegesAsync(college_code: code));
 
         // Assert
         result.ShouldNotBeNull();
@@ -345,7 +344,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     public async Task MajorsAsync_ReturnsResults()
     {
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.ReferenceData.GetMajorsAsync());
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.MajorsAsync());
 
         // Assert
         result.ShouldNotBeNull();
@@ -359,7 +358,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     public async Task MajorsAsync_FilterByStatus_ReturnsOnlyActive()
     {
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.ReferenceData.GetMajorsAsync(majorStatus: "A"));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.MajorsAsync(major_status: "A"));
 
         // Assert
         result.ShouldNotBeNull();
@@ -369,86 +368,98 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
     #endregion
 
-    #region Domain Smoke Tests
+    #region REST Endpoint Smoke Tests
 
     [SkippableFact]
-    public async Task AccountsClient_Smoke_ReturnsSourcesAndOptionalLookup()
+    public async Task AccountsApi_Smoke_ReturnsSourcesAndOptionalLookup()
     {
-        var counts = await SkipEnvironmentLimitations(() => _fixture.Client.Accounts.GetSourceCountsAsync());
+        var counts = await SkipEnvironmentLimitations(() => _fixture.Client.Api.AccountsAsync());
         counts.ShouldNotBeNull();
 
-        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Accounts.GetSourcesAsync());
+        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Api.Sources2Async());
         sources.ShouldNotBeNull();
 
-        var query = await FirstConfiguredSelectorAsync();
-        if (query != null)
+        var selector = await FirstConfiguredSelectorAsync();
+        if (selector != null)
         {
-            var lookup = await SkipEnvironmentLimitations(() => _fixture.Client.Accounts.LookupAsync(query));
+            var lookup = await SkipEnvironmentLimitations(() => _fixture.Client.Api.LookupAsync(
+                iamid: selector.IamId,
+                iamids: selector.IamIds,
+                email: selector.Email,
+                loginid: selector.LoginId));
             lookup.ShouldNotBeNull();
         }
     }
 
     [SkippableFact]
-    public async Task RolesClient_Smoke_ListsAndFetchesDiscoveredRole()
+    public async Task RolesApi_Smoke_ListsAndFetchesDiscoveredRole()
     {
-        var roles = await SkipEnvironmentLimitations(() => _fixture.Client.Roles.ListAsync(limit: 1));
+        var roles = await SkipEnvironmentLimitations(() => _fixture.Client.Api.RolesAllAsync(limit: 1));
         roles.ShouldNotBeNull();
 
         var roleId = roles.Select(r => r.RoleId).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
         Skip.If(string.IsNullOrWhiteSpace(roleId), "No role ID discovered from roles list");
 
-        var role = await SkipEnvironmentLimitations(() => _fixture.Client.Roles.GetByIdAsync(roleId!, limit: 1));
+        var role = await SkipEnvironmentLimitations(() => _fixture.Client.Api.RolesAsync(roleId!, limit: 1));
         role.RoleId.ShouldBe(roleId);
 
-        var membershipQuery = await FirstMembershipSelectorAsync();
-        if (membershipQuery != null)
+        var membershipSelector = await FirstConfiguredSelectorAsync();
+        if (membershipSelector != null)
         {
-            var membership = await SkipEnvironmentLimitations(() => _fixture.Client.Roles.GetMembershipAsync(membershipQuery));
+            var membership = await SkipEnvironmentLimitations(() => _fixture.Client.Api.Membership2Async(
+                iamid: membershipSelector.IamId,
+                iamids: membershipSelector.IamIds,
+                email: membershipSelector.Email,
+                loginid: membershipSelector.LoginId,
+                limit: 1));
             membership.ShouldNotBeNull();
         }
     }
 
     [SkippableFact]
-    public async Task GroupsClient_Smoke_ListsAndFetchesDiscoveredGroup()
+    public async Task GroupsApi_Smoke_ListsAndFetchesDiscoveredGroup()
     {
-        var groups = await SkipEnvironmentLimitations(() => _fixture.Client.Groups.ListAsync(new GroupQuery { Limit = 1 }));
+        var groups = await SkipEnvironmentLimitations(() => _fixture.Client.Api.GroupsAllAsync(limit: 1));
         groups.ShouldNotBeNull();
 
-        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Groups.GetSourcesAsync());
+        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Api.SourcesAsync());
         sources.ShouldNotBeNull();
 
         var groupId = groups.SelectMany(g => g.Groups).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
         if (!string.IsNullOrWhiteSpace(groupId))
         {
-            var group = await SkipEnvironmentLimitations(() => _fixture.Client.Groups.GetByIdAsync(groupId));
+            var group = await SkipEnvironmentLimitations(() => _fixture.Client.Api.GroupsAsync(groupId));
             group.GroupId.ShouldNotBeNullOrWhiteSpace();
         }
 
-        var membershipQuery = await FirstMembershipSelectorAsync();
-        if (membershipQuery != null)
+        var membershipSelector = await FirstConfiguredSelectorAsync();
+        if (membershipSelector != null)
         {
-            var membership = await SkipEnvironmentLimitations(() => _fixture.Client.Groups.GetMembershipAsync(membershipQuery));
+            var membership = await SkipEnvironmentLimitations(() => _fixture.Client.Api.MembershipAsync(
+                iamid: membershipSelector.IamId,
+                iamids: membershipSelector.IamIds,
+                email: membershipSelector.Email,
+                loginid: membershipSelector.LoginId,
+                limit: 1));
             membership.ShouldNotBeNull();
         }
     }
 
     [SkippableFact]
-    public async Task OrganizationsClient_Smoke_ListsAndFetchesDiscoveredOrganization()
+    public async Task OrganizationsApi_Smoke_ListsAndFetchesDiscoveredOrganization()
     {
-        var organizations = await SkipEnvironmentLimitations(() => _fixture.Client.Organizations.ListAsync(new OrganizationQuery { Limit = 1 }));
+        var organizations = await SkipEnvironmentLimitations(() => _fixture.Client.Api.OrganizationsAllAsync(limit: 1));
         organizations.ShouldNotBeNull();
 
         var organizationId = organizations.Select(o => o.Organization_id).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
         Skip.If(string.IsNullOrWhiteSpace(organizationId), "No organization ID discovered from organization list");
 
-        var organization = await SkipEnvironmentLimitations(() => _fixture.Client.Organizations.GetByIdAsync(organizationId!));
+        var organization = await SkipEnvironmentLimitations(() => _fixture.Client.Api.OrganizationsAsync(organizationId!));
         organization.Organization_id.ShouldBe(organizationId);
 
-        var departments = await SkipEnvironmentLimitations(() => _fixture.Client.Organizations.GetDepartmentsAsync(new OrganizationQuery
-        {
-            OrganizationId = organizationId,
-            Limit = 1
-        }));
+        var departments = await SkipEnvironmentLimitations(() => _fixture.Client.Api.DepartmentsAll2Async(
+            organizationid: organizationId,
+            limit: 1));
         departments.ShouldNotBeNull();
 
         var departmentId = departments.SelectMany(o => o.Divisions ?? [])
@@ -459,31 +470,31 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
         if (!string.IsNullOrWhiteSpace(departmentId))
         {
-            var department = await SkipEnvironmentLimitations(() => _fixture.Client.Organizations.GetDepartmentByIdAsync(departmentId));
+            var department = await SkipEnvironmentLimitations(() => _fixture.Client.Api.DepartmentsAsync(departmentId));
             department.Department_id.ShouldBe(departmentId);
         }
     }
 
     [SkippableFact]
-    public async Task AssociationClients_Smoke_ReturnLowLimitResults()
+    public async Task AssociationApis_Smoke_ReturnLowLimitResults()
     {
-        var employees = await SkipEnvironmentLimitations(() => _fixture.Client.EmployeeAssociations.SearchAsync(new EmployeeAssociationQuery { Limit = 1 }));
+        var employees = await SkipEnvironmentLimitations(() => _fixture.Client.Api.EmployeeAssociationAsync(limit: 1));
         employees.ShouldNotBeNull();
 
-        var departments = await SkipEnvironmentLimitations(() => _fixture.Client.EmployeeAssociations.GetDepartmentsAsync(new OrganizationQuery { Limit = 1 }));
+        var departments = await SkipEnvironmentLimitations(() => _fixture.Client.Api.DepartmentsAllAsync(limit: 1));
         departments.ShouldNotBeNull();
 
-        var jobTypes = await SkipEnvironmentLimitations(() => _fixture.Client.EmployeeAssociations.GetJobTypeIdsAsync());
+        var jobTypes = await SkipEnvironmentLimitations(() => _fixture.Client.Api.JobtypeidsAsync());
         jobTypes.ShouldNotBeNull();
 
-        var students = await SkipEnvironmentLimitations(() => _fixture.Client.StudentAssociations.SearchAsync(new StudentAssociationQuery { Limit = 1 }));
+        var students = await SkipEnvironmentLimitations(() => _fixture.Client.Api.StudentAssociationAsync(limit: 1));
         students.ShouldNotBeNull();
     }
 
     [SkippableFact]
-    public async Task CampaignContactsClient_Smoke_ReturnsCsvStream()
+    public async Task CampaignContactsApi_Smoke_ReturnsCsvStream()
     {
-        using var csv = await SkipEnvironmentLimitations(() => _fixture.Client.CampaignContacts.GetCsvAsync(limit: 1));
+        using var csv = await SkipEnvironmentLimitations(() => _fixture.Client.Api.CampaignContactsAsync(limit: 1));
 
         csv.ShouldNotBeNull();
         csv.Stream.ShouldNotBeNull();
@@ -491,65 +502,37 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
     #endregion
 
-    private async Task<AccountLookupQuery?> FirstConfiguredSelectorAsync()
+    private async Task<IdentitySelector?> FirstConfiguredSelectorAsync()
     {
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamId))
-            return new AccountLookupQuery { IamId = _fixture.TestData.IamId };
+            return new IdentitySelector(IamId: _fixture.TestData.IamId);
 
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds))
-            return new AccountLookupQuery { IamIds = _fixture.TestData.IamIds };
+            return new IdentitySelector(IamIds: _fixture.TestData.IamIds);
 
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.TestEmail))
-            return new AccountLookupQuery { Email = _fixture.TestData.TestEmail };
+            return new IdentitySelector(Email: _fixture.TestData.TestEmail);
 
         if (!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId))
-            return new AccountLookupQuery { LoginId = _fixture.TestData.LoginId };
+            return new IdentitySelector(LoginId: _fixture.TestData.LoginId);
 
         var sample = await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync());
         var person = sample.FirstOrDefault();
         if (!string.IsNullOrWhiteSpace(person?.Iam_id))
-            return new AccountLookupQuery { IamId = person.Iam_id };
+            return new IdentitySelector(IamId: person.Iam_id);
 
         var email = sample.SelectMany(GetEmails).FirstOrDefault();
         if (!string.IsNullOrWhiteSpace(email))
-            return new AccountLookupQuery { Email = email };
+            return new IdentitySelector(Email: email);
 
         var loginId = sample.Select(p => p.Id?.Login_id).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
         if (!string.IsNullOrWhiteSpace(loginId))
-            return new AccountLookupQuery { LoginId = loginId };
+            return new IdentitySelector(LoginId: loginId);
 
         return null;
     }
 
-    private async Task<MembershipQuery?> FirstMembershipSelectorAsync()
-    {
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamId))
-            return new MembershipQuery { IamId = _fixture.TestData.IamId, Limit = 1 };
-
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.IamIds))
-            return new MembershipQuery { IamIds = _fixture.TestData.IamIds, Limit = 1 };
-
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.TestEmail))
-            return new MembershipQuery { Email = _fixture.TestData.TestEmail, Limit = 1 };
-
-        if (!string.IsNullOrWhiteSpace(_fixture.TestData.LoginId))
-            return new MembershipQuery { LoginId = _fixture.TestData.LoginId, Limit = 1 };
-
-        var sample = await SkipEnvironmentLimitations(() => _fixture.GetPeopleSampleAsync());
-        var person = sample.FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(person?.Iam_id))
-            return new MembershipQuery { IamId = person.Iam_id, Limit = 1 };
-
-        var email = sample.SelectMany(GetEmails).FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(email))
-            return new MembershipQuery { Email = email, Limit = 1 };
-
-        var loginId = sample.Select(p => p.Id?.Login_id).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));
-        if (!string.IsNullOrWhiteSpace(loginId))
-            return new MembershipQuery { LoginId = loginId, Limit = 1 };
-
-        return null;
-    }
+    private sealed record IdentitySelector(string? IamId = null, string? IamIds = null, string? Email = null, string? LoginId = null);
 
     private static async Task<T> SkipEnvironmentLimitations<T>(Func<Task<T>> action)
     {

@@ -37,7 +37,6 @@ Install-Package UCD.Rosetta.Client
 ```csharp
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
-using UCD.Rosetta.Client.Core.Domain;
 using UCD.Rosetta.Client.GraphQL;
 
 // Configure the client
@@ -54,16 +53,16 @@ var options = new RosettaClientOptions
 using var client = new RosettaClient(options);
 
 // Search for people by login ID
-var people = await client.People.SearchAsync(new PeopleQuery { LoginId = "jsmith" });
+var people = await client.Api.PeopleGETAsync(loginid: "jsmith");
 
 // Search for people by IAM ID
-var person = await client.People.SearchAsync(new PeopleQuery { IamId = "1234567890" });
+var person = await client.Api.PeopleGETAsync(iamid: "1234567890");
 
 // Get all colleges
-var colleges = await client.ReferenceData.GetCollegesAsync();
+var colleges = await client.Api.CollegesAsync();
 
 // Get active majors
-var majors = await client.ReferenceData.GetMajorsAsync(majorStatus: "A");
+var majors = await client.Api.MajorsAsync(major_status: "A");
 
 // Strongly-typed GraphQL query (via ZeroQL)
 var filter = new PeopleFilterInput { Loginid = "jsmith" };
@@ -110,7 +109,7 @@ public class MyService
 
     public async Task<ICollection<Person>> GetPersonByIamIdAsync(string iamId)
     {
-        return await _rosettaClient.People.SearchAsync(new PeopleQuery { IamId = iamId });
+        return await _rosettaClient.Api.PeopleGETAsync(iamid: iamId);
     }
 }
 ```
@@ -151,55 +150,51 @@ builder.Services.AddRosettaClientWithFactory(options =>
 
 ## Available API Endpoints
 
-The client exposes three complementary surfaces:
-
-- Curated REST subclients such as `client.People`, `client.Accounts`, and `client.ReferenceData`. These are recommended for normal SDK usage.
-- `client.Api`, the raw NSwag-generated REST client. Use this as an advanced escape hatch when you need exact generated access.
-- `client.GraphQL`, the ZeroQL-generated strongly-typed GraphQL client.
+The client exposes two complementary surfaces: a REST API via `client.Api` and a strongly-typed GraphQL client via `client.GraphQL`.
 
 ### People
 
 ```csharp
 // Search by a variety of identifiers
-await client.People.SearchAsync(new PeopleQuery { LoginId = "jsmith" });
-await client.People.SearchAsync(new PeopleQuery { IamId = "1234567890" });
-await client.People.SearchAsync(new PeopleQuery { Email = "user@ucdavis.edu" });
-await client.People.SearchAsync(new PeopleQuery { EmployeeId = "123456" });
-await client.People.SearchAsync(new PeopleQuery { StudentId = "987654" });
-await client.People.SearchAsync(new PeopleQuery { ManagerIamId = "0987654321" });
+await client.Api.PeopleGETAsync(loginid: "jsmith");
+await client.Api.PeopleGETAsync(iamid: "1234567890");
+await client.Api.PeopleGETAsync(email: "user@ucdavis.edu");
+await client.Api.PeopleGETAsync(employeeid: "123456");
+await client.Api.PeopleGETAsync(studentid: "987654");
+await client.Api.PeopleGETAsync(manager_iam_id: "0987654321");
 
 // Subsets and bulk POST
-await client.People.GetStudentsAsync(new PeopleQuery { Limit = 25 });
-await client.People.GetEmployeesAsync(new PeopleQuery { Department = "123456" });
-await client.People.GetBulkAsync(new PeopleBulkQuery { IamIds = ["1234567890", "0987654321"] });
+await client.Api.StudentsAsync(limit: 25);
+await client.Api.EmployeesAsync(department: "123456");
+await client.Api.PeoplePOSTAsync(new PeoplePostRequest { Iamids = ["1234567890", "0987654321"] });
 ```
 
 ### Accounts, Roles, Groups, And Organizations
 
 ```csharp
-var accountSources = await client.Accounts.GetSourcesAsync();
-var accounts = await client.Accounts.LookupAsync(new AccountLookupQuery { LoginId = "jsmith" });
+var accountSources = await client.Api.Sources2Async();
+var accounts = await client.Api.LookupAsync(loginid: "jsmith");
 
-var roles = await client.Roles.ListAsync(limit: 10);
-var role = await client.Roles.GetByIdAsync(roles.First().RoleId, limit: 25);
+var roles = await client.Api.RolesAllAsync(limit: 10);
+var role = await client.Api.RolesAsync(roles.First().RoleId, limit: 25);
 
-var groups = await client.Groups.ListAsync(new GroupQuery { Limit = 10 });
-var groupSources = await client.Groups.GetSourcesAsync();
+var groups = await client.Api.GroupsAllAsync(limit: 10);
+var groupSources = await client.Api.SourcesAsync();
 
-var organizations = await client.Organizations.ListAsync(new OrganizationQuery { Limit = 10 });
-var departments = await client.Organizations.GetDepartmentsAsync(new OrganizationQuery { OrganizationId = "ORG001" });
+var organizations = await client.Api.OrganizationsAllAsync(limit: 10);
+var departments = await client.Api.DepartmentsAll2Async(organizationid: "ORG001");
 ```
 
 ### Reference Data
 
 ```csharp
 // Colleges
-await client.ReferenceData.GetCollegesAsync();
-await client.ReferenceData.GetCollegesAsync(collegeCode: "EN");
+await client.Api.CollegesAsync();
+await client.Api.CollegesAsync(college_code: "EN");
 
 // Majors
-await client.ReferenceData.GetMajorsAsync();
-await client.ReferenceData.GetMajorsAsync(majorStatus: "A"); // active majors only
+await client.Api.MajorsAsync();
+await client.Api.MajorsAsync(major_status: "A"); // active majors only
 ```
 
 ### GraphQL (Strongly-Typed)
@@ -282,7 +277,7 @@ var response = await client.GraphQL.Query(
 
 ```csharp
 // Get campaign contacts as CSV
-var csvFile = await client.CampaignContacts.GetCsvAsync(limit: 1000, save: true);
+var csvFile = await client.Api.CampaignContactsAsync(limit: 1000, save: true);
 ```
 
 ## Error Handling
@@ -294,7 +289,7 @@ using UCD.Rosetta.Client.Generated;
 
 try
 {
-    var person = await client.People.SearchAsync(new PeopleQuery { IamId = "invalid-id" });
+    var person = await client.Api.PeopleGETAsync(iamid: "invalid-id");
 }
 catch (RosettaApiException ex)
 {
@@ -340,9 +335,10 @@ var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
 try
 {
-    var people = await client.People.SearchAsync(
-        new PeopleQuery { Limit = 1000 },
-        cancellationToken: cts.Token);
+    var people = await client.Api.PeopleGETAsync(
+        limit: 1000,
+        cancellationToken: cts.Token
+    );
 }
 catch (OperationCanceledException)
 {
@@ -375,10 +371,6 @@ catch (OperationCanceledException)
     │   │   └── RosettaClientOptions.cs  # Configuration options
     │   ├── Converters/
     │   │   └── LenientTypedCollectionConverter.cs
-    │   ├── Domain/
-    │   │   ├── DomainClients.cs         # Curated REST subclients
-    │   │   ├── PeopleClient.cs          # Curated people REST client
-    │   │   └── RosettaDomainModels.cs   # Query records and stable DTOs
     │   ├── Extensions/
     │   │   ├── ClientExtensions.cs      # Debug logging
     │   │   └── ServiceCollectionExtensions.cs  # DI extensions

@@ -1,6 +1,5 @@
 ﻿using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
-using UCD.Rosetta.Client.Core.Domain;
 using UCD.Rosetta.Client.GraphQL;
 using Microsoft.Extensions.Configuration;
 using DotNetEnv;
@@ -36,17 +35,17 @@ try
 {
     Console.WriteLine("Example 1: Search for a person by email");
     Console.WriteLine("----------------------------------------");
-    var peopleByEmail = await client.People.SearchAsync(new PeopleQuery { Email = "email-address@ucdavis.edu" });
+    var peopleByEmail = await client.Api.PeopleGETAsync(email: "email-address@ucdavis.edu");
     Console.WriteLine($"✓ Found {peopleByEmail.Count} person/people\n");
 
     Console.WriteLine("Example 2: Search for a person by login ID");
     Console.WriteLine("-------------------------------------------");
-    var peopleByLogin = await client.People.SearchAsync(new PeopleQuery { LoginId = "jsmith" });
+    var peopleByLogin = await client.Api.PeopleGETAsync(loginid: "jsmith");
     Console.WriteLine($"✓ Found {peopleByLogin.Count} person/people\n");
 
     Console.WriteLine("Example 3: Get all colleges");
     Console.WriteLine("--------------------------");
-    var colleges = await client.ReferenceData.GetCollegesAsync();
+    var colleges = await client.Api.CollegesAsync();
     Console.WriteLine($"✓ Retrieved {colleges.Count} colleges");
     foreach (var college in colleges.Take(3))
         Console.WriteLine($"  {college.College_code}: {college.College_title}");
@@ -54,7 +53,7 @@ try
 
     Console.WriteLine("Example 4: Get active majors");
     Console.WriteLine("----------------------------");
-    var majors = await client.ReferenceData.GetMajorsAsync(majorStatus: "A");
+    var majors = await client.Api.MajorsAsync(major_status: "A");
     Console.WriteLine($"✓ Retrieved {majors.Count} active majors");
     foreach (var major in majors.Take(3))
         Console.WriteLine($"  {major.Major_code}: {major.Major_title}");
