@@ -1,5 +1,6 @@
 using UCD.Rosetta.Client.Core.Authentication;
 using UCD.Rosetta.Client.Core.Configuration;
+using UCD.Rosetta.Client.Core.Domain;
 using UCD.Rosetta.Client.Generated;
 using UCD.Rosetta.Client.GraphQL;
 
@@ -18,23 +19,71 @@ public class RosettaClient : IDisposable
     private readonly OAuthTokenProvider? _ownedTokenProvider;
 
     /// <summary>
-    /// Gets the underlying API client that provides access to all Rosetta API endpoints.
-    /// Use this property to call any API endpoint, for example:
+    /// Gets the underlying generated API client that provides raw access to all Rosetta API endpoints.
+    /// Prefer the domain clients such as <see cref="People"/> and <see cref="ReferenceData"/> for normal REST usage.
+    /// Use this property as an advanced escape hatch, for example:
     /// <code>
-    /// var people = await rosettaClient.Api.PeopleAsync(iamid: "1234567890");
+    /// var people = await rosettaClient.Api.PeopleGETAsync(iamid: "1234567890");
     /// var colleges = await rosettaClient.Api.CollegesAsync();
     /// var majors = await rosettaClient.Api.MajorsAsync(major_status: "A");
-    /// var graphqlResult = await rosettaClient.Api.GraphqlAsync(new { query = "{ people(limit:10) { iam_id displayname } }" });
+    /// var graphqlResult = await rosettaClient.Api.GraphqlAsync(new { query = "{ people(filter:{limit:10}) { results { iam_id displayname } } }" });
     /// </code>
     /// </summary>
     public IClient Api { get; }
+
+    /// <summary>
+    /// Gets the curated people REST client.
+    /// </summary>
+    public PeopleClient People { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated account REST client.
+    /// </summary>
+    public AccountsClient Accounts { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated role REST client.
+    /// </summary>
+    public RolesClient Roles { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated group REST client.
+    /// </summary>
+    public GroupsClient Groups { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated organization REST client.
+    /// </summary>
+    public OrganizationsClient Organizations { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated employee association REST client.
+    /// </summary>
+    public EmployeeAssociationsClient EmployeeAssociations { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated student association REST client.
+    /// </summary>
+    public StudentAssociationsClient StudentAssociations { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated reference data REST client.
+    /// </summary>
+    public ReferenceDataClient ReferenceData { get; private set; } = default!;
+
+    /// <summary>
+    /// Gets the curated campaign contacts REST client.
+    /// </summary>
+    public CampaignContactsClient CampaignContacts { get; private set; } = default!;
     
     /// <summary>
     /// Gets the strongly-typed ZeroQL GraphQL client for querying the Rosetta GraphQL API.
     /// Provides compile-time-checked, LINQ-style queries over the <c>/graphql</c> endpoint.
     /// <code>
+    /// var filter = new PeopleFilterInput { Loginid = "jsmith" };
     /// var response = await rosettaClient.GraphQL.Query(
-    ///     q => q.People(loginid: "jsmith", o => new { o.Iam_id, o.Displayname }));
+    ///     q => q.People(filter: filter,
+    ///         selector: o => new { Results = o.Results(p => new { p.Iam_id, p.Displayname }) }));
     /// </code>
     /// </summary>
     public RosettaGraphQLClient GraphQL { get; }
@@ -84,6 +133,7 @@ public class RosettaClient : IDisposable
         {
             BaseUrl = baseUrl
         };
+        InitializeDomainClients();
         _disposeHttpClient = true;
 
         // GraphQL client reuses the same token provider — no second token request
@@ -120,10 +170,24 @@ public class RosettaClient : IDisposable
         {
             BaseUrl = baseUrl
         };
+        InitializeDomainClients();
 
         _disposeHttpClient = false;        // IHttpClientFactory owns the REST client
         _disposeGraphqlHttpClient = false; // IHttpClientFactory owns the GraphQL client
         GraphQL = new RosettaGraphQLClient(_graphqlHttpClient);
+    }
+
+    private void InitializeDomainClients()
+    {
+        People = new PeopleClient(Api);
+        Accounts = new AccountsClient(Api);
+        Roles = new RolesClient(Api);
+        Groups = new GroupsClient(Api);
+        Organizations = new OrganizationsClient(Api);
+        EmployeeAssociations = new EmployeeAssociationsClient(Api);
+        StudentAssociations = new StudentAssociationsClient(Api);
+        ReferenceData = new ReferenceDataClient(Api);
+        CampaignContacts = new CampaignContactsClient(Api);
     }
 
     /// <summary>

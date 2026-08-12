@@ -4,14 +4,14 @@
 # Example: ./update-spec.sh 1.0.11
 #
 # To find the latest version:
-#   1. Open https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/
+#   1. Open https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/
 #   2. Open the Download dropdown menu
 #   3. Hover over any download link — the version number appears in the URL shown in the browser status bar
 
 set -e
 
-VERSION=${1:-"1.0.32"}
-SPEC_URL="https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/organizations/9b04bfa8-6eeb-4d85-b676-91db930f8411/assets/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/${VERSION}/files/fat-oas/zip/?sha=1762453698202"
+VERSION=${1:-"1.0.31"}
+SPEC_URL="https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/organizations/9b04bfa8-6eeb-4d85-b676-91db930f8411/assets/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/${VERSION}/files/fat-oas/zip/?sha=1786485917112"
 SPEC_DIR="./specs"
 SPEC_FILE="${SPEC_DIR}/rosetta-api.json"
 
@@ -41,7 +41,13 @@ GRAPHQL_TMP="$(mktemp /tmp/rosetta-api.graphql.XXXXXX)"
 echo "📐 Extracting GraphQL schema..."
 if command -v jq &>/dev/null; then
     jq -r '.externalDocs.description' "${SPEC_FILE}" \
-        | awk '/```graphql/{found=1; next} found && /```/{exit} found{print}' \
+        | awk '{
+            sub(/\r$/, "")
+            sub(/[[:blank:]]+$/, "")
+            if (!found && $0 ~ /^[[:blank:]]*```[[:space:]]*(graphql)?[[:space:]]*$/) { found=1; next }
+            if (found && $0 ~ /^[[:blank:]]*```[[:space:]]*$/) { exit }
+            if (found) { print }
+        }' \
         | sed 's/^    //' \
         > "${GRAPHQL_TMP}"
     # Append schema root declaration required by ZeroQL codegen
