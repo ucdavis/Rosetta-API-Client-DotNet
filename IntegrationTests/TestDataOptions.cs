@@ -36,6 +36,8 @@ public class TestDataOptions
     /// </summary>
     public string? TestEmail { get; set; }
 
+    public string? TestHealthEmail { get; set; }
+
     public string? TestDisplayName { get; set; }
 
     /// <summary>

@@ -38,6 +38,28 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeopleGETAsync_WithHealthEmail_ReturnsResults()
+    {
+        var email = await GetHealthEmailForPeopleFilterAsync();
+
+        // Act
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(email: email));
+
+        // Assert — every returned person should have the searched email in at least one email field
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.Count.ShouldBe(1);
+        var data = result.ElementAt(0);
+        data.ShouldNotBeNull();
+        data.Email.ShouldNotBeNull();
+        data.Email.Health.ShouldNotBeNull();
+        data.Email.Health.ShouldBe(email);
+        data.Email.Campus.ShouldNotBeNull();
+        data.Email.Campus.ShouldNotBeNull(email);
+
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_WithLimit_ReturnsResults()
     {
         // Arrange
@@ -162,6 +184,17 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     {
         return await ResolveFilterValueAsync(
             _fixture.TestData.TestEmail,
+            NormalizeFilterValue,
+            email => _fixture.Client.Api.PeopleGETAsync(email: email),
+            sample => sample.SelectMany(GetEmails).FirstOrDefault(),
+            HasFilterValue,
+            "No people with email addresses returned from API sample");
+    }
+
+    private async Task<string> GetHealthEmailForPeopleFilterAsync()
+    {
+        return await ResolveFilterValueAsync(
+            _fixture.TestData.TestHealthEmail,
             NormalizeFilterValue,
             email => _fixture.Client.Api.PeopleGETAsync(email: email),
             sample => sample.SelectMany(GetEmails).FirstOrDefault(),
