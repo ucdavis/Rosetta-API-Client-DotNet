@@ -38,6 +38,28 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeopleGETAsync_WithHealthEmail_ReturnsResults()
+    {
+        var email = await GetHealthEmailForPeopleFilterAsync();
+
+        // Act
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(email: email));
+
+        // Assert — every returned person should have the searched email in at least one email field
+        result.ShouldNotBeNull();
+        result.ShouldNotBeEmpty();
+        result.Count.ShouldBe(1);
+        var data = result.ElementAt(0);
+        data.ShouldNotBeNull();
+        data.Email.ShouldNotBeNull();
+        data.Email.Health.ShouldNotBeNull();
+        data.Email.Health.ShouldBe(email);
+        data.Email.Campus.ShouldNotBeNull();
+        data.Email.Campus.ShouldNotBeNull(email);
+
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_WithLimit_ReturnsResults()
     {
         // Arrange
@@ -50,6 +72,20 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         Assert.NotNull(result);
         Assert.True(result.Count <= limit, 
             $"Expected at most {limit} results, got {result.Count}");
+    }
+
+    [SkippableFact]
+    public async Task PeopleGETAsync_WithDepartmentCode_ReturnsMoreThan100Results()
+    {
+        const string departmentCode = "030000";
+
+        // Act
+        var result = await SkipEnvironmentLimitations(() =>
+            _fixture.Client.Api.PeopleGETAsync(department: departmentCode));
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(100);
     }
 
     [SkippableFact]
@@ -110,6 +146,10 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
             p.Id.Login_id == loginId);
     }
 
+    /// <summary>
+    /// Neat, we can query all the users that a manager manages. This is a good test of the manager_iam_id filter.
+    /// </summary>
+    /// <returns></returns>
     [SkippableFact]
     public async Task PeopleGETAsync_WithManagerIamId_ReturnsResults()
     {
@@ -162,6 +202,17 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     {
         return await ResolveFilterValueAsync(
             _fixture.TestData.TestEmail,
+            NormalizeFilterValue,
+            email => _fixture.Client.Api.PeopleGETAsync(email: email),
+            sample => sample.SelectMany(GetEmails).FirstOrDefault(),
+            HasFilterValue,
+            "No people with email addresses returned from API sample");
+    }
+
+    private async Task<string> GetHealthEmailForPeopleFilterAsync()
+    {
+        return await ResolveFilterValueAsync(
+            _fixture.TestData.TestHealthEmail,
             NormalizeFilterValue,
             email => _fixture.Client.Api.PeopleGETAsync(email: email),
             sample => sample.SelectMany(GetEmails).FirstOrDefault(),
@@ -327,6 +378,52 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
             p != null &&
             p.LoginId != null &&
             p.LoginId.Any(id => id == loginId));
+    }
+
+    [SkippableFact]
+    public async Task GraphQL_TypedPeopleFilter_ByEmails_ReturnsMatchingPeople()
+    {
+        var emails = (_fixture.TestData.TestMultipleEmails ?? string.Empty)
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        Skip.If(emails.Length == 0, "TestData:TestMultipleEmails is not configured");
+
+        var requestedEmails = emails.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var filter = new PeopleFilterInput { Emails = emails };
+
+        // Act
+        var response = await SkipEnvironmentLimitations(() => _fixture.Client.GraphQL.Query(
+            q => q.People(filter: filter, selector: o => new
+            {
+                Results = o.Results(p => new
+                {
+                    p.Iam_id,
+                    Email = p.Email(e => new { e.Campus, e.Health })
+                })
+            })));
+
+        // Assert
+        response.Data.ShouldNotBeNull($"GraphQL errors: {JsonSerializer.Serialize(response.Errors)}");
+        response.Data.Results.ShouldNotBeNull();
+        response.Data.Results.Count().ShouldBe(emails.Length);
+        response.Data.Results.ShouldAllBe(person =>
+            person != null &&
+            person.Email != null &&
+            person.Email.Any(address =>
+                address != null &&
+                ((!string.IsNullOrWhiteSpace(address.Campus) && requestedEmails.Contains(address.Campus)) ||
+                 (!string.IsNullOrWhiteSpace(address.Health) && requestedEmails.Contains(address.Health)))));
+
+        foreach (var email in requestedEmails)
+        {
+            response.Data.Results.ShouldContain(person =>
+                person != null &&
+                person.Email != null &&
+                person.Email.Any(address =>
+                    address != null &&
+                    (string.Equals(address.Campus, email, StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(address.Health, email, StringComparison.OrdinalIgnoreCase))));
+        }
     }
 
     [SkippableFact]
