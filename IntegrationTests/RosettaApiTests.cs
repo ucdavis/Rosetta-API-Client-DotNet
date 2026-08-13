@@ -75,6 +75,20 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeopleGETAsync_WithDepartmentCode_ReturnsMoreThan100Results()
+    {
+        const string departmentCode = "030000";
+
+        // Act
+        var result = await SkipEnvironmentLimitations(() =>
+            _fixture.Client.Api.PeopleGETAsync(department: departmentCode));
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(100);
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_WithIamId_ReturnsResults()
     {
         var iamId = await GetIamIdForPeopleFilterAsync();
@@ -132,6 +146,10 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
             p.Id.Login_id == loginId);
     }
 
+    /// <summary>
+    /// Neat, we can query all the users that a manager manages. This is a good test of the manager_iam_id filter.
+    /// </summary>
+    /// <returns></returns>
     [SkippableFact]
     public async Task PeopleGETAsync_WithManagerIamId_ReturnsResults()
     {
