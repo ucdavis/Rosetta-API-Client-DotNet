@@ -36,6 +36,13 @@ public class TestDataOptions
     /// </summary>
     public string? TestEmail { get; set; }
 
+    public string? TestHealthEmail { get; set; }
+
+    /// <summary>
+    /// Comma-separated list of email addresses for testing bulk person searches.
+    /// </summary>
+    public string? TestMultipleEmails { get; set; }
+
     public string? TestDisplayName { get; set; }
 
     /// <summary>

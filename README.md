@@ -1,6 +1,6 @@
 # UCD.Rosetta.Client
 
-![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.33-blue)
+![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.31-blue)
 
 Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.
 
@@ -37,6 +37,8 @@ Install-Package UCD.Rosetta.Client
 ```csharp
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
+using UCD.Rosetta.Client.Generated;
+using UCD.Rosetta.Client.GraphQL;
 
 // Configure the client
 var options = new RosettaClientOptions
@@ -52,10 +54,10 @@ var options = new RosettaClientOptions
 using var client = new RosettaClient(options);
 
 // Search for people by login ID
-var people = await client.Api.PeopleAsync(loginid: "jsmith");
+var people = await client.Api.PeopleGETAsync(loginid: "jsmith");
 
 // Search for people by IAM ID
-var person = await client.Api.PeopleAsync(iamid: "1234567890");
+var person = await client.Api.PeopleGETAsync(iamid: "1234567890");
 
 // Get all colleges
 var colleges = await client.Api.CollegesAsync();
@@ -64,11 +66,19 @@ var colleges = await client.Api.CollegesAsync();
 var majors = await client.Api.MajorsAsync(major_status: "A");
 
 // Strongly-typed GraphQL query (via ZeroQL)
-var loginId = "jsmith";
+var filter = new PeopleFilterInput { Loginid = "jsmith" };
 var response = await client.GraphQL.Query(
-    q => q.People(loginid: loginId,
-        selector: o => new { o.Iam_id, o.Displayname, Email = o.Email(e => e.Primary) }));
-var firstPerson = response.Data?[0];
+    q => q.People(filter: filter,
+        selector: o => new
+        {
+            Results = o.Results(p => new
+            {
+                p.Iam_id,
+                p.Displayname,
+                Email = p.Email(e => e.Campus)
+            })
+        }));
+var firstPerson = response.Data?.Results?.FirstOrDefault();
 ```
 
 ### ASP.NET Core Dependency Injection
@@ -78,6 +88,7 @@ var firstPerson = response.Data?[0];
 ```csharp
 // Program.cs or Startup.cs
 using UCD.Rosetta.Client.Core.Extensions;
+using UCD.Rosetta.Client.Generated;
 
 builder.Services.AddRosettaClient(options =>
 {
@@ -100,7 +111,7 @@ public class MyService
 
     public async Task<ICollection<Person>> GetPersonByIamIdAsync(string iamId)
     {
-        return await _rosettaClient.Api.PeopleAsync(iamid: iamId);
+        return await _rosettaClient.Api.PeopleGETAsync(iamid: iamId);
     }
 }
 ```
@@ -146,16 +157,40 @@ The client exposes two complementary surfaces: a REST API via `client.Api` and a
 ### People
 
 ```csharp
-// Search by a variety of identifiers
-await client.Api.PeopleAsync(loginid: "jsmith");
-await client.Api.PeopleAsync(iamid: "1234567890");
-await client.Api.PeopleAsync(email: "user@ucdavis.edu");
-await client.Api.PeopleAsync(employeeid: "123456");
-await client.Api.PeopleAsync(studentid: "987654");
-await client.Api.PeopleAsync(manager_iam_id: "0987654321");
+using UCD.Rosetta.Client.Generated;
 
-// Pass a comma-separated list of IAM IDs
-await client.Api.PeopleAsync(iamids: "1234567890,0987654321");
+// Search by a variety of identifiers
+await client.Api.PeopleGETAsync(loginid: "jsmith");
+await client.Api.PeopleGETAsync(iamid: "1234567890");
+await client.Api.PeopleGETAsync(email: "user@ucdavis.edu");
+await client.Api.PeopleGETAsync(employeeid: "123456");
+await client.Api.PeopleGETAsync(studentid: "987654");
+await client.Api.PeopleGETAsync(manager_iam_id: "0987654321");
+
+// Subsets and bulk POST
+await client.Api.StudentsAsync(limit: 25);
+await client.Api.EmployeesAsync(department: "123456");
+await client.Api.PeoplePOSTAsync(new PeoplePostRequest { Iamids = ["1234567890", "0987654321"] });
+```
+
+### Accounts, Roles, Groups, And Organizations
+
+```csharp
+var accountSources = await client.Api.Sources2Async();
+var accounts = await client.Api.LookupAsync(loginid: "jsmith");
+
+var roles = await client.Api.RolesAllAsync(limit: 10);
+var roleSummary = roles.FirstOrDefault(role => !string.IsNullOrWhiteSpace(role?.RoleId));
+if (roleSummary is not null)
+{
+    var role = await client.Api.RolesAsync(roleSummary.RoleId, limit: 25);
+}
+
+var groups = await client.Api.GroupsAllAsync(limit: 10);
+var groupSources = await client.Api.SourcesAsync();
+
+var organizations = await client.Api.OrganizationsAllAsync(limit: 10);
+var departments = await client.Api.DepartmentsAll2Async(organizationid: "ORG001");
 ```
 
 ### Reference Data
@@ -176,31 +211,46 @@ The `client.GraphQL` property exposes a [ZeroQL](https://github.com/byme8/ZeroQL
 
 ```csharp
 // People — select specific fields
-var loginId = "jsmith";
+var filter = new PeopleFilterInput { Loginid = "jsmith" };
 var response = await client.GraphQL.Query(
     q => q.People(
-        loginid: loginId,
+        filter: filter,
         selector: o => new
         {
-            o.Iam_id,
-            o.Displayname,
-            Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
-            Email = o.Email(e => e.Primary),
-            Phone = o.Phone(p => p.Primary),
-            Student = o.Student_association(s => new { s.College, s.Major, s.Class_level }),
-            Payroll = o.Payroll_association(p => new { p.Position_title, p.Employee_classification })
+            Results = o.Results(p => new
+            {
+                p.Iam_id,
+                p.Displayname,
+                Name  = p.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                Email = p.Email(e => e.Campus),
+                Phone = p.Phone(ph => ph.Primary),
+                Student = p.Student_association(s => new { s.College_code, s.Major_code, s.Class_level }),
+                Employee = p.Employee_association(e => new { e.Position_title, e.Employee_classification })
+            })
         }));
 
-foreach (var person in response.Data ?? [])
+foreach (var person in response.Data?.Results ?? [])
+{
+    if (person is null)
+        continue;
+
     Console.WriteLine($"{person.Iam_id?.Value}: {person.Displayname}");
+}
 
 // Colleges
 var colleges = await client.GraphQL.Query(
-    q => q.Colleges(selector: o => new { o.College_code, o.College_title }));
+    q => q.Colleges(selector: o => new
+    {
+        Results = o.Results(c => new { c.College_code, c.College_title })
+    }));
 
 // Majors filtered by status
+var majorFilter = new MajorsFilterInput { Major_status = "A" };
 var majors = await client.GraphQL.Query(
-    q => q.Majors(major_status: "A", selector: o => new { o.Major_code, o.Major_title }));
+    q => q.Majors(filter: majorFilter, selector: o => new
+    {
+        Results = o.Results(m => new { m.Major_code, m.Major_title })
+    }));
 ```
 
 #### Query parameters (variables)
@@ -209,13 +259,17 @@ ZeroQL captures query arguments via lambda closure. The argument **must be a loc
 
 ```csharp
 // ✅ Local variable — works
-var loginId = _options.LoginId;
+var filter = new PeopleFilterInput { Loginid = _options.LoginId };
 var response = await client.GraphQL.Query(
-    q => q.People(loginid: loginId, selector: o => new { o.Iam_id, o.Displayname }));
+    q => q.People(filter: filter, selector: o => new
+    {
+        Results = o.Results(p => new { p.Iam_id, p.Displayname })
+    }));
 
 // ❌ Property access — ZeroQL reports a compilation error
 var response = await client.GraphQL.Query(
-    q => q.People(loginid: _options.LoginId, selector: o => new { o.Iam_id, o.Displayname }));
+    q => q.People(filter: new PeopleFilterInput { Loginid = _options.LoginId },
+        selector: o => new { Results = o.Results(p => new { p.Iam_id, p.Displayname }) }));
 ```
 
 For `static` lambdas (or to make variable capture explicit), use the two-argument overload that takes a `variables` object:
@@ -225,15 +279,18 @@ var variables = new { LoginId = "jsmith" };
 var response = await client.GraphQL.Query(
     variables,
     static (vars, q) => q.People(
-        loginid: vars.LoginId,
-        selector: o => new { o.Iam_id, o.Displayname }));
+        filter: new PeopleFilterInput { Loginid = vars.LoginId },
+        selector: o => new
+        {
+            Results = o.Results(p => new { p.Iam_id, p.Displayname })
+        }));
 ```
 
 ### Campaign Contacts (CSV Export)
 
 ```csharp
 // Get campaign contacts as CSV
-var csvFile = await client.Api.CampaignContactsAsync(limit: 1000, save: true);
+using var csvFile = await client.Api.CampaignContactsAsync(limit: 1000, save: true);
 ```
 
 ## Error Handling
@@ -245,7 +302,7 @@ using UCD.Rosetta.Client.Generated;
 
 try
 {
-    var person = await client.Api.PeopleAsync("invalid-id");
+    var person = await client.Api.PeopleGETAsync(iamid: "invalid-id");
 }
 catch (RosettaApiException ex)
 {
@@ -291,7 +348,7 @@ var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
 try
 {
-    var people = await client.Api.PeopleAsync(
+    var people = await client.Api.PeopleGETAsync(
         limit: 1000,
         cancellationToken: cts.Token
     );
@@ -350,7 +407,7 @@ To update both specs to a new API version, use the convenience script:
 ./update-spec.sh <version>  # e.g. 1.0.33
 ```
 
-To find the latest version number: open the [Rosetta API Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/), open the **Download** dropdown, and hover over any link — the version appears in the URL shown in the browser status bar.
+To find the latest version number: open the [Rosetta API Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/), open the **Download** dropdown, and hover over any link — the version appears in the URL shown in the browser status bar.
 
 The script downloads the spec from MuleSoft Exchange, extracts the embedded GraphQL SDL into `specs/rosetta-api.graphql` (appending the `schema { query: Query }` root required by ZeroQL), and updates the README version badge. Then rebuild:
 ```bash
@@ -416,7 +473,7 @@ client.DebugResponseMaxLength = 4096; // print up to 4KiB of response body for d
 
 Why this extra configuration exists
 
-- The Rosetta API spec models use typed arrays (e.g. `ICollection<Name>`, `ICollection<Email>`) for nested sub-objects on `Person`. In practice the API can return `null` elements or unexpected primitives inside those arrays for records with no data. A `LenientTypedCollectionConverter<T>` is registered in ClientExtensions.UpdateJsonSerializerSettings() during client initialization to silently skip such tokens rather than throwing a `JsonException`. This keeps the library compatible with `System.Text.Json` (no Newtonsoft dependency) while being resilient to inconsistent server payloads.
+- Some Rosetta API spec models include typed arrays for nested sub-objects. In practice the API can return `null` elements or unexpected primitives inside those arrays for records with no data. A `LenientTypedCollectionConverter<T>` is registered in ClientExtensions.UpdateJsonSerializerSettings() during client initialization to silently skip such tokens rather than throwing a `JsonException`. This keeps the library compatible with `System.Text.Json` (no Newtonsoft dependency) while being resilient to inconsistent server payloads.
 
 CI notes
 
@@ -431,5 +488,5 @@ MIT License - See LICENSE file for details
 
 For issues, questions, or contributions:
 - **Issues**: [GitHub Issues](https://github.com/ucdavis/UCD.Rosetta.Client/issues)
-- **Documentation**: [Rosetta API Docs](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-unified-api-dev/)
+- **Documentation**: [Rosetta API Docs](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/)
 - **UC Davis IAM Team**: Contact your IAM representative for credentials and API access

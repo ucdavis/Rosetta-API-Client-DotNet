@@ -21,10 +21,10 @@ public class RosettaClient : IDisposable
     /// Gets the underlying API client that provides access to all Rosetta API endpoints.
     /// Use this property to call any API endpoint, for example:
     /// <code>
-    /// var people = await rosettaClient.Api.PeopleAsync(iamid: "1234567890");
+    /// var people = await rosettaClient.Api.PeopleGETAsync(iamid: "1234567890");
     /// var colleges = await rosettaClient.Api.CollegesAsync();
     /// var majors = await rosettaClient.Api.MajorsAsync(major_status: "A");
-    /// var graphqlResult = await rosettaClient.Api.GraphqlAsync(new { query = "{ people(limit:10) { iam_id displayname } }" });
+    /// var graphqlResult = await rosettaClient.Api.GraphqlAsync(new { query = "{ people(filter:{limit:10}) { results { iam_id displayname } } }" });
     /// </code>
     /// </summary>
     public IClient Api { get; }
@@ -33,8 +33,10 @@ public class RosettaClient : IDisposable
     /// Gets the strongly-typed ZeroQL GraphQL client for querying the Rosetta GraphQL API.
     /// Provides compile-time-checked, LINQ-style queries over the <c>/graphql</c> endpoint.
     /// <code>
+    /// var filter = new PeopleFilterInput { Loginid = "jsmith" };
     /// var response = await rosettaClient.GraphQL.Query(
-    ///     q => q.People(loginid: "jsmith", o => new { o.Iam_id, o.Displayname }));
+    ///     q => q.People(filter: filter,
+    ///         selector: o => new { Results = o.Results(p => new { p.Iam_id, p.Displayname }) }));
     /// </code>
     /// </summary>
     public RosettaGraphQLClient GraphQL { get; }

@@ -1,5 +1,6 @@
 ﻿using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
+using UCD.Rosetta.Client.GraphQL;
 using Microsoft.Extensions.Configuration;
 using DotNetEnv;
 
@@ -34,12 +35,12 @@ try
 {
     Console.WriteLine("Example 1: Search for a person by email");
     Console.WriteLine("----------------------------------------");
-    var peopleByEmail = await client.Api.PeopleAsync(email: "email-address@ucdavis.edu");
+    var peopleByEmail = await client.Api.PeopleGETAsync(email: "email-address@ucdavis.edu");
     Console.WriteLine($"✓ Found {peopleByEmail.Count} person/people\n");
 
     Console.WriteLine("Example 2: Search for a person by login ID");
     Console.WriteLine("-------------------------------------------");
-    var peopleByLogin = await client.Api.PeopleAsync(loginid: "jsmith");
+    var peopleByLogin = await client.Api.PeopleGETAsync(loginid: "jsmith");
     Console.WriteLine($"✓ Found {peopleByLogin.Count} person/people\n");
 
     Console.WriteLine("Example 3: Get all colleges");
@@ -62,7 +63,7 @@ try
     Console.WriteLine("-------------------------------------------------------");
     var graphqlResult = await client.Api.GraphqlAsync(new
     {
-        query = "{ people(limit: 5) { iam_id displayname email { primary } } }"
+        query = "{ people(filter: { limit: 5 }) { results { iam_id displayname email { campus } } } }"
     });
     Console.WriteLine("✓ Raw GraphQL query returned a result\n");
 
@@ -71,18 +72,22 @@ try
     // See https://github.com/byme8/ZeroQL/wiki/Queries-and-mutations for full documentation.
     Console.WriteLine("Example 6: GraphQL — strongly-typed (via client.GraphQL, powered by ZeroQL)");
     Console.WriteLine("----------------------------------------------------------------------------");
+    var filter = new PeopleFilterInput { Limit = 5 };
     var typedResponse = await client.GraphQL.Query(
         q => q.People(
-            limit: 5,
+            filter: filter,
             selector: o => new
             {
-                o.Iam_id,
-                o.Displayname,
-                Name  = o.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
-                Email = o.Email(e => e.Primary)
+                Results = o.Results(p => new
+                {
+                    p.Iam_id,
+                    p.Displayname,
+                    Name  = p.Name(n  => new { n.Lived_first_name, n.Lived_last_name }),
+                    Email = p.Email(e => e.Campus)
+                })
             }));
 
-    if (typedResponse.Data is { } people)
+    if (typedResponse.Data?.Results is { } people)
     {
         Console.WriteLine($"✓ Typed GraphQL query returned {people.Length} people:");
         foreach (var person in people.Take(3))

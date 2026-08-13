@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using UCD.Rosetta.Client.Core;
 using UCD.Rosetta.Client.Core.Configuration;
 using DotNetEnv;
+using UCD.Rosetta.Client.Generated;
 
 namespace IntegrationTests;
 
@@ -14,6 +15,8 @@ public class RosettaClientFixture : IDisposable
     public RosettaClient Client { get; }
     public RosettaClientOptions Options { get; }
     public TestDataOptions TestData { get; }
+    private readonly object _peopleSampleLock = new();
+    private Lazy<Task<ICollection<Person>>> _peopleSample;
 
     public RosettaClientFixture()
     {
@@ -37,6 +40,7 @@ public class RosettaClientFixture : IDisposable
 
         // Create the client
         Client = new RosettaClient(Options);
+        _peopleSample = CreatePeopleSampleLazy();
 
         // Configure debug logging if enabled
         if (TestData.EnableDebugLogging)
@@ -49,5 +53,35 @@ public class RosettaClientFixture : IDisposable
     public void Dispose()
     {
         Client?.Dispose();
+    }
+
+    public async Task<ICollection<Person>> GetPeopleSampleAsync()
+    {
+        var peopleSample = _peopleSample;
+        try
+        {
+            return await peopleSample.Value;
+        }
+        catch
+        {
+            ResetPeopleSample(peopleSample);
+        }
+
+        return await _peopleSample.Value;
+    }
+
+    private Lazy<Task<ICollection<Person>>> CreatePeopleSampleLazy()
+    {
+        return new Lazy<Task<ICollection<Person>>>(() =>
+            Client.Api.PeopleGETAsync(limit: 25));
+    }
+
+    private void ResetPeopleSample(Lazy<Task<ICollection<Person>>> failedPeopleSample)
+    {
+        lock (_peopleSampleLock)
+        {
+            if (ReferenceEquals(_peopleSample, failedPeopleSample))
+                _peopleSample = CreatePeopleSampleLazy();
+        }
     }
 }

@@ -43,71 +43,19 @@ namespace UCD.Rosetta.Client.Generated
         /// <remarks>
         /// Returns a collection of all contacts for Campaign Studio that have been modified in the last 24 hours
         /// </remarks>
-        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> CampaignContactsModifiedAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <remarks>
-        /// GraphQL endpoint for IAM.
+        /// <param name="modifiedsince">Return records modified within the given interval.
         /// <br/>
-        /// <br/>It supports queries on `Person` as defined in the GraphQL Schema under Documentation.
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
         /// <br/>
         /// <br/>Examples:
-        /// <br/>
-        /// <br/>Single Data Source:
-        /// <br/>      {
-        /// <br/>          "query": "{ people(limit: 10) { iam_id displayname email { primary } } }"
-        /// <br/>      }
-        /// <br/>      
-        /// <br/>Multiple Data Sources:
-        /// <br/>      {
-        /// <br/>      "query": "{ 
-        /// <br/>          people( limit: 1 affiliationContains: \"student\" ) 
-        /// <br/>          { 
-        /// <br/>              iam_id        
-        /// <br/>              name {lived_first_name lived_last_name}
-        /// <br/>              id {login_id}
-        /// <br/>              email {primary}
-        /// <br/>              phone {primary}
-        /// <br/>              student_association {college major academic_level class_level}
-        /// <br/>          }
-        /// <br/>          colleges
-        /// <br/>          {
-        /// <br/>              college_code
-        /// <br/>              college_title
-        /// <br/>          }
-        /// <br/>          majors
-        /// <br/>          {
-        /// <br/>              major_title
-        /// <br/>              major_code
-        /// <br/>          }
-        /// <br/>          }"
-        /// <br/>      }
-        /// </remarks>
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <remarks>
-        /// Returns a collection of people or a person.
-        /// </remarks>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
-        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
-        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
-        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
-        /// <param name="email">Return user info for a UC Davis email address</param>
-        /// <param name="loginid">Return user info for a UC Davis login id</param>
-        /// <param name="employeeid">Filter by employee ID</param>
-        /// <param name="studentid">Filter by student ID</param>
-        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
-        /// <param name="pidm">Filter by PIDM</param>
-        /// <param name="mothraid">Filter by Mothra ID</param>
-        /// <param name="affiliationContains">Comma-separated list of possible affiltion values</param>
-        /// <param name="employmentStatus">Comma separated list of possible employment status codes</param>
-        /// <param name="limit">The maximum number of records to</param>
-        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<FileResponse> CampaignContactsModifiedAsync(string? modifiedsince = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -120,6 +68,124 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
+        /// GraphQL endpoint for IAM.
+        /// <br/>
+        /// <br/>It supports queries as defined in the GraphQL Schema under Documentation.
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>
+        /// <br/>Single Data Source:
+        /// <br/>      ```
+        /// <br/>      {
+        /// <br/>          "query": "query {
+        /// <br/>              people(filter: {limit: 50, affiliationContains: \"student\", count: true}) {
+        /// <br/>              results {
+        /// <br/>                  iam_id name { lived_first_name lived_last_name lived_pronouns }
+        /// <br/>                  id { login_id }
+        /// <br/>                  email { primary work personal }
+        /// <br/>                  phone { primary work personal }
+        /// <br/>                  student_association { college major academic_level class_level }
+        /// <br/>                  }
+        /// <br/>              meta {
+        /// <br/>                  x_total_count
+        /// <br/>              }
+        /// <br/>
+        /// <br/>              }
+        /// <br/>          }"
+        /// <br/>      }
+        /// <br/>      ```
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of group associations for identities defined in the request
+        /// </remarks>
+        /// <param name="source">Return all groups from selected source</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="sortBy">Set a field to sort the results by</param>
+        /// <param name="searchAfter">Set a field value to start the search after. Requires sortBy to be set.</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Group>> GroupsAllAsync(string? source = null, bool? count = null, int? limit = null, int? offset = null, string? sortBy = null, string? searchAfter = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Type> GroupsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of group associations for identities defined in the request
+        /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="source">Return all groups from selected source</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupMembership>> MembershipAsync(string? iamid = null, string? iamids = null, string? email = null, string? loginid = null, string? employeeid = null, string? source = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Source>> SourcesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns each allowed SailPoint account source with the total number of accounts in that source.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<AccountSourceCount>> AccountsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns accounts for identities matched by exactly one supported lookup identifier.
+        /// </remarks>
+        /// <param name="iamid">Return accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="email">Return accounts for a UC Davis email address</param>
+        /// <param name="loginid">Return accounts for a UC Davis login id</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> LookupAsync(string? iamid = null, string? iamids = null, string? email = null, string? loginid = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns the cached list of SailPoint account sources.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Source>> Sources2Async(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns the cached list of SailPoint roles.
+        /// </remarks>
+        /// <param name="limit">The maximum number of role records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Role>> RolesAllAsync(int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <param name="limit">The maximum number of role members to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Type_1> RolesAsync(string id, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns the roles assigned to identities defined in the request.
+        /// </remarks>
+        /// <param name="iamid">Return all roles for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="email">Return roles for a UC Davis email address</param>
+        /// <param name="loginid">Return roles for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="limit">The maximum number of identity records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RoleMembership>> Membership2Async(string? iamid = null, string? iamids = null, string? email = null, string? loginid = null, string? employeeid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
         /// Returns a list of all majors
         /// </remarks>
         /// <param name="major_code">Return major information for the specified 4 character major code</param>
@@ -127,6 +193,716 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="major_status">Return majors with the specified status (Active = 'A', Inactive = 'I')</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Major>> MajorsAsync(string? major_code = null, string? major_title = null, string? major_status = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level? academic_level = null, Class_level? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns people matching filter parameters supplied in the JSON request body. This is intended for requests that need to send a list of IAM IDs without using query parameters.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState2? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level2? academic_level = null, Class_level2? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState3? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level3? academic_level = null, Class_level3? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState4? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level4? academic_level = null, Class_level4? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState5? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level5? academic_level = null, Class_level5? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of employee associations for identities defined in the request
+        /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="jobtypeid">Filter by job type ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="departmentid">Filter by department ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="subdivisionid">Filter by sub division ID</param>
+        /// <param name="subdivisionl4id">Filter by subdivision L4 ID</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<EmployeeAssociation>> EmployeeAssociationAsync(string? iamid = null, string? iamids = null, string? loginid = null, string? employeeid = null, string? jobtypeid = null, string? organizationid = null, string? departmentid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, bool? count = null, int? limit = null, int? offset = null, string? modifiedsince = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a list of payroll departments.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of identity records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Department>> DepartmentsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a list of payroll job type ids.
+        /// </remarks>
+        /// <param name="job_type_id">Filter by specific job type ID</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<JobTypeID>> JobtypeidsAsync(string? job_type_id = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a distinct list of organizations backed by employee association department data.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Organization>> OrganizationsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single organization with its distinct divisions.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<OrganizationDivision> OrganizationsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationDivision>> DivisionsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single division with its distinct subdivisions.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<DivisionSubdivision> DivisionsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions and broader subdivisions.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationSubdivision>> SubdivisionsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single broader subdivision with its distinct subdivision L4 records; the path id is the subdivision_id.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<SubdivisionSubdivisionL4> SubdivisionsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions, subdivisions, and subdivision L4 records.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationSubdivisionL4>> SubdivisionL4sAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single subdivision L4 record with its distinct departments; the path id is the subdivision_l4_id.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<SubdivisionL4Department> SubdivisionL4sAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions, subdivisions, subdivision L4 records, and departments.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationDepartment>> DepartmentsAll2Async(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single department record by department ID.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Department> DepartmentsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of student associations for identities defined in the request
+        /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="majorcode">Filter by major code</param>
+        /// <param name="collegecode">Filter by college code</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentAssociation>> StudentAssociationAsync(string? iamid = null, string? iamids = null, string? studentid = null, string? majorcode = null, string? collegecode = null, bool? count = null, int? limit = null, int? offset = null, string? modifiedsince = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -145,7 +921,7 @@ namespace UCD.Rosetta.Client.Generated
         public Client(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            BaseUrl = "https://iam-rosetta-dev-2y5rmy.jrfxkn.usa-w2.cloudhub.io/api/{version}";
+            BaseUrl = "https://rosetta.dev.api.ucdavis.edu/api/{version}";
             _httpClient = httpClient;
             Initialize();
         }
@@ -265,8 +1041,19 @@ namespace UCD.Rosetta.Client.Generated
         /// <remarks>
         /// Returns a collection of all contacts for Campaign Studio that have been modified in the last 24 hours
         /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> CampaignContactsModifiedAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<FileResponse> CampaignContactsModifiedAsync(string? modifiedsince = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -281,6 +1068,12 @@ namespace UCD.Rosetta.Client.Generated
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
                     // Operation Path: "campaign-contacts-modified"
                     urlBuilder_.Append("campaign-contacts-modified");
+                    urlBuilder_.Append('?');
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -311,299 +1104,6 @@ namespace UCD.Rosetta.Client.Generated
                             var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
                             disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
                             return fileResponse_;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <remarks>
-        /// GraphQL endpoint for IAM.
-        /// <br/>
-        /// <br/>It supports queries on `Person` as defined in the GraphQL Schema under Documentation.
-        /// <br/>
-        /// <br/>Examples:
-        /// <br/>
-        /// <br/>Single Data Source:
-        /// <br/>      {
-        /// <br/>          "query": "{ people(limit: 10) { iam_id displayname email { primary } } }"
-        /// <br/>      }
-        /// <br/>      
-        /// <br/>Multiple Data Sources:
-        /// <br/>      {
-        /// <br/>      "query": "{ 
-        /// <br/>          people( limit: 1 affiliationContains: \"student\" ) 
-        /// <br/>          { 
-        /// <br/>              iam_id        
-        /// <br/>              name {lived_first_name lived_last_name}
-        /// <br/>              id {login_id}
-        /// <br/>              email {primary}
-        /// <br/>              phone {primary}
-        /// <br/>              student_association {college major academic_level class_level}
-        /// <br/>          }
-        /// <br/>          colleges
-        /// <br/>          {
-        /// <br/>              college_code
-        /// <br/>              college_title
-        /// <br/>          }
-        /// <br/>          majors
-        /// <br/>          {
-        /// <br/>              major_title
-        /// <br/>              major_code
-        /// <br/>          }
-        /// <br/>          }"
-        /// <br/>      }
-        /// </remarks>
-        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-        {
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
-                    var content_ = new System.Net.Http.ByteArrayContent(json_);
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-                    var urlBuilder_ = new System.Text.StringBuilder();
-                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "graphql"
-                    urlBuilder_.Append("graphql");
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
-                        foreach (var item_ in response_.Headers)
-                            headers_[item_.Key] = item_.Value;
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <remarks>
-        /// Returns a collection of people or a person.
-        /// </remarks>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
-        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
-        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
-        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
-        /// <param name="email">Return user info for a UC Davis email address</param>
-        /// <param name="loginid">Return user info for a UC Davis login id</param>
-        /// <param name="employeeid">Filter by employee ID</param>
-        /// <param name="studentid">Filter by student ID</param>
-        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
-        /// <param name="pidm">Filter by PIDM</param>
-        /// <param name="mothraid">Filter by Mothra ID</param>
-        /// <param name="affiliationContains">Comma-separated list of possible affiltion values</param>
-        /// <param name="employmentStatus">Comma separated list of possible employment status codes</param>
-        /// <param name="limit">The maximum number of records to</param>
-        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleAsync(string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? employmentStatus = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-        {
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-                    var urlBuilder_ = new System.Text.StringBuilder();
-                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "people"
-                    urlBuilder_.Append("people");
-                    urlBuilder_.Append('?');
-                    if (firstname != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("firstname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (lastname != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (iamid != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (iamids != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (manager_iam_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("manager_iam_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(manager_iam_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (email != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (loginid != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (employeeid != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (studentid != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (mailid != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("mailid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mailid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (pidm != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("pidm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pidm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (mothraid != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("mothraid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (pps_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("pps_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pps_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (cosmos_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("cosmos_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cosmos_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (cpe_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("cpe_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cpe_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (health_affiliate_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("health_affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(health_affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (ucanr_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("ucanr_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucanr_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (usda_whnrc_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("usda_whnrc_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(usda_whnrc_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (affiliate_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (ucnet_id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("ucnet_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucnet_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (affiliationContains != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (employmentStatus != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    if (limit != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
-                        foreach (var item_ in response_.Headers)
-                            headers_[item_.Key] = item_.Value;
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -712,6 +1212,1004 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
+        /// GraphQL endpoint for IAM.
+        /// <br/>
+        /// <br/>It supports queries as defined in the GraphQL Schema under Documentation.
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>
+        /// <br/>Single Data Source:
+        /// <br/>      ```
+        /// <br/>      {
+        /// <br/>          "query": "query {
+        /// <br/>              people(filter: {limit: 50, affiliationContains: \"student\", count: true}) {
+        /// <br/>              results {
+        /// <br/>                  iam_id name { lived_first_name lived_last_name lived_pronouns }
+        /// <br/>                  id { login_id }
+        /// <br/>                  email { primary work personal }
+        /// <br/>                  phone { primary work personal }
+        /// <br/>                  student_association { college major academic_level class_level }
+        /// <br/>                  }
+        /// <br/>              meta {
+        /// <br/>                  x_total_count
+        /// <br/>              }
+        /// <br/>
+        /// <br/>              }
+        /// <br/>          }"
+        /// <br/>      }
+        /// <br/>      ```
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "graphql"
+                    urlBuilder_.Append("graphql");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of group associations for identities defined in the request
+        /// </remarks>
+        /// <param name="source">Return all groups from selected source</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="sortBy">Set a field to sort the results by</param>
+        /// <param name="searchAfter">Set a field value to start the search after. Requires sortBy to be set.</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Group>> GroupsAllAsync(string? source = null, bool? count = null, int? limit = null, int? offset = null, string? sortBy = null, string? searchAfter = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "groups"
+                    urlBuilder_.Append("groups");
+                    urlBuilder_.Append('?');
+                    if (source != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("source")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(source, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (sortBy != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("sortBy")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(sortBy, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (searchAfter != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("searchAfter")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(searchAfter, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Group>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<Type> GroupsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "groups/{id}"
+                    urlBuilder_.Append("groups/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Type>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new RosettaApiException<object>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of group associations for identities defined in the request
+        /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="source">Return all groups from selected source</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<GroupMembership>> MembershipAsync(string? iamid = null, string? iamids = null, string? email = null, string? loginid = null, string? employeeid = null, string? source = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "groups/membership"
+                    urlBuilder_.Append("groups/membership");
+                    urlBuilder_.Append('?');
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (source != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("source")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(source, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<GroupMembership>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Source>> SourcesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "groups/sources"
+                    urlBuilder_.Append("groups/sources");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Source>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns each allowed SailPoint account source with the total number of accounts in that source.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<AccountSourceCount>> AccountsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "accounts"
+                    urlBuilder_.Append("accounts");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<AccountSourceCount>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns accounts for identities matched by exactly one supported lookup identifier.
+        /// </remarks>
+        /// <param name="iamid">Return accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="email">Return accounts for a UC Davis email address</param>
+        /// <param name="loginid">Return accounts for a UC Davis login id</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<object>> LookupAsync(string? iamid = null, string? iamids = null, string? email = null, string? loginid = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "accounts/lookup"
+                    urlBuilder_.Append("accounts/lookup");
+                    urlBuilder_.Append('?');
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<object>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new RosettaApiException<object>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns the cached list of SailPoint account sources.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Source>> Sources2Async(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "accounts/sources"
+                    urlBuilder_.Append("accounts/sources");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Source>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns the cached list of SailPoint roles.
+        /// </remarks>
+        /// <param name="limit">The maximum number of role records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Role>> RolesAllAsync(int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "roles"
+                    urlBuilder_.Append("roles");
+                    urlBuilder_.Append('?');
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Role>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <param name="limit">The maximum number of role members to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<Type_1> RolesAsync(string id, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "roles/{id}"
+                    urlBuilder_.Append("roles/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append('?');
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Type_1>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<object>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new RosettaApiException<object>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns the roles assigned to identities defined in the request.
+        /// </remarks>
+        /// <param name="iamid">Return all roles for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="email">Return roles for a UC Davis email address</param>
+        /// <param name="loginid">Return roles for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="limit">The maximum number of identity records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<RoleMembership>> Membership2Async(string? iamid = null, string? iamids = null, string? email = null, string? loginid = null, string? employeeid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "roles/membership"
+                    urlBuilder_.Append("roles/membership");
+                    urlBuilder_.Append('?');
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<RoleMembership>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
         /// Returns a list of all majors
         /// </remarks>
         /// <param name="major_code">Return major information for the specified 4 character major code</param>
@@ -774,6 +2272,3068 @@ namespace UCD.Rosetta.Client.Generated
                         if (status_ == 200)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Major>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level? academic_level = null, Class_level? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people"
+                    urlBuilder_.Append("people");
+                    urlBuilder_.Append('?');
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (firstname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (manager_iam_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("manager_iam_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(manager_iam_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (studentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mailid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mailid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mailid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pidm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pidm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pidm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mothraid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mothraid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pps_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pps_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pps_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cosmos_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cosmos_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cosmos_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cpe_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cpe_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cpe_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (health_affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("health_affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(health_affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucanr_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucanr_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucanr_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (usda_whnrc_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("usda_whnrc_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(usda_whnrc_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucnet_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucnet_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucnet_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationNotContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationNotContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationNotContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationState != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationState")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationState, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (department != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("department")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(department, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (collegecode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("collegecode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(collegecode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (majorcode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("majorcode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(majorcode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (academic_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("academic_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(academic_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (class_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("class_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(class_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employmentStatus != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns people matching filter parameters supplied in the JSON request body. This is intended for requests that need to send a list of IAM IDs without using query parameters.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people"
+                    urlBuilder_.Append("people");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState2? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level2? academic_level = null, Class_level2? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/students"
+                    urlBuilder_.Append("people/students");
+                    urlBuilder_.Append('?');
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (firstname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (manager_iam_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("manager_iam_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(manager_iam_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (studentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mailid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mailid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mailid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pidm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pidm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pidm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mothraid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mothraid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pps_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pps_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pps_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cosmos_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cosmos_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cosmos_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cpe_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cpe_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cpe_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (health_affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("health_affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(health_affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucanr_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucanr_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucanr_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (usda_whnrc_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("usda_whnrc_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(usda_whnrc_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucnet_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucnet_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucnet_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationNotContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationNotContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationNotContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationState != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationState")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationState, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (department != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("department")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(department, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (collegecode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("collegecode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(collegecode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (majorcode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("majorcode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(majorcode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (academic_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("academic_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(academic_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (class_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("class_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(class_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employmentStatus != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState3? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level3? academic_level = null, Class_level3? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/employees"
+                    urlBuilder_.Append("people/employees");
+                    urlBuilder_.Append('?');
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (firstname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (manager_iam_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("manager_iam_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(manager_iam_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (studentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mailid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mailid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mailid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pidm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pidm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pidm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mothraid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mothraid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pps_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pps_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pps_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cosmos_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cosmos_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cosmos_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cpe_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cpe_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cpe_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (health_affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("health_affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(health_affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucanr_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucanr_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucanr_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (usda_whnrc_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("usda_whnrc_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(usda_whnrc_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucnet_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucnet_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucnet_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationNotContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationNotContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationNotContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationState != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationState")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationState, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (department != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("department")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(department, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (collegecode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("collegecode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(collegecode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (majorcode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("majorcode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(majorcode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (academic_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("academic_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(academic_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (class_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("class_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(class_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employmentStatus != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState4? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level4? academic_level = null, Class_level4? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/faculty"
+                    urlBuilder_.Append("people/faculty");
+                    urlBuilder_.Append('?');
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (firstname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (manager_iam_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("manager_iam_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(manager_iam_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (studentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mailid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mailid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mailid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pidm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pidm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pidm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mothraid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mothraid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pps_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pps_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pps_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cosmos_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cosmos_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cosmos_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cpe_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cpe_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cpe_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (health_affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("health_affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(health_affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucanr_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucanr_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucanr_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (usda_whnrc_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("usda_whnrc_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(usda_whnrc_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucnet_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucnet_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucnet_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationNotContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationNotContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationNotContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationState != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationState")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationState, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (department != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("department")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(department, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (collegecode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("collegecode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(collegecode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (majorcode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("majorcode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(majorcode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (academic_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("academic_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(academic_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (class_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("class_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(class_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employmentStatus != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
+        /// <br/>
+        /// <br/>Supports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.
+        /// <br/>Supports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.
+        /// <br/>The response includes an expanded `provisioning_status` object.
+        /// <br/>
+        /// <br/>## Filter Groups
+        /// <br/>
+        /// <br/>Use the query parameters below to filter by different portions of the person record.
+        /// <br/>
+        /// <br/>### Identity Filters
+        /// <br/>
+        /// <br/>- `iamid`, `iamids`
+        /// <br/>- `email`, `loginid`, `mailid`
+        /// <br/>- `employeeid`, `studentid`
+        /// <br/>- `pidm`, `mothraid`
+        /// <br/>- `pps_id`, `cosmos_id`, `cpe_id`
+        /// <br/>- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`
+        /// <br/>- `manager_iam_id`
+        /// <br/>
+        /// <br/>### Name Filters
+        /// <br/>
+        /// <br/>- `firstname`
+        /// <br/>- `lastname`
+        /// <br/>
+        /// <br/>### Affiliation Filters
+        /// <br/>
+        /// <br/>- `affiliationContains`
+        /// <br/>- `affiliationNotContains`
+        /// <br/>- `affiliationState`
+        /// <br/>- `employmentStatus`
+        /// <br/>
+        /// <br/>### Student Filters
+        /// <br/>
+        /// <br/>- `collegecode`
+        /// <br/>- `majorcode`
+        /// <br/>- `academic_level`
+        /// <br/>- `class_level`
+        /// <br/>
+        /// <br/>`academic_level` also supports grouped values:
+        /// <br/>
+        /// <br/>- `undergrad`: matches academic levels beginning with `U`
+        /// <br/>- `graduate`: matches non-`U` academic levels except `ND`
+        /// <br/>
+        /// <br/>### Organization And Employment Filters
+        /// <br/>
+        /// <br/>- `department`
+        /// <br/>- `organizationid`
+        /// <br/>- `divisionid`
+        /// <br/>- `subdivisionid`
+        /// <br/>- `subdivisionl4id`
+        /// <br/>
+        /// <br/>### Pagination And Change Tracking
+        /// <br/>
+        /// <br/>- `limit`
+        /// <br/>- `offset`
+        /// <br/>- `count`
+        /// <br/>- `modifiedsince`
+        /// </remarks>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="firstname">Return all accounts for specified first name</param>
+        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
+        /// <param name="email">Return user info for a UC Davis email address</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
+        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="mothraid">Filter by Mothra ID</param>
+        /// <param name="affiliationContains">Comma-separated list of affiliation values to include</param>
+        /// <param name="affiliationNotContains">Comma-separated list of affiliation values to exclude</param>
+        /// <param name="affiliationState">Filter on whether a person has any current affiliation.</param>
+        /// <param name="department">Filter by UCPath department code.</param>
+        /// <param name="collegecode">Filter by student college code.</param>
+        /// <param name="majorcode">Filter by student major code.</param>
+        /// <param name="academic_level">Filter by student academic level.</param>
+        /// <param name="class_level">Filter by student class level.</param>
+        /// <param name="organizationid">Filter by UCPath organization ID.</param>
+        /// <param name="divisionid">Filter by UCPath division ID.</param>
+        /// <param name="subdivisionid">Filter by UCPath subdivision ID.</param>
+        /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
+        /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState5? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level5? academic_level = null, Class_level5? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/external"
+                    urlBuilder_.Append("people/external");
+                    urlBuilder_.Append('?');
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (firstname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastname != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (manager_iam_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("manager_iam_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(manager_iam_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (email != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("email")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(email, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (studentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mailid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mailid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mailid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pidm != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pidm")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pidm, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (mothraid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("mothraid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (pps_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("pps_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(pps_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cosmos_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cosmos_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cosmos_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (cpe_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("cpe_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(cpe_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (health_affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("health_affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(health_affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucanr_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucanr_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucanr_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (usda_whnrc_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("usda_whnrc_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(usda_whnrc_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliate_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliate_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliate_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ucnet_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ucnet_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ucnet_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationNotContains != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationNotContains")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationNotContains, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (affiliationState != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("affiliationState")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(affiliationState, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (department != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("department")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(department, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (collegecode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("collegecode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(collegecode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (majorcode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("majorcode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(majorcode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (academic_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("academic_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(academic_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (class_level != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("class_level")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(class_level, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employmentStatus != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of employee associations for identities defined in the request
+        /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="loginid">Return user info for a UC Davis login id</param>
+        /// <param name="employeeid">Filter by employee ID</param>
+        /// <param name="jobtypeid">Filter by job type ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="departmentid">Filter by department ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="subdivisionid">Filter by sub division ID</param>
+        /// <param name="subdivisionl4id">Filter by subdivision L4 ID</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<EmployeeAssociation>> EmployeeAssociationAsync(string? iamid = null, string? iamids = null, string? loginid = null, string? employeeid = null, string? jobtypeid = null, string? organizationid = null, string? departmentid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, bool? count = null, int? limit = null, int? offset = null, string? modifiedsince = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "employee-association"
+                    urlBuilder_.Append("employee-association");
+                    urlBuilder_.Append('?');
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (loginid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("loginid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(loginid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (employeeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("employeeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (jobtypeid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("jobtypeid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(jobtypeid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (departmentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("departmentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(departmentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<EmployeeAssociation>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a list of payroll departments.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of identity records to return</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Department>> DepartmentsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "employee-association/departments"
+                    urlBuilder_.Append("employee-association/departments");
+                    urlBuilder_.Append('?');
+                    if (departmentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("departmentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(departmentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Department>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a list of payroll job type ids.
+        /// </remarks>
+        /// <param name="job_type_id">Filter by specific job type ID</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<JobTypeID>> JobtypeidsAsync(string? job_type_id = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "employee-association/jobtypeids"
+                    urlBuilder_.Append("employee-association/jobtypeids");
+                    urlBuilder_.Append('?');
+                    if (job_type_id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("job_type_id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(job_type_id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<JobTypeID>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a distinct list of organizations backed by employee association department data.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Organization>> OrganizationsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations"
+                    urlBuilder_.Append("organizations");
+                    urlBuilder_.Append('?');
+                    if (departmentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("departmentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(departmentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Organization>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single organization with its distinct divisions.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<OrganizationDivision> OrganizationsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/{id}"
+                    urlBuilder_.Append("organizations/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<OrganizationDivision>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationDivision>> DivisionsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/divisions"
+                    urlBuilder_.Append("organizations/divisions");
+                    urlBuilder_.Append('?');
+                    if (departmentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("departmentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(departmentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<OrganizationDivision>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single division with its distinct subdivisions.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<DivisionSubdivision> DivisionsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/divisions/{id}"
+                    urlBuilder_.Append("organizations/divisions/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<DivisionSubdivision>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions and broader subdivisions.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationSubdivision>> SubdivisionsAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/subdivisions"
+                    urlBuilder_.Append("organizations/subdivisions");
+                    urlBuilder_.Append('?');
+                    if (departmentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("departmentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(departmentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<OrganizationSubdivision>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single broader subdivision with its distinct subdivision L4 records; the path id is the subdivision_id.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<SubdivisionSubdivisionL4> SubdivisionsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/subdivisions/{id}"
+                    urlBuilder_.Append("organizations/subdivisions/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<SubdivisionSubdivisionL4>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions, subdivisions, and subdivision L4 records.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationSubdivisionL4>> SubdivisionL4sAllAsync(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/subdivision-l4s"
+                    urlBuilder_.Append("organizations/subdivision-l4s");
+                    urlBuilder_.Append('?');
+                    if (departmentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("departmentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(departmentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<OrganizationSubdivisionL4>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single subdivision L4 record with its distinct departments; the path id is the subdivision_l4_id.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<SubdivisionL4Department> SubdivisionL4sAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/subdivision-l4s/{id}"
+                    urlBuilder_.Append("organizations/subdivision-l4s/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<SubdivisionL4Department>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns organizations with their distinct divisions, subdivisions, subdivision L4 records, and departments.
+        /// </remarks>
+        /// <param name="departmentid">Filter by specific department ID</param>
+        /// <param name="subdivisionid">Filter by specific subdivision ID</param>
+        /// <param name="subdivisionl4id">Filter by specific l4 subdivision ID</param>
+        /// <param name="organizationid">Filter by organization ID</param>
+        /// <param name="divisionid">Filter by division ID</param>
+        /// <param name="limit">The maximum number of department records to scan when building the hierarchy</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<OrganizationDepartment>> DepartmentsAll2Async(string? departmentid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? organizationid = null, string? divisionid = null, int? limit = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/departments"
+                    urlBuilder_.Append("organizations/departments");
+                    urlBuilder_.Append('?');
+                    if (departmentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("departmentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(departmentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (subdivisionl4id != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("subdivisionl4id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(subdivisionl4id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (organizationid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("organizationid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(organizationid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (divisionid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("divisionid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(divisionid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<OrganizationDepartment>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a single department record by department ID.
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<Department> DepartmentsAsync(string id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "organizations/departments/{id}"
+                    urlBuilder_.Append("organizations/departments/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<Department>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns a collection of student associations for identities defined in the request
+        /// </remarks>
+        /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
+        /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
+        /// <param name="studentid">Filter by student ID</param>
+        /// <param name="majorcode">Filter by major code</param>
+        /// <param name="collegecode">Filter by college code</param>
+        /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
+        /// <param name="limit">The maximum number of records to return</param>
+        /// <param name="offset">The number of records to start the current search after</param>
+        /// <param name="modifiedsince">Return records modified within the given interval.
+        /// <br/>
+        /// <br/>Format: &lt;integer&gt;&lt;unit&gt; where:
+        /// <br/>- integer is 1–3 digits (0–999)
+        /// <br/>- unit is one of: d (days), w (weeks), m (months), y (years)
+        /// <br/>
+        /// <br/>Examples:
+        /// <br/>- 7d  (last 7 days)
+        /// <br/>- 2w  (last 2 weeks)
+        /// <br/>- 12m (last 12 months)
+        /// <br/>- 1y  (last 1 year)</param>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<StudentAssociation>> StudentAssociationAsync(string? iamid = null, string? iamids = null, string? studentid = null, string? majorcode = null, string? collegecode = null, bool? count = null, int? limit = null, int? offset = null, string? modifiedsince = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "student-association"
+                    urlBuilder_.Append("student-association");
+                    urlBuilder_.Append('?');
+                    if (iamid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (iamids != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("iamids")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamids, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (studentid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("studentid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(studentid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (majorcode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("majorcode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(majorcode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (collegecode != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("collegecode")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(collegecode, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (count != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("count")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(count, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (limit != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("limit")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(limit, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (offset != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("offset")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(offset, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (modifiedsince != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("modifiedsince")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(modifiedsince, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<StudentAssociation>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -930,71 +5490,6 @@ namespace UCD.Rosetta.Client.Generated
     }
 
     /// <summary>
-    /// An object containing identity data about a user.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Person
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Iam_id { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("displayname")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Displayname { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("birth_date")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Birth_date { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("manager_iam_id")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Manager_iam_id { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("provisioning_status")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Provisioning_status> Provisioning_status { get; set; } = new System.Collections.Generic.List<Provisioning_status>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("affiliation")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<string> Affiliation { get; set; } = new System.Collections.Generic.List<string>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("employment_status")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<string> Employment_status { get; set; } = new System.Collections.Generic.List<string>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("name")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Name> Name { get; set; } = new System.Collections.Generic.List<Name>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("id")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Id> Id { get; set; } = new System.Collections.Generic.List<Id>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("email")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Email> Email { get; set; } = new System.Collections.Generic.List<Email>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("phone")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Phone> Phone { get; set; } = new System.Collections.Generic.List<Phone>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("student_association")]
-        [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Student_association> Student_association { get; set; } = new System.Collections.Generic.List<Student_association>();
-
-        [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset Modified_date { get; set; } = default!;
-
-        [System.Text.Json.Serialization.JsonPropertyName("create_date")]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset Create_date { get; set; } = default!;
-
-    }
-
-    /// <summary>
     /// College metadata.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1016,6 +5511,182 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [System.ComponentModel.DataAnnotations.StringLength(64)]
         public string College_title { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Group
+    {
+
+        /// <summary>
+        /// Human-friendly source system name (e.g., "Google Workspace", "Active Directory").
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("sourceName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceName { get; set; } = default!;
+
+        /// <summary>
+        /// Identifier for the source system (typically an application/tenant id).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceId { get; set; } = default!;
+
+        /// <summary>
+        /// List of group identifiers/names from the source system.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("groups")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Groups { get; set; } = new System.Collections.Generic.List<string>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Type
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string GroupName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string GroupId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupMembers")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Items> GroupMembers { get; set; } = new System.Collections.Generic.List<Items>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GroupMembership
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string? Name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("iamid")]
+        public string? Iamid { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("loginId")]
+        public string? LoginId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employeeId")]
+        public string? EmployeeId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("email")]
+        public string? Email { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("groups")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Items_2> Groups { get; set; } = new System.Collections.Generic.List<Items_2>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Source
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceId { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class AccountSourceCount
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("accountCount")]
+        public int AccountCount { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Role
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("roleName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string RoleName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("roleId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string RoleId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+        public string? Description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("enabled")]
+        public bool? Enabled { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("requestable")]
+        public bool? Requestable { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Type_1
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("roleName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string RoleName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("roleId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string RoleId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+        public string? Description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("enabled")]
+        public bool? Enabled { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("requestable")]
+        public bool? Requestable { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("roleMembers")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Items> RoleMembers { get; set; } = new System.Collections.Generic.List<Items>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class RoleMembership
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string? Name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("iamid")]
+        public string? Iamid { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("loginId")]
+        public string? LoginId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employeeId")]
+        public string? EmployeeId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("email")]
+        public string? Email { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("roles")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Items_3> Roles { get; set; } = new System.Collections.Generic.List<Items_3>();
 
     }
 
@@ -1052,6 +5723,1263 @@ namespace UCD.Rosetta.Client.Generated
 
     }
 
+    /// <summary>
+    /// An object containing identity data about a user.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Person
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("displayname")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Displayname { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("birth_date")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Birth_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("manager_iam_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Manager_iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("provisioning_status")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Provisioning_status> Provisioning_status { get; set; } = new System.Collections.Generic.List<Provisioning_status>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("affiliation")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Affiliation Affiliation { get; set; } = new Affiliation();
+
+        [System.Text.Json.Serialization.JsonPropertyName("employment_status")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Employment_status Employment_status { get; set; } = new Employment_status();
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Name Name { get; set; } = new Name();
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Id Id { get; set; } = new Id();
+
+        [System.Text.Json.Serialization.JsonPropertyName("email")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Email Email { get; set; } = new Email();
+
+        [System.Text.Json.Serialization.JsonPropertyName("phone")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Phone Phone { get; set; } = new Phone();
+
+        [System.Text.Json.Serialization.JsonPropertyName("student_association")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Student_association> Student_association { get; set; } = new System.Collections.Generic.List<Student_association>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_association")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Employee_association> Employee_association { get; set; } = new System.Collections.Generic.List<Employee_association>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.DateTimeOffset Modified_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("create_date")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.DateTimeOffset Create_date { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// Request body for POST /people lookups.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class PeoplePostRequest
+    {
+
+        /// <summary>
+        /// List of 10-digit IAM IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("iamids")]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string> Iamids { get; set; } = new System.Collections.Generic.List<string>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("limit")]
+        public int? Limit { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("offset")]
+        public int? Offset { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("count")]
+        public bool? Count { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// An object describing a payroll association
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class EmployeeAssociation
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("reports_to_iam_id")]
+        public string? Reports_to_iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("reports_to_employee_id")]
+        public string? Reports_to_employee_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_record")]
+        public string? Employee_record { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
+        public string? Employee_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("position_number")]
+        public string? Position_number { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("position_title")]
+        public string? Position_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
+        public string? Relationship_to_organization { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_classification")]
+        public string? Employee_classification { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_classification_description")]
+        public string? Employee_classification_description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public string? Status { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("hire_date")]
+        public string? Hire_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("start_date")]
+        public string? Start_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("termination_date")]
+        public string? Termination_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("fte_percentage")]
+        public string? Fte_percentage { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("reports_to_position")]
+        public string? Reports_to_position { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_type_id")]
+        public string? Job_type_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_type_description")]
+        public string? Job_type_description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_family_id")]
+        public string? Job_family_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_family_description")]
+        public string? Job_family_description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("business_unit_id")]
+        public string? Business_unit_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("business_unit_title")]
+        public string? Business_unit_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_id")]
+        public string? Department_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_title")]
+        public string? Department_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
+        public string? Department_short_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_health_position")]
+        public string? Is_health_position { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
+        public string? Is_campus_position { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
+        public string? Modified_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("create_date")]
+        public string? Create_date { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// An object describing a payroll department
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Department
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Department_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_title")]
+        public string? Department_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
+        public string? Department_short_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// Job Type ID metadata.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class JobTypeID
+    {
+
+        /// <summary>
+        /// 6-character job type ID code
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("job_type_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(6)]
+        public string Job_type_id { get; set; } = default!;
+
+        /// <summary>
+        /// Job type description
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("job_type_description")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(64)]
+        public string Job_type_description { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// A distinct organization derived from employee association department data
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Organization
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// An organization with its distinct divisions
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class OrganizationDivision
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("divisions")]
+        public System.Collections.Generic.ICollection<Divisions>? Divisions { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// A division with its distinct subdivisions
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class DivisionSubdivision
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
+        public System.Collections.Generic.ICollection<Subdivisions>? Subdivisions { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// An organization with its distinct divisions and subdivisions
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class OrganizationSubdivision
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("divisions")]
+        public System.Collections.Generic.ICollection<Divisions2>? Divisions { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// A subdivision with its distinct subdivision L4 records
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SubdivisionSubdivisionL4
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4s")]
+        public System.Collections.Generic.ICollection<Subdivision_l4s>? Subdivision_l4s { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// An organization with its distinct divisions, subdivisions, and subdivision L4 records
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class OrganizationSubdivisionL4
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("divisions")]
+        public System.Collections.Generic.ICollection<Divisions3>? Divisions { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// A subdivision L4 record with its distinct departments
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SubdivisionL4Department
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("departments")]
+        public System.Collections.Generic.ICollection<Departments>? Departments { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// An organization with its distinct divisions, subdivisions, and departments
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class OrganizationDepartment
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("divisions")]
+        public System.Collections.Generic.ICollection<Divisions4>? Divisions { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// An object describing a student association
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class StudentAssociation
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("student_id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Student_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("pidm")]
+        public string? Pidm { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("college_code")]
+        public string? College_code { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("college_title")]
+        public string? College_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("major_code")]
+        public string? Major_code { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("major_title")]
+        public string? Major_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("lvl_affiliation_code")]
+        public string? Lvl_affiliation_code { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cls_affiliation_code")]
+        public string? Cls_affiliation_code { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("rank")]
+        public string? Rank { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
+        public System.DateTimeOffset? Modified_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("create_date")]
+        public System.DateTimeOffset? Create_date { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Items
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("firstname")]
+        public string? Firstname { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("lastname")]
+        public string? Lastname { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("iamid")]
+        public string? Iamid { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("email")]
+        public string? Email { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Items_2
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string SourceId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("groups")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<string> Groups { get; set; } = new System.Collections.Generic.List<string>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Items_3
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("roleName")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string RoleName { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("roleId")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string RoleId { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("description")]
+        public string? Description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("enabled")]
+        public bool? Enabled { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("requestable")]
+        public bool? Requestable { get; set; } = default!;
+
+    }
+
+    /// <summary>
+    /// Filter on whether a person has any current affiliation.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum AffiliationState
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withAffiliation")]
+        WithAffiliation = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withoutAffiliation")]
+        WithoutAffiliation = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"all")]
+        All = 2,
+
+    }
+
+    /// <summary>
+    /// Filter by student academic level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Academic_level
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GR")]
+        GR = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LW")]
+        LW = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"MD")]
+        MD = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UG")]
+        UG = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"VM")]
+        VM = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"graduate")]
+        Graduate = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"undergrad")]
+        Undergrad = 9,
+
+    }
+
+    /// <summary>
+    /// Filter by student class level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Class_level
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"00")]
+        _00 = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D1")]
+        D1 = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D2")]
+        D2 = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"FR")]
+        FR = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GM")]
+        GM = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"JR")]
+        JR = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L1")]
+        L1 = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L2")]
+        L2 = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L3")]
+        L3 = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LM")]
+        LM = 9,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M1")]
+        M1 = 10,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M2")]
+        M2 = 11,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M3")]
+        M3 = 12,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M4")]
+        M4 = 13,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 14,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"PB")]
+        PB = 15,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SO")]
+        SO = 16,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SR")]
+        SR = 17,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 18,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 19,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V1")]
+        V1 = 20,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V2")]
+        V2 = 21,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V3")]
+        V3 = 22,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V4")]
+        V4 = 23,
+
+    }
+
+    /// <summary>
+    /// Filter on whether a person has any current affiliation.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum AffiliationState2
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withAffiliation")]
+        WithAffiliation = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withoutAffiliation")]
+        WithoutAffiliation = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"all")]
+        All = 2,
+
+    }
+
+    /// <summary>
+    /// Filter by student academic level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Academic_level2
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GR")]
+        GR = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LW")]
+        LW = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"MD")]
+        MD = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UG")]
+        UG = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"VM")]
+        VM = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"graduate")]
+        Graduate = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"undergrad")]
+        Undergrad = 9,
+
+    }
+
+    /// <summary>
+    /// Filter by student class level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Class_level2
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"00")]
+        _00 = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D1")]
+        D1 = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D2")]
+        D2 = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"FR")]
+        FR = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GM")]
+        GM = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"JR")]
+        JR = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L1")]
+        L1 = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L2")]
+        L2 = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L3")]
+        L3 = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LM")]
+        LM = 9,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M1")]
+        M1 = 10,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M2")]
+        M2 = 11,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M3")]
+        M3 = 12,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M4")]
+        M4 = 13,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 14,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"PB")]
+        PB = 15,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SO")]
+        SO = 16,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SR")]
+        SR = 17,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 18,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 19,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V1")]
+        V1 = 20,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V2")]
+        V2 = 21,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V3")]
+        V3 = 22,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V4")]
+        V4 = 23,
+
+    }
+
+    /// <summary>
+    /// Filter on whether a person has any current affiliation.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum AffiliationState3
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withAffiliation")]
+        WithAffiliation = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withoutAffiliation")]
+        WithoutAffiliation = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"all")]
+        All = 2,
+
+    }
+
+    /// <summary>
+    /// Filter by student academic level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Academic_level3
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GR")]
+        GR = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LW")]
+        LW = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"MD")]
+        MD = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UG")]
+        UG = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"VM")]
+        VM = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"graduate")]
+        Graduate = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"undergrad")]
+        Undergrad = 9,
+
+    }
+
+    /// <summary>
+    /// Filter by student class level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Class_level3
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"00")]
+        _00 = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D1")]
+        D1 = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D2")]
+        D2 = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"FR")]
+        FR = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GM")]
+        GM = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"JR")]
+        JR = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L1")]
+        L1 = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L2")]
+        L2 = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L3")]
+        L3 = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LM")]
+        LM = 9,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M1")]
+        M1 = 10,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M2")]
+        M2 = 11,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M3")]
+        M3 = 12,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M4")]
+        M4 = 13,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 14,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"PB")]
+        PB = 15,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SO")]
+        SO = 16,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SR")]
+        SR = 17,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 18,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 19,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V1")]
+        V1 = 20,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V2")]
+        V2 = 21,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V3")]
+        V3 = 22,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V4")]
+        V4 = 23,
+
+    }
+
+    /// <summary>
+    /// Filter on whether a person has any current affiliation.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum AffiliationState4
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withAffiliation")]
+        WithAffiliation = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withoutAffiliation")]
+        WithoutAffiliation = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"all")]
+        All = 2,
+
+    }
+
+    /// <summary>
+    /// Filter by student academic level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Academic_level4
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GR")]
+        GR = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LW")]
+        LW = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"MD")]
+        MD = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UG")]
+        UG = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"VM")]
+        VM = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"graduate")]
+        Graduate = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"undergrad")]
+        Undergrad = 9,
+
+    }
+
+    /// <summary>
+    /// Filter by student class level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Class_level4
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"00")]
+        _00 = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D1")]
+        D1 = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D2")]
+        D2 = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"FR")]
+        FR = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GM")]
+        GM = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"JR")]
+        JR = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L1")]
+        L1 = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L2")]
+        L2 = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L3")]
+        L3 = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LM")]
+        LM = 9,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M1")]
+        M1 = 10,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M2")]
+        M2 = 11,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M3")]
+        M3 = 12,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M4")]
+        M4 = 13,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 14,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"PB")]
+        PB = 15,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SO")]
+        SO = 16,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SR")]
+        SR = 17,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 18,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 19,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V1")]
+        V1 = 20,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V2")]
+        V2 = 21,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V3")]
+        V3 = 22,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V4")]
+        V4 = 23,
+
+    }
+
+    /// <summary>
+    /// Filter on whether a person has any current affiliation.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum AffiliationState5
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withAffiliation")]
+        WithAffiliation = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"withoutAffiliation")]
+        WithoutAffiliation = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"all")]
+        All = 2,
+
+    }
+
+    /// <summary>
+    /// Filter by student academic level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Academic_level5
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GR")]
+        GR = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LW")]
+        LW = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"MD")]
+        MD = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UG")]
+        UG = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"VM")]
+        VM = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"graduate")]
+        Graduate = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"undergrad")]
+        Undergrad = 9,
+
+    }
+
+    /// <summary>
+    /// Filter by student class level.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Class_level5
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"00")]
+        _00 = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D1")]
+        D1 = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"D2")]
+        D2 = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"FR")]
+        FR = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"GM")]
+        GM = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"JR")]
+        JR = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L1")]
+        L1 = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L2")]
+        L2 = 7,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"L3")]
+        L3 = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LM")]
+        LM = 9,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M1")]
+        M1 = 10,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M2")]
+        M2 = 11,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M3")]
+        M3 = 12,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"M4")]
+        M4 = 13,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ND")]
+        ND = 14,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"PB")]
+        PB = 15,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SO")]
+        SO = 16,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SR")]
+        SR = 17,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"U2")]
+        U2 = 18,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UL")]
+        UL = 19,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V1")]
+        V1 = 20,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V2")]
+        V2 = 21,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V3")]
+        V3 = 22,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"V4")]
+        V4 = 23,
+
+    }
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Provisioning_status
     {
@@ -1059,6 +6987,147 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("primary")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Primary { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("primary_override")]
+        public string? Primary_override { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cosmos_affiliate")]
+        public string? Cosmos_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cpe_affiliate")]
+        public string? Cpe_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee")]
+        public string? Employee { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("faculty")]
+        public string? Faculty { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("health_affiliate")]
+        public string? Health_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("student")]
+        public string? Student { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("student_applicant")]
+        public string? Student_applicant { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("temporary_affiliate")]
+        public string? Temporary_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ucanr_affiliate")]
+        public string? Ucanr_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_affiliate")]
+        public string? Usda_whnrc_affiliate { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Affiliation
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee")]
+        public string? Employee { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("faculty")]
+        public string? Faculty { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("student")]
+        public string? Student { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("student_applicant")]
+        public string? Student_applicant { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("health_affiliate")]
+        public string? Health_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("temporary_affiliate")]
+        public string? Temporary_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cosmos_affiliate")]
+        public string? Cosmos_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("cpe_affiliate")]
+        public string? Cpe_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ucanr_affiliate")]
+        public string? Ucanr_affiliate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_affiliate")]
+        public string? Usda_whnrc_affiliate { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Employment_status
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_without_salary")]
+        public string? Is_without_salary { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_academic")]
+        public string? Is_academic { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_academic_senate")]
+        public string? Is_academic_senate { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_academic_federation")]
+        public string? Is_academic_federation { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_faculty")]
+        public string? Is_faculty { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_teaching_faculty")]
+        public string? Is_teaching_faculty { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_msp")]
+        public string? Is_msp { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp")]
+        public string? Is_ssp { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_msp_career")]
+        public string? Is_msp_career { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_msp_career_partial_year")]
+        public string? Is_msp_career_partial_year { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_msp_contract")]
+        public string? Is_msp_contract { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_msp_casual")]
+        public string? Is_msp_casual { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_msp_senior_management")]
+        public string? Is_msp_senior_management { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp_career")]
+        public string? Is_ssp_career { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp_career_partial_year")]
+        public string? Is_ssp_career_partial_year { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp_contract")]
+        public string? Is_ssp_contract { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp_casual")]
+        public string? Is_ssp_casual { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp_casual_restricted")]
+        public string? Is_ssp_casual_restricted { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp_per_diem")]
+        public string? Is_ssp_per_diem { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_ssp_floater")]
+        public string? Is_ssp_floater { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_health_employee")]
+        public string? Is_health_employee { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_campus_employee")]
+        public string? Is_campus_employee { get; set; } = default!;
 
     }
 
@@ -1074,6 +7143,9 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_last_name")]
         public string? Lived_last_name { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("lived_pronouns")]
+        public string? Lived_pronouns { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_first_name")]
         public string? Legal_first_name { get; set; } = default!;
@@ -1106,7 +7178,7 @@ namespace UCD.Rosetta.Client.Generated
         public string? Employee_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("mail_id")]
-        public string? Mail_id { get; set; } = default!;
+        public Mail_id? Mail_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("pidm")]
         public string? Pidm { get; set; } = default!;
@@ -1141,11 +7213,11 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Email
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("primary")]
-        public string? Primary { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("campus")]
+        public string? Campus { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("work")]
-        public string? Work { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("health")]
+        public string? Health { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("personal")]
         public string? Personal { get; set; } = default!;
@@ -1171,17 +7243,329 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Student_association
     {
 
-        [System.Text.Json.Serialization.JsonPropertyName("college")]
-        public string? College { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
+        public string? Iam_id { get; set; } = default!;
 
-        [System.Text.Json.Serialization.JsonPropertyName("major")]
-        public string? Major { get; set; } = default!;
+        [System.Text.Json.Serialization.JsonPropertyName("college_code")]
+        public string? College_code { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("college_title")]
+        public string? College_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("major_code")]
+        public string? Major_code { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("major_title")]
+        public string? Major_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("academic_level")]
         public string? Academic_level { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("class_level")]
         public string? Class_level { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Employee_association
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_record")]
+        public string? Employee_record { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
+        public string? Employee_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("position_number")]
+        public string? Position_number { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("position_title")]
+        public string? Position_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
+        public string? Relationship_to_organization { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_classification")]
+        public string? Employee_classification { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("employee_classification_description")]
+        public string? Employee_classification_description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public string? Status { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("hire_date")]
+        public string? Hire_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("start_date")]
+        public string? Start_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("termination_date")]
+        public string? Termination_date { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("fte_percentage")]
+        public string? Fte_percentage { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_type_id")]
+        public string? Job_type_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_type_description")]
+        public string? Job_type_description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_family_id")]
+        public string? Job_family_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("job_family_description")]
+        public string? Job_family_description { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public string? Organization_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
+        public string? Organization_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("business_unit_id")]
+        public string? Business_unit_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("business_unit_title")]
+        public string? Business_unit_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_id")]
+        public string? Department_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_title")]
+        public string? Department_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
+        public string? Department_short_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("reports_to_position")]
+        public string? Reports_to_position { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("reports_to_iam_id")]
+        public string? Reports_to_iam_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("reports_to_employee_id")]
+        public string? Reports_to_employee_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_health_position")]
+        public string? Is_health_position { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
+        public string? Is_campus_position { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Divisions
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Subdivisions
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Divisions2
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
+        public System.Collections.Generic.ICollection<Subdivisions2>? Subdivisions { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Subdivision_l4s
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Divisions3
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
+        public System.Collections.Generic.ICollection<Subdivisions3>? Subdivisions { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Departments
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_id")]
+        public string? Department_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_title")]
+        public string? Department_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
+        public string? Department_short_title { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Divisions4
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_id")]
+        public string? Division_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("division_title")]
+        public string? Division_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
+        public System.Collections.Generic.ICollection<Subdivisions4>? Subdivisions { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Mail_id
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("campus")]
+        public string? Campus { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("health")]
+        public string? Health { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Subdivisions2
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Subdivisions3
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4s")]
+        public System.Collections.Generic.ICollection<Subdivision_l4s2>? Subdivision_l4s { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Subdivisions4
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
+        public string? Subdivision_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
+        public string? Subdivision_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("departments")]
+        public System.Collections.Generic.ICollection<Departments2>? Departments { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Subdivision_l4s2
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
+        public string? Subdivision_l4_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
+        public string? Subdivision_l4_title { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Departments2
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_id")]
+        public string? Department_id { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_title")]
+        public string? Department_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
+        public string? Department_short_title { get; set; } = default!;
 
     }
 
