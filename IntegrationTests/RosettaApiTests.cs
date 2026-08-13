@@ -381,6 +381,52 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task GraphQL_TypedPeopleFilter_ByEmails_ReturnsMatchingPeople()
+    {
+        var emails = (_fixture.TestData.TestMultipleEmails ?? string.Empty)
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        Skip.If(emails.Length == 0, "TestData:TestMultipleEmails is not configured");
+
+        var requestedEmails = emails.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var filter = new PeopleFilterInput { Emails = emails };
+
+        // Act
+        var response = await SkipEnvironmentLimitations(() => _fixture.Client.GraphQL.Query(
+            q => q.People(filter: filter, selector: o => new
+            {
+                Results = o.Results(p => new
+                {
+                    p.Iam_id,
+                    Email = p.Email(e => new { e.Campus, e.Health })
+                })
+            })));
+
+        // Assert
+        response.Data.ShouldNotBeNull($"GraphQL errors: {JsonSerializer.Serialize(response.Errors)}");
+        response.Data.Results.ShouldNotBeNull();
+        response.Data.Results.Count().ShouldBe(emails.Length);
+        response.Data.Results.ShouldAllBe(person =>
+            person != null &&
+            person.Email != null &&
+            person.Email.Any(address =>
+                address != null &&
+                ((!string.IsNullOrWhiteSpace(address.Campus) && requestedEmails.Contains(address.Campus)) ||
+                 (!string.IsNullOrWhiteSpace(address.Health) && requestedEmails.Contains(address.Health)))));
+
+        foreach (var email in requestedEmails)
+        {
+            response.Data.Results.ShouldContain(person =>
+                person != null &&
+                person.Email != null &&
+                person.Email.Any(address =>
+                    address != null &&
+                    (string.Equals(address.Campus, email, StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(address.Health, email, StringComparison.OrdinalIgnoreCase))));
+        }
+    }
+
+    [SkippableFact]
     public async Task GraphQL_TypedCollegesQuery_ReturnsAllColleges()
     {
         // Act
