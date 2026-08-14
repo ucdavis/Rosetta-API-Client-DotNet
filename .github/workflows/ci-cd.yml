@@ -147,4 +147,3 @@ jobs:
           dotnet nuget push "artifacts/*.nupkg"
           --api-key "${{ secrets.NUGET_API_KEY }}"
           --source "${{ env.NUGET_SOURCE }}"
-          --skip-duplicate
