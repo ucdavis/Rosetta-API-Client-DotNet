@@ -400,7 +400,7 @@ The REST client (`RosettaApiClient.g.cs`) is regenerated from the OpenAPI spec b
 
 The GraphQL client (`obj/ZeroQL/rosetta.zeroql.json.g.cs`) is regenerated from `specs/rosetta-api.graphql` by ZeroQL on every build.
 
-> **Note:** ZeroQL codegen runs via a local .NET tool declared in `.config/dotnet-tools.json`. A `Directory.Build.targets` at the repo root automatically runs `dotnet tool restore` before every build, so no manual setup is required after cloning.
+> **Note:** ZeroQL codegen runs via a local .NET tool declared in `.config/dotnet-tools.json`. A `Directory.Build.targets` at the repo root automatically runs `dotnet tool restore` before local builds, so no manual setup is required after cloning. CI restores tools explicitly once per job to avoid concurrent tool restore races during solution builds.
 
 To update both specs to a new API version, use the convenience script:
 ```bash

@@ -39,11 +39,14 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Restore .NET tools
+        run: dotnet tool restore
+
       - name: Restore
         run: dotnet restore "${{ env.SOLUTION_PATH }}"
 
       - name: Build
-        run: dotnet build "${{ env.SOLUTION_PATH }}" --configuration Release --no-restore
+        run: dotnet build "${{ env.SOLUTION_PATH }}" --configuration Release --no-restore /p:RestoreDotNetToolsOnBuild=false
 
   publish:
     name: Publish to NuGet
@@ -62,6 +65,9 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore .NET tools
+        run: dotnet tool restore
 
       - name: Restore
         run: dotnet restore "${{ env.SOLUTION_PATH }}"
@@ -124,6 +130,7 @@ jobs:
           dotnet build "${{ env.SOLUTION_PATH }}"
           --configuration Release
           --no-restore
+          /p:RestoreDotNetToolsOnBuild=false
           /p:Version=${{ steps.package-version.outputs.version }}
 
       - name: Pack
@@ -132,6 +139,7 @@ jobs:
           --configuration Release
           --no-build
           --output artifacts
+          /p:RestoreDotNetToolsOnBuild=false
           /p:Version=${{ steps.package-version.outputs.version }}
 
       - name: Publish
