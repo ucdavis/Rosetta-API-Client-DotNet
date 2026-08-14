@@ -1,6 +1,11 @@
 <Project>
-  <!-- Ensure local .NET tools declared in .config/dotnet-tools.json are installed -->
-  <Target Name="RestoreDotNetTools" BeforeTargets="BeforeBuild">
+  <PropertyGroup>
+    <RestoreDotNetToolsOnBuild Condition="'$(RestoreDotNetToolsOnBuild)' == '' AND '$(CI)' == 'true'">false</RestoreDotNetToolsOnBuild>
+    <RestoreDotNetToolsOnBuild Condition="'$(RestoreDotNetToolsOnBuild)' == ''">true</RestoreDotNetToolsOnBuild>
+  </PropertyGroup>
+
+  <!-- Ensure local .NET tools declared in .config/dotnet-tools.json are installed for local builds. -->
+  <Target Name="RestoreDotNetTools" BeforeTargets="BeforeBuild" Condition="'$(RestoreDotNetToolsOnBuild)' == 'true'">
     <Exec Command="dotnet tool restore" />
   </Target>
 </Project>

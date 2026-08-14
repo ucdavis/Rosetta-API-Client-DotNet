@@ -13,8 +13,8 @@
     <Company>University of California, Davis</Company>
     <Description>Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.</Description>
     <PackageTags>ucdavis;iam;identity;rosetta;api-client</PackageTags>
-    <PackageProjectUrl>https://github.com/ucdavis/UCD.Rosetta.Client</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ucdavis/UCD.Rosetta.Client</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/ucdavis/Rosetta-API-Client-DotNet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ucdavis/Rosetta-API-Client-DotNet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <!-- Run NSwag to generate client code before build -->
