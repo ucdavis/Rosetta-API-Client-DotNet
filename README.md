@@ -407,7 +407,7 @@ To update both specs to a new API version, use the convenience script:
 ./update-spec.sh <version>  # e.g. 1.0.33
 ```
 
-To find the latest version number: open the [Rosetta API Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/), open the **Download** dropdown, and hover over any link — the version appears in the URL shown in the browser status bar.
+The [Rosetta API Anypoint Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/) is the source of truth for the API. To find the latest version number, open the **Download** dropdown and hover over any link — the version appears in the URL shown in the browser status bar.
 
 The script downloads the spec from MuleSoft Exchange, extracts the embedded GraphQL SDL into `specs/rosetta-api.graphql` (appending the `schema { query: Query }` root required by ZeroQL), and updates the README version badge. Then rebuild:
 ```bash
@@ -448,7 +448,7 @@ Running integration tests:
 
 - The integration test project `IntegrationTests` uses the same `.env` file as the example project.
 - Tests also read environment variables, which is useful for CI. The supported environment variable names use double underscores for hierarchy (for example: `RosettaClient__ClientId` and `RosettaClient__ClientSecret`).
-- See [IntegrationTests/README.md](IntegrationTests/README.md) for more details.
+- See [IntegrationTests/README.md](https://github.com/ucdavis/Rosetta-API-Client-DotNet/blob/main/IntegrationTests/README.md) for more details.
 
 Run tests locally with:
 
@@ -487,6 +487,6 @@ MIT License - See LICENSE file for details
 ## Support
 
 For issues, questions, or contributions:
-- **Issues**: [GitHub Issues](https://github.com/ucdavis/UCD.Rosetta.Client/issues)
+- **Issues**: [GitHub Issues](https://github.com/ucdavis/Rosetta-API-Client-DotNet/issues)
 - **Documentation**: [Rosetta API Docs](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/)
 - **UC Davis IAM Team**: Contact your IAM representative for credentials and API access
