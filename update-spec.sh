@@ -10,7 +10,7 @@
 
 set -e
 
-VERSION=${1:-"1.0.31"}
+VERSION=${1:-"1.0.33"}
 SPEC_URL="https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/organizations/9b04bfa8-6eeb-4d85-b676-91db930f8411/assets/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/${VERSION}/files/fat-oas/zip/?sha=1786485917112"
 SPEC_DIR="./specs"
 SPEC_FILE="${SPEC_DIR}/rosetta-api.json"
