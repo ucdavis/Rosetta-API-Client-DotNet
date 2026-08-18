@@ -15,6 +15,7 @@ public class RosettaClientFixture : IDisposable
     public RosettaClient Client { get; }
     public RosettaClientOptions Options { get; }
     public TestDataOptions TestData { get; }
+    public TestDataOptions TestDataBig { get; }
     private readonly object _peopleSampleLock = new();
     private Lazy<Task<ICollection<Person>>> _peopleSample;
 
@@ -37,6 +38,9 @@ public class RosettaClientFixture : IDisposable
 
         TestData = new TestDataOptions();
         configuration.GetSection("TestData").Bind(TestData);
+
+        TestDataBig = new TestDataOptions();
+        configuration.GetSection("TestDataBig").Bind(TestDataBig);
 
         // Create the client
         Client = new RosettaClient(Options);

@@ -65,6 +65,7 @@ public partial class Client
     {
         // Add any custom JSON serialization settings here
         settings.PropertyNameCaseInsensitive = true;
+        settings.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
         
         // Gracefully handle ICollection<T> arrays that may contain null or unexpected
         // token types for some records in real API responses (e.g. student_association).

@@ -2,6 +2,7 @@ using System.Text.Json;
 using Shouldly;
 using UCD.Rosetta.Client.Generated;
 using UCD.Rosetta.Client.GraphQL;
+using Xunit.Abstractions;
 using GeneratedPerson = UCD.Rosetta.Client.Generated.Person;
 
 namespace IntegrationTests;
@@ -13,10 +14,12 @@ namespace IntegrationTests;
 public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 {
     private readonly RosettaClientFixture _fixture;
+    private readonly ITestOutputHelper _output;
 
-    public RosettaApiTests(RosettaClientFixture fixture)
+    public RosettaApiTests(RosettaClientFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
+        _output = output;
     }
 
     #region People
@@ -75,6 +78,77 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeopleGETAsync_WithLastName_ReturnsAllMatchingPeopleIn20RecordPages()
+    {
+        const string lastName = "Hu";
+        const int pageSize = 20;
+        var results = new List<GeneratedPerson>();
+
+        // Act
+        for (var offset = 0; ; offset += pageSize)
+        {
+            var page = await SkipEnvironmentLimitations(() =>
+                _fixture.Client.Api.PeopleGETAsync(
+                    limit: pageSize,
+                    offset: offset,
+                    lastname: lastName));
+
+            page.ShouldNotBeNull();
+            page.Count.ShouldBeLessThanOrEqualTo(pageSize);
+            results.AddRange(page);
+
+            if (page.Count < pageSize)
+                break;
+        }
+
+        // Assert
+        results.ShouldNotBeEmpty();
+        results.ShouldAllBe(person => !string.IsNullOrWhiteSpace(person.Iam_id));
+        results.Select(person => person.Iam_id).Distinct().Count()
+            .ShouldBe(results.Count, "Expected all IAM IDs to be unique across pages");
+        _output.WriteLine($"Total people matching last name {lastName}: {results.Count}");
+
+        var exactMatches = results.Where(person =>
+            string.Equals(person.Name?.Lived_last_name, lastName, StringComparison.OrdinalIgnoreCase)).ToList();
+    }
+
+    [SkippableFact]
+    public async Task PeopleGETAsync_WithLastNameLike_ReturnsAllMatchingPeopleIn20RecordPages()
+    {
+        const string lastName = "Sylv";
+        const int pageSize = 20;
+        var results = new List<GeneratedPerson>();
+
+        // Act
+        for (var offset = 0; ; offset += pageSize)
+        {
+            var page = await SkipEnvironmentLimitations(() =>
+                _fixture.Client.Api.PeopleGETAsync(
+                    limit: pageSize,
+                    offset: offset,
+                    lastnamelike: lastName));
+
+            page.ShouldNotBeNull();
+            page.Count.ShouldBeLessThanOrEqualTo(pageSize);
+            results.AddRange(page);
+
+            if (page.Count < pageSize)
+                break;
+        }
+
+        // Assert
+        results.ShouldNotBeEmpty();
+        results.ShouldAllBe(person => !string.IsNullOrWhiteSpace(person.Iam_id));
+        results.Select(person => person.Iam_id).Distinct().Count()
+            .ShouldBe(results.Count, "Expected all IAM IDs to be unique across pages");
+        _output.WriteLine($"Total people matching last name {lastName}: {results.Count}");
+
+        //Found a user with a display name, and a null lived name...
+        results.ShouldAllBe(person => person.Name.Lived_last_name == null ||
+            person.Name.Lived_last_name.Contains(lastName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_WithDepartmentCode_ReturnsMoreThan100Results()
     {
         const string departmentCode = "030000";
@@ -113,6 +187,27 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeopleGETAsync_MapsResultToPersonModel()
+    {
+        var iamId = await GetIamIdForPeopleFilterAsync();
+
+        // Act
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamid: iamId));
+        var people = result.Select(PersonModel.FromPerson).ToList();
+
+        // Assert
+        people.ShouldNotBeEmpty();
+
+        var sourcePerson = result.First(person => person.Iam_id == iamId);
+        var mappedPerson = people.First(person => person.IamId == iamId);
+
+        mappedPerson.IamId.ShouldBe(sourcePerson.Iam_id);
+        mappedPerson.EmployeeId.ShouldBe(sourcePerson.Id?.Employee_id);
+        mappedPerson.Name.ShouldBe(sourcePerson.Displayname);
+        mappedPerson.Emails.ShouldBe(GetEmails(sourcePerson));
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_WithIamIds_ReturnsResults()
     {
         var iamIds = await GetIamIdsForPeopleFilterAsync();
@@ -128,6 +223,52 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         result.ShouldNotBeNull();
         result.ShouldNotBeEmpty();
         result.ShouldAllBe(p => requestedIds.Contains(p.Iam_id));
+    }
+
+    [SkippableFact]
+    public async Task PeoplePOSTAsync_WithIamIds_ReturnsAllResultsInFiveIdBatches()
+    {
+        const int batchSize = 5;
+        var iamIds = _fixture.TestDataBig.IamIds?
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray() ?? [];
+
+        Skip.If(iamIds.Length == 0, "TestDataBig__IamIds must contain at least one IAM ID");
+
+        var requestedIds = iamIds.ToHashSet(StringComparer.Ordinal);
+        var results = new List<GeneratedPerson>();
+
+        // Act
+        foreach (var batch in iamIds.Chunk(batchSize))
+        {
+            var batchResults = await SkipEnvironmentLimitations(() =>
+                _fixture.Client.Api.PeoplePOSTAsync(new PeoplePostRequest
+                {
+                    Iamids = batch,
+                    Count = false,
+                    Limit = batch.Length,
+                    Offset = 0
+                }));
+
+            batchResults.ShouldNotBeNull();
+            //batchResults.Count.ShouldBe(batch.Length,
+            //    "Expected one result for every IAM ID in the batch");
+
+            var batchIds = batch.ToHashSet(StringComparer.Ordinal);
+            //batchIds.SetEquals(batchResults.Select(person => person.Iam_id))
+            //    .ShouldBeTrue("Expected the results to match the IAM IDs in the batch");
+
+            results.AddRange(batchResults);
+        }
+
+        // Assert
+        results.ShouldNotBeEmpty();
+        results.ShouldAllBe(person => requestedIds.Contains(person.Iam_id));
+        results.Select(person => person.Iam_id).Distinct(StringComparer.Ordinal).Count()
+            .ShouldBe(results.Count, "Expected all IAM IDs to be unique across batches");
+        requestedIds.SetEquals(results.Select(person => person.Iam_id))
+            .ShouldBeTrue("Expected one result for every IAM ID configured in TestDataBig__IamIds");
     }
 
     [SkippableFact]
@@ -347,6 +488,135 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         response.Data.Results.ShouldNotBeNull();
         response.Data.Results.ShouldNotBeEmpty();
         response.Data.Results[0]!.Iam_id?.Value.ShouldNotBeNullOrEmpty();
+    }
+
+    [SkippableFact]
+    public async Task GraphQL_TypedPeopleFilter_WithModifiedSince_ReturnsFirst100In20RecordPages()
+    {
+        const int pageSize = 20;
+        const int recordsToGet = 100;
+        var peopleIamIds = new List<string>(recordsToGet);
+        int? totalCount = null;
+
+        // Act
+        for (var offset = 0;
+             offset < recordsToGet && (totalCount is null || offset < totalCount.Value);
+             offset += pageSize)
+        {
+            var filter = new PeopleFilterInput
+            {
+                Modifiedsince = "2d",
+                Count = offset == 0,
+                Limit = pageSize,
+                Offset = offset
+            };
+
+            var response = await SkipEnvironmentLimitations(() => _fixture.Client.GraphQL.Query(
+                q => q.People(filter: filter, selector: o => new
+                {
+                    Results = o.Results(p => new { p.Iam_id, p.Displayname }),
+                    Meta = o.Meta(m => new { m.X_total_count })
+                })));
+
+            response.Data.ShouldNotBeNull($"GraphQL errors: {JsonSerializer.Serialize(response.Errors)}");
+            response.Data.Results.ShouldNotBeNull();
+            response.Data.Results.ShouldAllBe(person =>
+                person != null &&
+                person.Iam_id != null &&
+                !string.IsNullOrWhiteSpace(person.Iam_id.Value));
+
+            if (offset == 0)
+            {
+                response.Data.Meta.ShouldNotBeNull();
+                totalCount = response.Data.Meta.X_total_count;
+                totalCount.ShouldNotBeNull();
+                _output.WriteLine($"Total people modified in the last two days: {totalCount}");
+            }
+
+            var expectedPageCount = Math.Min(pageSize, Math.Min(recordsToGet, totalCount!.Value) - offset);
+            response.Data.Results.Length.ShouldBe(expectedPageCount);
+            peopleIamIds.AddRange(response.Data.Results.Select(person => person!.Iam_id!.Value!));
+        }
+
+        // Assert
+        totalCount.ShouldNotBeNull();
+        var expectedRecordCount = Math.Min(totalCount.Value, recordsToGet);
+        peopleIamIds.Count.ShouldBe(expectedRecordCount);
+
+        var uniqueIamIds = peopleIamIds.Distinct().ToList();
+        uniqueIamIds.ShouldNotBeNull();
+        uniqueIamIds.Count.ShouldBe(expectedRecordCount, "Expected all IAM IDs to be unique across pages");
+    }
+
+    [SkippableFact]
+    public async Task GraphQL_TypedPeopleFilter_ByLastName_ReturnsAllMatchingPeople()
+    {
+        const string lastName = "Hu";
+        const int pageSize = 20;
+        var results = new List<GeneratedPerson>();
+        int? totalCount = null;
+
+        // Act
+        for (var offset = 0; totalCount is null || offset < totalCount.Value; offset += pageSize)
+        {
+            var filter = new PeopleFilterInput
+            {
+                Lastname = lastName,
+                Count = offset == 0,
+                Limit = pageSize,
+                Offset = offset
+            };
+
+            var response = await SkipEnvironmentLimitations(() => _fixture.Client.GraphQL.Query(
+                q => q.People(filter: filter, selector: o => new
+                {
+                    Results = o.Results(p => new
+                    {
+                        p.Iam_id,
+                        Name = p.Name(n => new { n.Lived_last_name })
+                    }),
+                    Meta = o.Meta(m => new { m.X_total_count })
+                })));
+
+            response.Data.ShouldNotBeNull($"GraphQL errors: {JsonSerializer.Serialize(response.Errors)}");
+            response.Data.Results.ShouldNotBeNull();
+
+            if (offset == 0)
+            {
+                response.Data.Meta.ShouldNotBeNull();
+                totalCount = response.Data.Meta.X_total_count;
+                totalCount.ShouldNotBeNull();
+                _output.WriteLine($"Total people matching last name {lastName}: {totalCount}");
+            }
+
+            var expectedPageCount = Math.Min(pageSize, totalCount!.Value - offset);
+            response.Data.Results.Length.ShouldBe(expectedPageCount);
+            response.Data.Results.ShouldAllBe(person =>
+                person != null &&
+                person.Iam_id != null &&
+                !string.IsNullOrWhiteSpace(person.Iam_id.Value));
+
+            results.AddRange(response.Data.Results.Select(person => new GeneratedPerson
+            {
+                Iam_id = person!.Iam_id!.Value!,
+                Name = new UCD.Rosetta.Client.Generated.Name
+                {
+                    Lived_last_name = person.Name?
+                        .Where(name => name != null && !string.IsNullOrWhiteSpace(name.Lived_last_name))
+                        .Select(name => name!.Lived_last_name!)
+                        .FirstOrDefault()
+                }
+            }));
+        }
+
+        // Assert
+        totalCount.ShouldNotBeNull();
+        results.Count.ShouldBe(totalCount.Value);
+        results.Select(result => result.Iam_id).Distinct().Count()
+            .ShouldBe(totalCount.Value, "Expected all IAM IDs to be unique across pages");
+
+        var ExactMatches = results.Where(result => string.Equals(result.Name?.Lived_last_name, lastName, StringComparison.OrdinalIgnoreCase)).ToList();
+
     }
 
     [SkippableFact]
@@ -673,6 +943,19 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     private sealed record IdentitySelector(string? IamId = null, string? IamIds = null, string? Email = null, string? LoginId = null);
+
+    private sealed record PersonModel(
+        string IamId,
+        string? EmployeeId,
+        string Name,
+        IReadOnlyCollection<string> Emails)
+    {
+        public static PersonModel FromPerson(GeneratedPerson person) => new(
+            IamId: person.Iam_id,
+            EmployeeId: person.Id?.Employee_id,
+            Name: person.Displayname,
+            Emails: GetEmails(person).ToArray());
+    }
 
     private static async Task<T> SkipEnvironmentLimitations<T>(Func<Task<T>> action)
     {
