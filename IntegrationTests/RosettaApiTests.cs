@@ -113,6 +113,42 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeopleGETAsync_WithLastNameLike_ReturnsAllMatchingPeopleIn20RecordPages()
+    {
+        const string lastName = "Sylv";
+        const int pageSize = 20;
+        var results = new List<GeneratedPerson>();
+
+        // Act
+        for (var offset = 0; ; offset += pageSize)
+        {
+            var page = await SkipEnvironmentLimitations(() =>
+                _fixture.Client.Api.PeopleGETAsync(
+                    limit: pageSize,
+                    offset: offset,
+                    lastnamelike: lastName));
+
+            page.ShouldNotBeNull();
+            page.Count.ShouldBeLessThanOrEqualTo(pageSize);
+            results.AddRange(page);
+
+            if (page.Count < pageSize)
+                break;
+        }
+
+        // Assert
+        results.ShouldNotBeEmpty();
+        results.ShouldAllBe(person => !string.IsNullOrWhiteSpace(person.Iam_id));
+        results.Select(person => person.Iam_id).Distinct().Count()
+            .ShouldBe(results.Count, "Expected all IAM IDs to be unique across pages");
+        _output.WriteLine($"Total people matching last name {lastName}: {results.Count}");
+
+        //Found a user with a display name, and a null lived name...
+        results.ShouldAllBe(person => person.Name.Lived_last_name == null ||
+            person.Name.Lived_last_name.Contains(lastName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_WithDepartmentCode_ReturnsMoreThan100Results()
     {
         const string departmentCode = "030000";
