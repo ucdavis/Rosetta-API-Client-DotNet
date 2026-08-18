@@ -929,7 +929,7 @@
     },
     "/people": {
       "get": {
-        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`\n- `lastname`\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
+        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`, `lastname` for exact matches\n- `firstnamelike`, `lastnamelike` for partial matches\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
         "consumes": [
           "application/json"
         ],
@@ -970,14 +970,28 @@
           },
           {
             "name": "firstname",
-            "description": "Return all accounts for specified first name",
+            "description": "Return all accounts for an exact first name match",
             "required": false,
             "in": "query",
             "type": "string"
           },
           {
             "name": "lastname",
-            "description": "Return all accounts for specified last name",
+            "description": "Return all accounts for an exact last name match",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "firstnamelike",
+            "description": "Return all accounts with a first name containing the supplied value",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastnamelike",
+            "description": "Return all accounts with a last name containing the supplied value",
             "required": false,
             "in": "query",
             "type": "string"
@@ -1421,7 +1435,7 @@
         ]
       },
       "post": {
-        "description": "Returns people matching filter parameters supplied in the JSON request body. This is intended for requests that need to send a list of IAM IDs without using query parameters.",
+        "description": "Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.\n\nThe POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.\n\nIf multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.\n\nExample:\n  Data:\n    { email: johndoe@ucdavis.edu, iamid: 1234567890 }\n    { email: janedoe@ucdavis.edu, iamid: 5555555555 }\n\n  Request body:\n    {\n      \"emails\": [\"johndoe@ucdavis.edu\", \"janedoe@ucdavis.edu\"],\n      \"iamids\": [\"1234567890\", \"2345678901\"]\n    }\n\n  Result:\n    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.\n\nAccepted identity filters:\n  - `iamids`\n  - `emails`\n  - `loginids`\n  - `employeeids`\n  - `studentids`\n  - `pidms`\n  - `mothraids`",
         "consumes": [
           "application/json"
         ],
@@ -1617,7 +1631,7 @@
     },
     "/people/students": {
       "get": {
-        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`\n- `lastname`\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
+        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`, `lastname` for exact matches\n- `firstnamelike`, `lastnamelike` for partial matches\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
         "consumes": [
           "application/json"
         ],
@@ -1658,14 +1672,28 @@
           },
           {
             "name": "firstname",
-            "description": "Return all accounts for specified first name",
+            "description": "Return all accounts for an exact first name match",
             "required": false,
             "in": "query",
             "type": "string"
           },
           {
             "name": "lastname",
-            "description": "Return all accounts for specified last name",
+            "description": "Return all accounts for an exact last name match",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "firstnamelike",
+            "description": "Return all accounts with a first name containing the supplied value",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastnamelike",
+            "description": "Return all accounts with a last name containing the supplied value",
             "required": false,
             "in": "query",
             "type": "string"
@@ -1930,6 +1958,200 @@
             "in": "query",
             "type": "string",
             "pattern": "^(is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(\\s*,\\s*(is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty))*$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active",
+                      "employee": "active",
+                      "health_affiliate": "pending_removal"
+                    }
+                  ],
+                  "affiliation": {
+                    "employee": "Y"
+                  },
+                  "employment_status": {
+                    "is_msp": "Y",
+                    "is_msp_career": "Y",
+                    "is_campus_employee": "Y"
+                  },
+                  "name": {
+                    "lived_first_name": "Alice",
+                    "lived_middle_name": "Beth",
+                    "lived_last_name": "Example",
+                    "lived_pronouns": "she/her/hers",
+                    "legal_first_name": "Alicia",
+                    "legal_middle_name": "B.",
+                    "legal_last_name": "Exampleton"
+                  },
+                  "id": {
+                    "iam_id": "1234567890",
+                    "login_id": "aexample",
+                    "student_id": "01234567",
+                    "mothra_id": "00123456",
+                    "employee_id": "10987654",
+                    "mail_id": {
+                      "campus": "aexample",
+                      "health": "aexample"
+                    },
+                    "pidm": "9876543",
+                    "pps_id": "76543210",
+                    "cosmos_id": "COS123456",
+                    "cpe_id": "CPE98765",
+                    "health_affiliate_id": "HA12345",
+                    "ucanr_id": "UCANR54321",
+                    "usda_whnrc_id": "USDA9999",
+                    "affiliate_id": "AFF12345",
+                    "ucnet_id": "UCNET123456"
+                  },
+                  "email": {
+                    "campus": "aexample@ucdavis.edu",
+                    "health": "aexample@health.ucdavis.edu",
+                    "personal": "alice.personal@example.com"
+                  },
+                  "phone": {
+                    "primary": "+1-530-555-0100",
+                    "work": "+1-530-555-0199",
+                    "personal": "+1-916-555-0123"
+                  },
+                  "student_association": [
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "ENGR",
+                      "college_title": "College of Engineering",
+                      "major_code": "CSE",
+                      "major_title": "Computer Science",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "L&S",
+                      "college_title": "College of Letters and Science",
+                      "major_code": "MATH",
+                      "major_title": "Mathematics",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "employee_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "subdivision_l4_id": "SUBL401",
+                      "subdivision_l4_title": "Platform Services",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "reports_to_position": "P000001",
+                      "reports_to_iam_id": "1234567891",
+                      "reports_to_employee_id": "12345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "subdivision_l4_id": "SUBL410",
+                      "subdivision_l4_title": "Academic Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "reports_to_position": "P100001",
+                      "reports_to_iam_id": "1234567892",
+                      "reports_to_employee_id": "22345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      },
+      "post": {
+        "description": "Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.\n\nThe POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.\n\nIf multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.\n\nExample:\n  Data:\n    { email: johndoe@ucdavis.edu, iamid: 1234567890 }\n    { email: janedoe@ucdavis.edu, iamid: 5555555555 }\n\n  Request body:\n    {\n      \"emails\": [\"johndoe@ucdavis.edu\", \"janedoe@ucdavis.edu\"],\n      \"iamids\": [\"1234567890\", \"2345678901\"]\n    }\n\n  Result:\n    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.\n\nAccepted identity filters:\n  - `iamids`\n  - `emails`\n  - `loginids`\n  - `employeeids`\n  - `studentids`\n  - `pidms`\n  - `mothraids`",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "$ref": "#/definitions/PeoplePostRequest"
+            }
           }
         ],
         "responses": {
@@ -2111,7 +2333,7 @@
     },
     "/people/employees": {
       "get": {
-        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`\n- `lastname`\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
+        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`, `lastname` for exact matches\n- `firstnamelike`, `lastnamelike` for partial matches\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
         "consumes": [
           "application/json"
         ],
@@ -2152,14 +2374,28 @@
           },
           {
             "name": "firstname",
-            "description": "Return all accounts for specified first name",
+            "description": "Return all accounts for an exact first name match",
             "required": false,
             "in": "query",
             "type": "string"
           },
           {
             "name": "lastname",
-            "description": "Return all accounts for specified last name",
+            "description": "Return all accounts for an exact last name match",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "firstnamelike",
+            "description": "Return all accounts with a first name containing the supplied value",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastnamelike",
+            "description": "Return all accounts with a last name containing the supplied value",
             "required": false,
             "in": "query",
             "type": "string"
@@ -2424,6 +2660,200 @@
             "in": "query",
             "type": "string",
             "pattern": "^(is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(\\s*,\\s*(is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty))*$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active",
+                      "employee": "active",
+                      "health_affiliate": "pending_removal"
+                    }
+                  ],
+                  "affiliation": {
+                    "employee": "Y"
+                  },
+                  "employment_status": {
+                    "is_msp": "Y",
+                    "is_msp_career": "Y",
+                    "is_campus_employee": "Y"
+                  },
+                  "name": {
+                    "lived_first_name": "Alice",
+                    "lived_middle_name": "Beth",
+                    "lived_last_name": "Example",
+                    "lived_pronouns": "she/her/hers",
+                    "legal_first_name": "Alicia",
+                    "legal_middle_name": "B.",
+                    "legal_last_name": "Exampleton"
+                  },
+                  "id": {
+                    "iam_id": "1234567890",
+                    "login_id": "aexample",
+                    "student_id": "01234567",
+                    "mothra_id": "00123456",
+                    "employee_id": "10987654",
+                    "mail_id": {
+                      "campus": "aexample",
+                      "health": "aexample"
+                    },
+                    "pidm": "9876543",
+                    "pps_id": "76543210",
+                    "cosmos_id": "COS123456",
+                    "cpe_id": "CPE98765",
+                    "health_affiliate_id": "HA12345",
+                    "ucanr_id": "UCANR54321",
+                    "usda_whnrc_id": "USDA9999",
+                    "affiliate_id": "AFF12345",
+                    "ucnet_id": "UCNET123456"
+                  },
+                  "email": {
+                    "campus": "aexample@ucdavis.edu",
+                    "health": "aexample@health.ucdavis.edu",
+                    "personal": "alice.personal@example.com"
+                  },
+                  "phone": {
+                    "primary": "+1-530-555-0100",
+                    "work": "+1-530-555-0199",
+                    "personal": "+1-916-555-0123"
+                  },
+                  "student_association": [
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "ENGR",
+                      "college_title": "College of Engineering",
+                      "major_code": "CSE",
+                      "major_title": "Computer Science",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "L&S",
+                      "college_title": "College of Letters and Science",
+                      "major_code": "MATH",
+                      "major_title": "Mathematics",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "employee_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "subdivision_l4_id": "SUBL401",
+                      "subdivision_l4_title": "Platform Services",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "reports_to_position": "P000001",
+                      "reports_to_iam_id": "1234567891",
+                      "reports_to_employee_id": "12345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "subdivision_l4_id": "SUBL410",
+                      "subdivision_l4_title": "Academic Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "reports_to_position": "P100001",
+                      "reports_to_iam_id": "1234567892",
+                      "reports_to_employee_id": "22345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      },
+      "post": {
+        "description": "Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.\n\nThe POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.\n\nIf multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.\n\nExample:\n  Data:\n    { email: johndoe@ucdavis.edu, iamid: 1234567890 }\n    { email: janedoe@ucdavis.edu, iamid: 5555555555 }\n\n  Request body:\n    {\n      \"emails\": [\"johndoe@ucdavis.edu\", \"janedoe@ucdavis.edu\"],\n      \"iamids\": [\"1234567890\", \"2345678901\"]\n    }\n\n  Result:\n    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.\n\nAccepted identity filters:\n  - `iamids`\n  - `emails`\n  - `loginids`\n  - `employeeids`\n  - `studentids`\n  - `pidms`\n  - `mothraids`",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "$ref": "#/definitions/PeoplePostRequest"
+            }
           }
         ],
         "responses": {
@@ -2605,7 +3035,7 @@
     },
     "/people/faculty": {
       "get": {
-        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`\n- `lastname`\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
+        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`, `lastname` for exact matches\n- `firstnamelike`, `lastnamelike` for partial matches\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
         "consumes": [
           "application/json"
         ],
@@ -2646,14 +3076,28 @@
           },
           {
             "name": "firstname",
-            "description": "Return all accounts for specified first name",
+            "description": "Return all accounts for an exact first name match",
             "required": false,
             "in": "query",
             "type": "string"
           },
           {
             "name": "lastname",
-            "description": "Return all accounts for specified last name",
+            "description": "Return all accounts for an exact last name match",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "firstnamelike",
+            "description": "Return all accounts with a first name containing the supplied value",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastnamelike",
+            "description": "Return all accounts with a last name containing the supplied value",
             "required": false,
             "in": "query",
             "type": "string"
@@ -3095,11 +3539,205 @@
             "Oauth2": []
           }
         ]
+      },
+      "post": {
+        "description": "Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.\n\nThe POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.\n\nIf multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.\n\nExample:\n  Data:\n    { email: johndoe@ucdavis.edu, iamid: 1234567890 }\n    { email: janedoe@ucdavis.edu, iamid: 5555555555 }\n\n  Request body:\n    {\n      \"emails\": [\"johndoe@ucdavis.edu\", \"janedoe@ucdavis.edu\"],\n      \"iamids\": [\"1234567890\", \"2345678901\"]\n    }\n\n  Result:\n    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.\n\nAccepted identity filters:\n  - `iamids`\n  - `emails`\n  - `loginids`\n  - `employeeids`\n  - `studentids`\n  - `pidms`\n  - `mothraids`",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "$ref": "#/definitions/PeoplePostRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active",
+                      "employee": "active",
+                      "health_affiliate": "pending_removal"
+                    }
+                  ],
+                  "affiliation": {
+                    "employee": "Y"
+                  },
+                  "employment_status": {
+                    "is_msp": "Y",
+                    "is_msp_career": "Y",
+                    "is_campus_employee": "Y"
+                  },
+                  "name": {
+                    "lived_first_name": "Alice",
+                    "lived_middle_name": "Beth",
+                    "lived_last_name": "Example",
+                    "lived_pronouns": "she/her/hers",
+                    "legal_first_name": "Alicia",
+                    "legal_middle_name": "B.",
+                    "legal_last_name": "Exampleton"
+                  },
+                  "id": {
+                    "iam_id": "1234567890",
+                    "login_id": "aexample",
+                    "student_id": "01234567",
+                    "mothra_id": "00123456",
+                    "employee_id": "10987654",
+                    "mail_id": {
+                      "campus": "aexample",
+                      "health": "aexample"
+                    },
+                    "pidm": "9876543",
+                    "pps_id": "76543210",
+                    "cosmos_id": "COS123456",
+                    "cpe_id": "CPE98765",
+                    "health_affiliate_id": "HA12345",
+                    "ucanr_id": "UCANR54321",
+                    "usda_whnrc_id": "USDA9999",
+                    "affiliate_id": "AFF12345",
+                    "ucnet_id": "UCNET123456"
+                  },
+                  "email": {
+                    "campus": "aexample@ucdavis.edu",
+                    "health": "aexample@health.ucdavis.edu",
+                    "personal": "alice.personal@example.com"
+                  },
+                  "phone": {
+                    "primary": "+1-530-555-0100",
+                    "work": "+1-530-555-0199",
+                    "personal": "+1-916-555-0123"
+                  },
+                  "student_association": [
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "ENGR",
+                      "college_title": "College of Engineering",
+                      "major_code": "CSE",
+                      "major_title": "Computer Science",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "L&S",
+                      "college_title": "College of Letters and Science",
+                      "major_code": "MATH",
+                      "major_title": "Mathematics",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "employee_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "subdivision_l4_id": "SUBL401",
+                      "subdivision_l4_title": "Platform Services",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "reports_to_position": "P000001",
+                      "reports_to_iam_id": "1234567891",
+                      "reports_to_employee_id": "12345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "subdivision_l4_id": "SUBL410",
+                      "subdivision_l4_title": "Academic Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "reports_to_position": "P100001",
+                      "reports_to_iam_id": "1234567892",
+                      "reports_to_employee_id": "22345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
       }
     },
     "/people/external": {
       "get": {
-        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`\n- `lastname`\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
+        "description": "Returns person records.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.\n\nSupports affiliation include and exclude filtering with `affiliationContains` and `affiliationNotContains`.\nSupports `affiliationState` filtering with `withAffiliation`, `withoutAffiliation`, or `all`.\nThe response includes an expanded `provisioning_status` object.\n\n## Filter Groups\n\nUse the query parameters below to filter by different portions of the person record.\n\n### Identity Filters\n\n- `iamid`, `iamids`\n- `email`, `loginid`, `mailid`\n- `employeeid`, `studentid`\n- `pidm`, `mothraid`\n- `pps_id`, `cosmos_id`, `cpe_id`\n- `health_affiliate_id`, `ucanr_id`, `usda_whnrc_id`, `affiliate_id`, `ucnet_id`\n- `manager_iam_id`\n\n### Name Filters\n\n- `firstname`, `lastname` for exact matches\n- `firstnamelike`, `lastnamelike` for partial matches\n\n### Affiliation Filters\n\n- `affiliationContains`\n- `affiliationNotContains`\n- `affiliationState`\n- `employmentStatus`\n\n### Student Filters\n\n- `collegecode`\n- `majorcode`\n- `academic_level`\n- `class_level`\n\n`academic_level` also supports grouped values:\n\n- `undergrad`: matches academic levels beginning with `U`\n- `graduate`: matches non-`U` academic levels except `ND`\n\n### Organization And Employment Filters\n\n- `department`\n- `organizationid`\n- `divisionid`\n- `subdivisionid`\n- `subdivisionl4id`\n\n### Pagination And Change Tracking\n\n- `limit`\n- `offset`\n- `count`\n- `modifiedsince`\n",
         "consumes": [
           "application/json"
         ],
@@ -3140,14 +3778,28 @@
           },
           {
             "name": "firstname",
-            "description": "Return all accounts for specified first name",
+            "description": "Return all accounts for an exact first name match",
             "required": false,
             "in": "query",
             "type": "string"
           },
           {
             "name": "lastname",
-            "description": "Return all accounts for specified last name",
+            "description": "Return all accounts for an exact last name match",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "firstnamelike",
+            "description": "Return all accounts with a first name containing the supplied value",
+            "required": false,
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "lastnamelike",
+            "description": "Return all accounts with a last name containing the supplied value",
             "required": false,
             "in": "query",
             "type": "string"
@@ -3412,6 +4064,200 @@
             "in": "query",
             "type": "string",
             "pattern": "^(is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty)(\\s*,\\s*(is_ssp|is_campus_employee|is_health_employee|is_without_salary|is_academic|is_faculty))*$"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "x-amf-mediaType": "application/json",
+            "schema": {
+              "example": [
+                {
+                  "iam_id": "1234567890",
+                  "displayname": "Alice Example",
+                  "birth_date": "1975-01-23",
+                  "manager_iam_id": "1234567891",
+                  "provisioning_status": [
+                    {
+                      "primary": "active",
+                      "employee": "active",
+                      "health_affiliate": "pending_removal"
+                    }
+                  ],
+                  "affiliation": {
+                    "employee": "Y"
+                  },
+                  "employment_status": {
+                    "is_msp": "Y",
+                    "is_msp_career": "Y",
+                    "is_campus_employee": "Y"
+                  },
+                  "name": {
+                    "lived_first_name": "Alice",
+                    "lived_middle_name": "Beth",
+                    "lived_last_name": "Example",
+                    "lived_pronouns": "she/her/hers",
+                    "legal_first_name": "Alicia",
+                    "legal_middle_name": "B.",
+                    "legal_last_name": "Exampleton"
+                  },
+                  "id": {
+                    "iam_id": "1234567890",
+                    "login_id": "aexample",
+                    "student_id": "01234567",
+                    "mothra_id": "00123456",
+                    "employee_id": "10987654",
+                    "mail_id": {
+                      "campus": "aexample",
+                      "health": "aexample"
+                    },
+                    "pidm": "9876543",
+                    "pps_id": "76543210",
+                    "cosmos_id": "COS123456",
+                    "cpe_id": "CPE98765",
+                    "health_affiliate_id": "HA12345",
+                    "ucanr_id": "UCANR54321",
+                    "usda_whnrc_id": "USDA9999",
+                    "affiliate_id": "AFF12345",
+                    "ucnet_id": "UCNET123456"
+                  },
+                  "email": {
+                    "campus": "aexample@ucdavis.edu",
+                    "health": "aexample@health.ucdavis.edu",
+                    "personal": "alice.personal@example.com"
+                  },
+                  "phone": {
+                    "primary": "+1-530-555-0100",
+                    "work": "+1-530-555-0199",
+                    "personal": "+1-916-555-0123"
+                  },
+                  "student_association": [
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "ENGR",
+                      "college_title": "College of Engineering",
+                      "major_code": "CSE",
+                      "major_title": "Computer Science",
+                      "academic_level": "UG",
+                      "class_level": "SR"
+                    },
+                    {
+                      "iam_id": "1234567890",
+                      "college_code": "L&S",
+                      "college_title": "College of Letters and Science",
+                      "major_code": "MATH",
+                      "major_title": "Mathematics",
+                      "academic_level": "UG",
+                      "class_level": "JR"
+                    }
+                  ],
+                  "employee_association": [
+                    {
+                      "employee_record": "01",
+                      "employee_id": "10987654",
+                      "position_number": "P123456",
+                      "position_title": "Senior Software Engineer",
+                      "relationship_to_organization": "Employee",
+                      "employee_classification": "MSP",
+                      "employee_classification_description": "Management & Senior Professional",
+                      "status": "Active",
+                      "hire_date": "2015-07-01",
+                      "start_date": "2015-07-15",
+                      "termination_date": "",
+                      "fte_percentage": "1.0",
+                      "job_type_id": "JT001",
+                      "job_type_description": "Professional",
+                      "job_family_id": "JF100",
+                      "job_family_description": "Information Technology",
+                      "organization_id": "ORG001",
+                      "organization_title": "Information & Educational Technology",
+                      "division_id": "DIV01",
+                      "division_title": "Administrative IT",
+                      "subdivision_id": "SUB01",
+                      "subdivision_title": "Enterprise Applications",
+                      "subdivision_l4_id": "SUBL401",
+                      "subdivision_l4_title": "Platform Services",
+                      "business_unit_id": "BU01",
+                      "business_unit_title": "Central IT",
+                      "department_id": "DEPT01",
+                      "department_title": "Enterprise Systems",
+                      "department_short_title": "ENT SYS",
+                      "reports_to_position": "P000001",
+                      "reports_to_iam_id": "1234567891",
+                      "reports_to_employee_id": "12345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    },
+                    {
+                      "employee_record": "02",
+                      "employee_id": "20987654",
+                      "position_number": "P654321",
+                      "position_title": "Adjunct Instructor",
+                      "relationship_to_organization": "Academic",
+                      "employee_classification": "ACADEMIC",
+                      "employee_classification_description": "Academic Personnel",
+                      "status": "Active",
+                      "hire_date": "2018-09-01",
+                      "start_date": "2018-09-15",
+                      "termination_date": "",
+                      "fte_percentage": "0.25",
+                      "job_type_id": "JT010",
+                      "job_type_description": "Teaching",
+                      "job_family_id": "JF200",
+                      "job_family_description": "Instruction",
+                      "organization_id": "ORG010",
+                      "organization_title": "College of Engineering",
+                      "division_id": "DIV10",
+                      "division_title": "Computer Science",
+                      "subdivision_id": "SUB10",
+                      "subdivision_title": "Undergraduate Programs",
+                      "subdivision_l4_id": "SUBL410",
+                      "subdivision_l4_title": "Academic Programs",
+                      "business_unit_id": "BU10",
+                      "business_unit_title": "College Admin",
+                      "department_id": "DEPT10",
+                      "department_title": "Computer Science Department",
+                      "department_short_title": "CS",
+                      "reports_to_position": "P100001",
+                      "reports_to_iam_id": "1234567892",
+                      "reports_to_employee_id": "22345678",
+                      "is_health_position": "N",
+                      "is_campus_position": "Y"
+                    }
+                  ],
+                  "modified_date": "2025-12-02T18:30:00Z",
+                  "create_date": "2020-09-15T10:05:00Z"
+                }
+              ],
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Oauth2": []
+          }
+        ]
+      },
+      "post": {
+        "description": "Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.\n\nThis description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.\n\nThe POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.\n\nIf multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.\n\nExample:\n  Data:\n    { email: johndoe@ucdavis.edu, iamid: 1234567890 }\n    { email: janedoe@ucdavis.edu, iamid: 5555555555 }\n\n  Request body:\n    {\n      \"emails\": [\"johndoe@ucdavis.edu\", \"janedoe@ucdavis.edu\"],\n      \"iamids\": [\"1234567890\", \"2345678901\"]\n    }\n\n  Result:\n    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.\n\nAccepted identity filters:\n  - `iamids`\n  - `emails`\n  - `loginids`\n  - `employeeids`\n  - `studentids`\n  - `pidms`\n  - `mothraids`",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "x-amf-mediaType": "application/json",
+            "in": "body",
+            "name": "generated",
+            "schema": {
+              "$ref": "#/definitions/PeoplePostRequest"
+            }
           }
         ],
         "responses": {
@@ -5497,19 +6343,56 @@
     "PeoplePostRequest": {
       "description": "Request body for POST /people lookups.",
       "example": {
+        "employeeids": [
+          "10604512",
+          "10604513"
+        ],
+        "studentids": [
+          "01234567",
+          "01234568"
+        ],
         "iamids": [
           "1234567890",
           "2345678901"
+        ],
+        "loginids": [
+          "johndoe",
+          "janedoe"
+        ],
+        "pidms": [
+          "9876543",
+          "9876544"
+        ],
+        "emails": [
+          "johndoe@ucdavis.edu",
+          "janedoe@ucdavis.edu"
+        ],
+        "mothraids": [
+          "02230320",
+          "02230321"
         ],
         "limit": 100,
         "count": true
       },
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "iamids"
-      ],
       "properties": {
+        "employeeids": {
+          "description": "List of employee IDs to return.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "studentids": {
+          "description": "List of student IDs to return.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
         "iamids": {
           "description": "List of 10-digit IAM IDs to return.",
           "type": "array",
@@ -5517,6 +6400,39 @@
           "items": {
             "type": "string",
             "pattern": "^\\d{10}$"
+          }
+        },
+        "loginids": {
+          "description": "List of UC Davis login IDs to return.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^(?=.{1,64}$)[A-Za-z0-9](?:[A-Za-z0-9_-]|(?:\\.(?!$)))*$"
+          }
+        },
+        "pidms": {
+          "description": "List of PIDMs to return.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "emails": {
+          "description": "List of email addresses to return.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "mothraids": {
+          "description": "List of Mothra IDs to return.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
           }
         },
         "limit": {

@@ -1,6 +1,6 @@
 # UCD.Rosetta.Client
 
-![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.31-blue)
+![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.33-blue)
 
 Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.
 
@@ -168,8 +168,8 @@ await client.Api.PeopleGETAsync(studentid: "987654");
 await client.Api.PeopleGETAsync(manager_iam_id: "0987654321");
 
 // Subsets and bulk POST
-await client.Api.StudentsAsync(limit: 25);
-await client.Api.EmployeesAsync(department: "123456");
+await client.Api.StudentsGETAsync(limit: 25);
+await client.Api.EmployeesGETAsync(department: "123456");
 await client.Api.PeoplePOSTAsync(new PeoplePostRequest
 {
     Iamids = ["1234567890", "0987654321"],
@@ -408,10 +408,19 @@ The GraphQL client (`obj/ZeroQL/rosetta.zeroql.json.g.cs`) is regenerated from `
 
 > **Note:** ZeroQL codegen runs via a local .NET tool declared in `.config/dotnet-tools.json`. A `Directory.Build.targets` at the repo root automatically runs `dotnet tool restore` before local builds, so no manual setup is required after cloning. CI restores tools explicitly once per job to avoid concurrent tool restore races during solution builds.
 
-To update both specs to a new API version, use the convenience script:
+To update both specs to a new API version, use the convenience script from macOS, Linux, WSL, or a Git Bash terminal:
+
 ```bash
 ./update-spec.sh <version>  # e.g. 1.0.33
 ```
+
+From a VS Code terminal using PowerShell on Windows, explicitly launch Git Bash (shown at its default Git for Windows installation path):
+
+```powershell
+& "C:\Program Files\Git\bin\bash.exe" ./update-spec.sh <version>  # e.g. 1.0.33
+```
+
+PowerShell cannot execute `update-spec.sh` directly. If Git for Windows is installed elsewhere, adjust the path to `bash.exe`.
 
 The [Rosetta API Anypoint Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/) is the source of truth for the API. To find the latest version number, open the **Download** dropdown and hover over any link — the version appears in the URL shown in the browser status bar.
 
