@@ -2,6 +2,7 @@ using System.Text.Json;
 using Shouldly;
 using UCD.Rosetta.Client.Generated;
 using UCD.Rosetta.Client.GraphQL;
+using Xunit.Abstractions;
 using GeneratedPerson = UCD.Rosetta.Client.Generated.Person;
 
 namespace IntegrationTests;
@@ -13,10 +14,12 @@ namespace IntegrationTests;
 public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 {
     private readonly RosettaClientFixture _fixture;
+    private readonly ITestOutputHelper _output;
 
-    public RosettaApiTests(RosettaClientFixture fixture)
+    public RosettaApiTests(RosettaClientFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
+        _output = output;
     }
 
     #region People
@@ -110,6 +113,27 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         {
             result.ElementAt(0).Displayname.ShouldBe(_fixture.TestData.TestDisplayName);
         }
+    }
+
+    [SkippableFact]
+    public async Task PeopleGETAsync_MapsResultToPersonModel()
+    {
+        var iamId = await GetIamIdForPeopleFilterAsync();
+
+        // Act
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamid: iamId));
+        var people = result.Select(PersonModel.FromPerson).ToList();
+
+        // Assert
+        people.ShouldNotBeEmpty();
+
+        var sourcePerson = result.First(person => person.Iam_id == iamId);
+        var mappedPerson = people.First(person => person.IamId == iamId);
+
+        mappedPerson.IamId.ShouldBe(sourcePerson.Iam_id);
+        mappedPerson.EmployeeId.ShouldBe(sourcePerson.Id?.Employee_id);
+        mappedPerson.Name.ShouldBe(sourcePerson.Displayname);
+        mappedPerson.Emails.ShouldBe(GetEmails(sourcePerson));
     }
 
     [SkippableFact]
@@ -347,6 +371,61 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         response.Data.Results.ShouldNotBeNull();
         response.Data.Results.ShouldNotBeEmpty();
         response.Data.Results[0]!.Iam_id?.Value.ShouldNotBeNullOrEmpty();
+    }
+
+    [SkippableFact]
+    public async Task GraphQL_TypedPeopleFilter_WithModifiedSince_ReturnsFirst100In20RecordPages()
+    {
+        const int pageSize = 20;
+        const int recordsToGet = 100;
+        var peopleIamIds = new List<string>(recordsToGet);
+        int? totalCount = null;
+
+        // Act
+        for (var offset = 0; offset < recordsToGet; offset += pageSize)
+        {
+            var filter = new PeopleFilterInput
+            {
+                Modifiedsince = "2d",
+                Count = offset == 0,
+                Limit = pageSize,
+                Offset = offset
+            };
+
+            var response = await SkipEnvironmentLimitations(() => _fixture.Client.GraphQL.Query(
+                q => q.People(filter: filter, selector: o => new
+                {
+                    Results = o.Results(p => new { p.Iam_id, p.Displayname }),
+                    Meta = o.Meta(m => new { m.X_total_count })
+                })));
+
+            response.Data.ShouldNotBeNull($"GraphQL errors: {JsonSerializer.Serialize(response.Errors)}");
+            response.Data.Results.ShouldNotBeNull();
+            response.Data.Results.Length.ShouldBe(pageSize);
+            response.Data.Results.ShouldAllBe(person =>
+                person != null &&
+                person.Iam_id != null &&
+                !string.IsNullOrWhiteSpace(person.Iam_id.Value));
+
+            if (offset == 0)
+            {
+                response.Data.Meta.ShouldNotBeNull();
+                totalCount = response.Data.Meta.X_total_count;
+                totalCount.ShouldNotBeNull();
+                _output.WriteLine($"Total people modified in the last two days: {totalCount}");
+            }
+
+            peopleIamIds.AddRange(response.Data.Results.Select(person => person!.Iam_id!.Value!));
+        }
+
+        // Assert
+        totalCount.ShouldNotBeNull();
+        totalCount.Value.ShouldBeGreaterThanOrEqualTo(recordsToGet);
+        peopleIamIds.Count.ShouldBe(recordsToGet);
+
+        var uniqueIamIds = peopleIamIds.Distinct().ToList();
+        uniqueIamIds.ShouldNotBeNull();
+        uniqueIamIds.Count.ShouldBe(recordsToGet, "Expected all IAM IDs to be unique across pages");
     }
 
     [SkippableFact]
@@ -673,6 +752,19 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     private sealed record IdentitySelector(string? IamId = null, string? IamIds = null, string? Email = null, string? LoginId = null);
+
+    private sealed record PersonModel(
+        string IamId,
+        string? EmployeeId,
+        string Name,
+        IReadOnlyCollection<string> Emails)
+    {
+        public static PersonModel FromPerson(GeneratedPerson person) => new(
+            IamId: person.Iam_id,
+            EmployeeId: person.Id?.Employee_id,
+            Name: person.Displayname,
+            Emails: GetEmails(person).ToArray());
+    }
 
     private static async Task<T> SkipEnvironmentLimitations<T>(Func<Task<T>> action)
     {
