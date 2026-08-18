@@ -382,7 +382,9 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         int? totalCount = null;
 
         // Act
-        for (var offset = 0; offset < recordsToGet; offset += pageSize)
+        for (var offset = 0;
+             offset < recordsToGet && (totalCount is null || offset < totalCount.Value);
+             offset += pageSize)
         {
             var filter = new PeopleFilterInput
             {
@@ -401,7 +403,6 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
 
             response.Data.ShouldNotBeNull($"GraphQL errors: {JsonSerializer.Serialize(response.Errors)}");
             response.Data.Results.ShouldNotBeNull();
-            response.Data.Results.Length.ShouldBe(pageSize);
             response.Data.Results.ShouldAllBe(person =>
                 person != null &&
                 person.Iam_id != null &&
@@ -415,17 +416,90 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
                 _output.WriteLine($"Total people modified in the last two days: {totalCount}");
             }
 
+            var expectedPageCount = Math.Min(pageSize, Math.Min(recordsToGet, totalCount!.Value) - offset);
+            response.Data.Results.Length.ShouldBe(expectedPageCount);
             peopleIamIds.AddRange(response.Data.Results.Select(person => person!.Iam_id!.Value!));
         }
 
         // Assert
         totalCount.ShouldNotBeNull();
-        totalCount.Value.ShouldBeGreaterThanOrEqualTo(recordsToGet);
-        peopleIamIds.Count.ShouldBe(recordsToGet);
+        var expectedRecordCount = Math.Min(totalCount.Value, recordsToGet);
+        peopleIamIds.Count.ShouldBe(expectedRecordCount);
 
         var uniqueIamIds = peopleIamIds.Distinct().ToList();
         uniqueIamIds.ShouldNotBeNull();
-        uniqueIamIds.Count.ShouldBe(recordsToGet, "Expected all IAM IDs to be unique across pages");
+        uniqueIamIds.Count.ShouldBe(expectedRecordCount, "Expected all IAM IDs to be unique across pages");
+    }
+
+    [SkippableFact]
+    public async Task GraphQL_TypedPeopleFilter_ByLastName_ReturnsAllMatchingPeople()
+    {
+        const string lastName = "Hu";
+        const int pageSize = 20;
+        var results = new List<GeneratedPerson>();
+        int? totalCount = null;
+
+        // Act
+        for (var offset = 0; totalCount is null || offset < totalCount.Value; offset += pageSize)
+        {
+            var filter = new PeopleFilterInput
+            {
+                Lastname = lastName,
+                Count = offset == 0,
+                Limit = pageSize,
+                Offset = offset
+            };
+
+            var response = await SkipEnvironmentLimitations(() => _fixture.Client.GraphQL.Query(
+                q => q.People(filter: filter, selector: o => new
+                {
+                    Results = o.Results(p => new
+                    {
+                        p.Iam_id,
+                        Name = p.Name(n => new { n.Lived_last_name })
+                    }),
+                    Meta = o.Meta(m => new { m.X_total_count })
+                })));
+
+            response.Data.ShouldNotBeNull($"GraphQL errors: {JsonSerializer.Serialize(response.Errors)}");
+            response.Data.Results.ShouldNotBeNull();
+
+            if (offset == 0)
+            {
+                response.Data.Meta.ShouldNotBeNull();
+                totalCount = response.Data.Meta.X_total_count;
+                totalCount.ShouldNotBeNull();
+                _output.WriteLine($"Total people matching last name {lastName}: {totalCount}");
+            }
+
+            var expectedPageCount = Math.Min(pageSize, totalCount!.Value - offset);
+            response.Data.Results.Length.ShouldBe(expectedPageCount);
+            response.Data.Results.ShouldAllBe(person =>
+                person != null &&
+                person.Iam_id != null &&
+                !string.IsNullOrWhiteSpace(person.Iam_id.Value));
+
+            results.AddRange(response.Data.Results.Select(person => new GeneratedPerson
+            {
+                Iam_id = person!.Iam_id!.Value!,
+                Name = new UCD.Rosetta.Client.Generated.Name
+                {
+                    Lived_last_name = person.Name?
+                        .Where(name => name != null && !string.IsNullOrWhiteSpace(name.Lived_last_name))
+                        .Select(name => name!.Lived_last_name!)
+                        .FirstOrDefault()
+                }
+            }));
+        }
+
+        // Assert
+        totalCount.ShouldNotBeNull();
+        results.Count.ShouldBe(totalCount.Value);
+        results.Select(result => result.Iam_id).Distinct().Count()
+            .ShouldBe(totalCount.Value, "Expected all IAM IDs to be unique across pages");
+
+        var ExactMatches = results.Where(result => string.Equals(result.Name?.Lived_last_name, lastName, StringComparison.OrdinalIgnoreCase)).ToList();
+
     }
 
     [SkippableFact]
