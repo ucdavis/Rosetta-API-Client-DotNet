@@ -1,8 +1,11 @@
 #!/bin/bash
 # Script to update the OpenAPI specification from MuleSoft Exchange
-# Usage: ./update-spec.sh [version]
-# Example: ./update-spec.sh 1.0.33
-# Windows: run this script from Git Bash or WSL, not PowerShell or Command Prompt.
+# macOS, Linux, WSL, or Git Bash usage:
+#   ./update-spec.sh [version]
+#   Example: ./update-spec.sh 1.0.33
+# VS Code PowerShell usage with Git for Windows in its default location:
+#   & "C:\Program Files\Git\bin\bash.exe" ./update-spec.sh [version]
+# PowerShell cannot execute this .sh file directly; the command above launches Git Bash.
 # Requires curl, unzip, awk, sed, grep, and mktemp. JSON is read with jq, macOS plutil, or PowerShell.
 #
 # To find the latest version:
