@@ -190,6 +190,52 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeoplePOSTAsync_WithIamIds_ReturnsAllResultsInFiveIdBatches()
+    {
+        const int batchSize = 5;
+        var iamIds = _fixture.TestDataBig.IamIds?
+            .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Distinct(StringComparer.Ordinal)
+            .ToArray() ?? [];
+
+        Skip.If(iamIds.Length == 0, "TestDataBig__IamIds must contain at least one IAM ID");
+
+        var requestedIds = iamIds.ToHashSet(StringComparer.Ordinal);
+        var results = new List<GeneratedPerson>();
+
+        // Act
+        foreach (var batch in iamIds.Chunk(batchSize))
+        {
+            var batchResults = await SkipEnvironmentLimitations(() =>
+                _fixture.Client.Api.PeoplePOSTAsync(new PeoplePostRequest
+                {
+                    Iamids = batch,
+                    Count = false,
+                    Limit = batch.Length,
+                    Offset = 0
+                }));
+
+            batchResults.ShouldNotBeNull();
+            //batchResults.Count.ShouldBe(batch.Length,
+            //    "Expected one result for every IAM ID in the batch");
+
+            var batchIds = batch.ToHashSet(StringComparer.Ordinal);
+            //batchIds.SetEquals(batchResults.Select(person => person.Iam_id))
+            //    .ShouldBeTrue("Expected the results to match the IAM IDs in the batch");
+
+            results.AddRange(batchResults);
+        }
+
+        // Assert
+        results.ShouldNotBeEmpty();
+        results.ShouldAllBe(person => requestedIds.Contains(person.Iam_id));
+        results.Select(person => person.Iam_id).Distinct(StringComparer.Ordinal).Count()
+            .ShouldBe(results.Count, "Expected all IAM IDs to be unique across batches");
+        requestedIds.SetEquals(results.Select(person => person.Iam_id))
+            .ShouldBeTrue("Expected one result for every IAM ID configured in TestDataBig__IamIds");
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_WithLoginId_ReturnsResults()
     {
         var loginId = await GetLoginIdForPeopleFilterAsync();
