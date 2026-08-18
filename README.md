@@ -168,8 +168,8 @@ await client.Api.PeopleGETAsync(studentid: "987654");
 await client.Api.PeopleGETAsync(manager_iam_id: "0987654321");
 
 // Subsets and bulk POST
-await client.Api.StudentsAsync(limit: 25);
-await client.Api.EmployeesAsync(department: "123456");
+await client.Api.StudentsGETAsync(limit: 25);
+await client.Api.EmployeesGETAsync(department: "123456");
 await client.Api.PeoplePOSTAsync(new PeoplePostRequest
 {
     Iamids = ["1234567890", "0987654321"],
