@@ -220,8 +220,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -271,8 +271,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -297,11 +299,40 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level? academic_level = null, Class_level? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level? academic_level = null, Class_level? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns people matching filter parameters supplied in the JSON request body. This is intended for requests that need to send a list of IAM IDs without using query parameters.
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
@@ -332,8 +363,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -383,8 +414,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -409,7 +442,43 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState2? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level2? academic_level = null, Class_level2? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState2? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level2? academic_level = null, Class_level2? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -437,8 +506,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -488,8 +557,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -514,7 +585,43 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState3? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level3? academic_level = null, Class_level3? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState3? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level3? academic_level = null, Class_level3? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -542,8 +649,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -593,8 +700,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -619,7 +728,43 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState4? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level4? academic_level = null, Class_level4? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState4? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level4? academic_level = null, Class_level4? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -647,8 +792,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -698,8 +843,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -724,7 +871,43 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState5? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level5? academic_level = null, Class_level5? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState5? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level5? academic_level = null, Class_level5? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -2324,8 +2507,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -2375,8 +2558,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -2401,7 +2586,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level? academic_level = null, Class_level? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeopleGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level? academic_level = null, Class_level? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2440,6 +2625,14 @@ namespace UCD.Rosetta.Client.Generated
                     if (lastname != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (firstnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     if (iamid != null)
                     {
@@ -2621,7 +2814,36 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns people matching filter parameters supplied in the JSON request body. This is intended for requests that need to send a list of IAM IDs without using query parameters.
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
@@ -2722,8 +2944,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -2773,8 +2995,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -2799,7 +3023,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState2? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level2? academic_level = null, Class_level2? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState2? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level2? academic_level = null, Class_level2? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2839,6 +3063,14 @@ namespace UCD.Rosetta.Client.Generated
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
+                    if (firstnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (iamid != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
@@ -3019,6 +3251,112 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/students"
+                    urlBuilder_.Append("people/students");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
         /// Returns person records.
         /// <br/>
         /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
@@ -3043,8 +3381,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -3094,8 +3432,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -3120,7 +3460,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState3? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level3? academic_level = null, Class_level3? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState3? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level3? academic_level = null, Class_level3? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3160,6 +3500,14 @@ namespace UCD.Rosetta.Client.Generated
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
+                    if (firstnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (iamid != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
@@ -3340,6 +3688,112 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/employees"
+                    urlBuilder_.Append("people/employees");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
         /// Returns person records.
         /// <br/>
         /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
@@ -3364,8 +3818,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -3415,8 +3869,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -3441,7 +3897,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState4? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level4? academic_level = null, Class_level4? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState4? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level4? academic_level = null, Class_level4? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3481,6 +3937,14 @@ namespace UCD.Rosetta.Client.Generated
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
+                    if (firstnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
                     if (iamid != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("iamid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(iamid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
@@ -3661,6 +4125,112 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/faculty"
+                    urlBuilder_.Append("people/faculty");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
         /// Returns person records.
         /// <br/>
         /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the query parameters are applied.
@@ -3685,8 +4255,8 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>
         /// <br/>### Name Filters
         /// <br/>
-        /// <br/>- `firstname`
-        /// <br/>- `lastname`
+        /// <br/>- `firstname`, `lastname` for exact matches
+        /// <br/>- `firstnamelike`, `lastnamelike` for partial matches
         /// <br/>
         /// <br/>### Affiliation Filters
         /// <br/>
@@ -3736,8 +4306,10 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="count">When true, include a count of matching records in the response headers 'x-total-count' (if supported by the endpoint).</param>
         /// <param name="limit">The maximum number of records to return</param>
         /// <param name="offset">The number of records to start the current search after</param>
-        /// <param name="firstname">Return all accounts for specified first name</param>
-        /// <param name="lastname">Return all accounts for specified last name</param>
+        /// <param name="firstname">Return all accounts for an exact first name match</param>
+        /// <param name="lastname">Return all accounts for an exact last name match</param>
+        /// <param name="firstnamelike">Return all accounts with a first name containing the supplied value</param>
+        /// <param name="lastnamelike">Return all accounts with a last name containing the supplied value</param>
         /// <param name="iamid">Return all accounts for a specific 10-digit IAM ID</param>
         /// <param name="iamids">Comma-separated list of 10-digit IAM IDs</param>
         /// <param name="manager_iam_id">Return all accounts for a specific 10-digit manager_iam_id</param>
@@ -3762,7 +4334,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="subdivisionl4id">Filter by UCPath subdivision L4 ID.</param>
         /// <param name="employmentStatus">Comma-separated list of employment status codes</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState5? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level5? academic_level = null, Class_level5? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalGETAsync(string? modifiedsince = null, bool? count = null, int? limit = null, int? offset = null, string? firstname = null, string? lastname = null, string? firstnamelike = null, string? lastnamelike = null, string? iamid = null, string? iamids = null, string? manager_iam_id = null, string? email = null, string? loginid = null, string? employeeid = null, string? studentid = null, string? mailid = null, string? pidm = null, string? mothraid = null, string? pps_id = null, string? cosmos_id = null, string? cpe_id = null, string? health_affiliate_id = null, string? ucanr_id = null, string? usda_whnrc_id = null, string? affiliate_id = null, string? ucnet_id = null, string? affiliationContains = null, string? affiliationNotContains = null, AffiliationState5? affiliationState = null, string? department = null, string? collegecode = null, string? majorcode = null, Academic_level5? academic_level = null, Class_level5? class_level = null, string? organizationid = null, string? divisionid = null, string? subdivisionid = null, string? subdivisionl4id = null, string? employmentStatus = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3801,6 +4373,14 @@ namespace UCD.Rosetta.Client.Generated
                     if (lastname != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("lastname")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastname, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (firstnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("firstnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(firstnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (lastnamelike != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("lastnamelike")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(lastnamelike, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     if (iamid != null)
                     {
@@ -3927,6 +4507,112 @@ namespace UCD.Rosetta.Client.Generated
                         urlBuilder_.Append(System.Uri.EscapeDataString("employmentStatus")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employmentStatus, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Person>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new RosettaApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
+                            throw new RosettaApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <remarks>
+        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// <br/>
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>
+        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>
+        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>
+        /// <br/>Example:
+        /// <br/>  Data:
+        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>
+        /// <br/>  Request body:
+        /// <br/>    {
+        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>      "iamids": ["1234567890", "2345678901"]
+        /// <br/>    }
+        /// <br/>
+        /// <br/>  Result:
+        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>
+        /// <br/>Accepted identity filters:
+        /// <br/>  - `iamids`
+        /// <br/>  - `emails`
+        /// <br/>  - `loginids`
+        /// <br/>  - `employeeids`
+        /// <br/>  - `studentids`
+        /// <br/>  - `pidms`
+        /// <br/>  - `mothraids`
+        /// </remarks>
+        /// <exception cref="RosettaApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.ByteArrayContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "people/external"
+                    urlBuilder_.Append("people/external");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -5800,12 +6486,53 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         /// <summary>
+        /// List of employee IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("employeeids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Employeeids { get; set; } = default!;
+
+        /// <summary>
+        /// List of student IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("studentids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Studentids { get; set; } = default!;
+
+        /// <summary>
         /// List of 10-digit IAM IDs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("iamids")]
-        [System.ComponentModel.DataAnnotations.Required]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string> Iamids { get; set; } = new System.Collections.Generic.List<string>();
+        public System.Collections.Generic.ICollection<string>? Iamids { get; set; } = default!;
+
+        /// <summary>
+        /// List of UC Davis login IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("loginids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Loginids { get; set; } = default!;
+
+        /// <summary>
+        /// List of PIDMs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("pidms")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Pidms { get; set; } = default!;
+
+        /// <summary>
+        /// List of email addresses to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("emails")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Emails { get; set; } = default!;
+
+        /// <summary>
+        /// List of Mothra IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("mothraids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Mothraids { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("limit")]
         public int? Limit { get; set; } = default!;

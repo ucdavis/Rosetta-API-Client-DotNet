@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script to update the OpenAPI specification from MuleSoft Exchange
 # Usage: ./update-spec.sh [version]
-# Example: ./update-spec.sh 1.0.11
+# Example: ./update-spec.sh 1.0.33
 #
 # To find the latest version:
 #   1. Open https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/
@@ -50,6 +50,18 @@ if command -v jq &>/dev/null; then
         }' \
         | sed 's/^    //' \
         > "${GRAPHQL_TMP}"
+elif command -v powershell.exe &>/dev/null; then
+    powershell.exe -NoProfile -NonInteractive -Command \
+        '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); (Get-Content -LiteralPath "./specs/rosetta-api.json" -Raw | ConvertFrom-Json).externalDocs.description' \
+        | awk '{
+            sub(/\r$/, "")
+            sub(/[[:blank:]]+$/, "")
+            if (!found && $0 ~ /^[[:blank:]]*```[[:space:]]*(graphql)?[[:space:]]*$/) { found=1; next }
+            if (found && $0 ~ /^[[:blank:]]*```[[:space:]]*$/) { exit }
+            if (found) { print }
+        }' \
+        | sed 's/^    //' \
+        > "${GRAPHQL_TMP}"
     # Append schema root declaration required by ZeroQL codegen
     printf '\nschema {\n  query: Query\n}\n' >> "${GRAPHQL_TMP}"
 
@@ -69,7 +81,7 @@ if command -v jq &>/dev/null; then
     echo "✅ GraphQL schema extracted: ${GRAPHQL_FILE}"
 else
     rm -f "${GRAPHQL_TMP}"
-    echo "❌ jq not found — install it first: brew install jq"
+    echo "❌ Neither jq nor Windows PowerShell was found"
     exit 1
 fi
 
