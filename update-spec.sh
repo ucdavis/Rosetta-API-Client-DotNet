@@ -42,6 +42,7 @@ mkdir -p "${SPEC_DIR}"
 TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/rosetta-spec.XXXXXX")"
 SPEC_ZIP="${TEMP_DIR}/rosetta-spec.zip"
 EXTRACT_DIR="${TEMP_DIR}/extracted"
+SPEC_TMP="${TEMP_DIR}/rosetta-api.json"
 GRAPHQL_TMP="${TEMP_DIR}/rosetta-api.graphql"
 
 cleanup() {
@@ -57,22 +58,24 @@ curl --fail --location --show-error "${SPEC_URL}" -o "${SPEC_ZIP}"
 echo "📦 Extracting specification..."
 mkdir -p "${EXTRACT_DIR}"
 unzip -q -o "${SPEC_ZIP}" -d "${EXTRACT_DIR}"
-cp "${EXTRACT_DIR}/api.json" "${SPEC_FILE}"
+cp "${EXTRACT_DIR}/api.json" "${SPEC_TMP}"
 
 # Extract embedded GraphQL schema from externalDocs.description
 echo "📐 Extracting GraphQL schema..."
 
 extract_description() {
     if command -v jq >/dev/null 2>&1; then
-        jq -r '.externalDocs.description' "${SPEC_FILE}"
+        jq -r '.externalDocs.description' "${SPEC_TMP}"
     elif [[ "${OSTYPE:-}" == "darwin"* ]] && command -v plutil >/dev/null 2>&1; then
-        plutil -extract externalDocs.description raw -o - "${SPEC_FILE}"
+        plutil -extract externalDocs.description raw -o - "${SPEC_TMP}"
     elif command -v powershell.exe >/dev/null 2>&1; then
         powershell.exe -NoProfile -NonInteractive -Command \
-            '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); (Get-Content -LiteralPath "./specs/rosetta-api.json" -Raw | ConvertFrom-Json).externalDocs.description'
+            '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); ([Console]::In.ReadToEnd() | ConvertFrom-Json).externalDocs.description' \
+            < "${SPEC_TMP}"
     elif command -v pwsh >/dev/null 2>&1; then
         pwsh -NoProfile -NonInteractive -Command \
-            '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); (Get-Content -LiteralPath "./specs/rosetta-api.json" -Raw | ConvertFrom-Json).externalDocs.description'
+            '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false); ([Console]::In.ReadToEnd() | ConvertFrom-Json).externalDocs.description' \
+            < "${SPEC_TMP}"
     else
         echo "❌ No supported JSON reader was found. Install jq or PowerShell; macOS can use its built-in plutil." >&2
         return 1
@@ -99,7 +102,7 @@ if ! grep -q '^type ' "${GRAPHQL_TMP}"; then
     exit 1
 fi
 
-mv "${GRAPHQL_TMP}" "${GRAPHQL_FILE}"
+mv "${SPEC_TMP}" "${GRAPHQL_TMP}" "${SPEC_DIR}/"
 echo "✅ GraphQL schema extracted: ${GRAPHQL_FILE}"
 
 # Update README badge with new version
