@@ -1,0 +1,82 @@
+name: Check Rosetta API version
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every Monday at 15:17 UTC.
+    - cron: "17 15 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  check-version:
+    name: Compare MuleSoft and README versions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Check Rosetta API version
+        shell: bash
+        env:
+          ROSETTA_SETTINGS_URL: >-
+            https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/minor/1.0/settings/
+        run: |
+          set -euo pipefail
+
+          page_file="${RUNNER_TEMP}/rosetta-settings.html"
+          chrome_profile="${RUNNER_TEMP}/rosetta-chrome-profile"
+
+          # The MuleSoft page renders the version with JavaScript, so load it
+          # with the Chrome installation provided by the GitHub-hosted runner.
+          google-chrome \
+            --headless \
+            --disable-gpu \
+            --user-data-dir="${chrome_profile}" \
+            --virtual-time-budget=20000 \
+            --dump-dom \
+            "${ROSETTA_SETTINGS_URL}" \
+            > "${page_file}"
+
+          mapfile -t mule_versions < <(
+            grep -oE 'iam-rosetta-api/[0-9]+\.[0-9]+\.[0-9]+/m' "${page_file}" |
+              sed -E 's#iam-rosetta-api/([0-9]+\.[0-9]+\.[0-9]+)/m#\1#' |
+              sort -Vu
+          )
+
+          if [[ "${#mule_versions[@]}" -ne 1 ]]; then
+            echo "::error title=Unable to determine Rosetta API version::Expected exactly one Mocking Service version, but found ${#mule_versions[@]}."
+            exit 1
+          fi
+
+          mule_version="${mule_versions[0]}"
+
+          mapfile -t readme_versions < <(
+            grep -oE 'Rosetta%20API%20Spec-v[0-9]+\.[0-9]+\.[0-9]+-blue' README.md |
+              sed -E 's/.*-v([0-9]+\.[0-9]+\.[0-9]+)-blue/\1/' |
+              sort -Vu
+          )
+
+          if [[ "${#readme_versions[@]}" -ne 1 ]]; then
+            echo "::error title=Unable to determine README version::Expected exactly one Rosetta API version badge, but found ${#readme_versions[@]}."
+            exit 1
+          fi
+
+          readme_version="${readme_versions[0]}"
+
+          {
+            echo "## Rosetta API version check"
+            echo
+            echo "- MuleSoft: \`${mule_version}\`"
+            echo "- README: \`${readme_version}\`"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          if [[ "${mule_version}" != "${readme_version}" ]]; then
+            echo "::error title=Rosetta API update available::MuleSoft reports ${mule_version}, but README.md reports ${readme_version}."
+            exit 1
+          fi
+
+          echo "README.md is current: ${readme_version}"
