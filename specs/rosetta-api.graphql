@@ -178,6 +178,8 @@ type EmployeeAssociation {
   employee_id: String
   position_number: String
   position_title: String
+  "Values: N (Not Applicable), S (Secondary Job), P (Primary Job)."
+  job_indicator: String
   relationship_to_organization: String
   employee_classification: String
   employee_classification_description: String
@@ -238,6 +240,8 @@ type PpsAssociationRecord {
   employee_record: String
   position_number: String
   position_title: String
+  "Values: N (Not Applicable), S (Secondary Job), P (Primary Job)."
+  job_indicator: String
   relationship_to_organization: String
   employee_classification: String
   employee_classification_description: String
@@ -461,6 +465,8 @@ input PeopleFilterInput {
   iamid: String
   firstname: String
   lastname: String
+  firstnamelike: String
+  lastnamelike: String
   manager_iam_id: String
   iamids: [String]
   email: String
