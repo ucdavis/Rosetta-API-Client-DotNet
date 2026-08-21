@@ -6574,6 +6574,13 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("position_title")]
         public string? Position_title { get; set; } = default!;
 
+        /// <summary>
+        /// Job indicator. Values are N (Not Applicable), S (Secondary Job), P (Primary Job).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("job_indicator")]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<EmployeeAssociationJob_indicator>))]
+        public EmployeeAssociationJob_indicator? Job_indicator { get; set; } = default!;
+
         [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
         public string? Relationship_to_organization { get; set; } = default!;
 
@@ -8009,6 +8016,13 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("position_title")]
         public string? Position_title { get; set; } = default!;
 
+        /// <summary>
+        /// Job indicator. Values are N (Not Applicable), S (Secondary Job), P (Primary Job).
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("job_indicator")]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Employee_associationJob_indicator>))]
+        public Employee_associationJob_indicator? Job_indicator { get; set; } = default!;
+
         [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
         public string? Relationship_to_organization { get; set; } = default!;
 
@@ -8098,6 +8112,21 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
         public string? Is_campus_position { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum EmployeeAssociationJob_indicator
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"N")]
+        N = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"S")]
+        S = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"P")]
+        P = 2,
 
     }
 
@@ -8212,6 +8241,21 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("health")]
         public string? Health { get; set; } = default!;
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Employee_associationJob_indicator
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"N")]
+        N = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"S")]
+        S = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"P")]
+        P = 2,
 
     }
 
