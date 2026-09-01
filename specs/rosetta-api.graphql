@@ -419,6 +419,12 @@ type Meta {
   x_response_count: Int
 }
 
+type QueryParameterValidationError {
+  parameter: String
+  value: String
+  message: String
+}
+
 enum AcademicLevel {
   GR
   LW
@@ -618,92 +624,114 @@ input AccountLookupFilterInput {
 type PeopleResult {
   results: [Person]
   meta: Meta
+  errors: [QueryParameterValidationError]
 }
 
 type EmployeeAssociationResult {
   results: [PpsAssociationRecord]
   meta: Meta
+  errors: [QueryParameterValidationError]
 }
 
 type StudentAssociationResult {
   results: [SisAssociationRecord]
   meta: Meta
+  errors: [QueryParameterValidationError]
 }
 
 type MajorsResult {
   results: [Major]
+  errors: [QueryParameterValidationError]
 }
 
 type JobTypeIdsResult {
   results: [JobTypeId]
+  errors: [QueryParameterValidationError]
 }
 
 type CollegeResult {
   results: [College]
+  errors: [QueryParameterValidationError]
 }
 
 type GroupsResult {
   results: [GroupBucket]
+  errors: [QueryParameterValidationError]
 }
 
 type GroupSourceResults {
   results: [GroupSource]
+  errors: [QueryParameterValidationError]
 }
 
 type GroupMembershipResult {
   results: [GroupMembership]
+  errors: [QueryParameterValidationError]
 }
 
 type GroupByIdResult {
   results: GroupById
+  errors: [QueryParameterValidationError]
 }
 
 type RolesResult {
   results: [Role]
+  errors: [QueryParameterValidationError]
 }
 
 type RoleMembershipResult {
   results: [RoleMembership]
+  errors: [QueryParameterValidationError]
 }
 
 type RoleByIdResult {
   results: RoleById
+  errors: [QueryParameterValidationError]
 }
 
 type OrganizationsResult {
   results: [OrganizationNode]
+  errors: [QueryParameterValidationError]
 }
 
 type OrganizationByIdResult {
   results: OrganizationNode
+  errors: [QueryParameterValidationError]
 }
 
 type OrganizationDivisionByIdResult {
   results: OrganizationDivisionDetail
+  errors: [QueryParameterValidationError]
 }
 
 type OrganizationSubdivisionByIdResult {
   results: OrganizationSubdivisionDetail
+  errors: [QueryParameterValidationError]
 }
 
 type OrganizationSubdivisionL4ByIdResult {
   results: OrganizationSubdivisionL4Detail
+  errors: [QueryParameterValidationError]
 }
 
 type OrganizationDepartmentByIdResult {
   results: OrganizationDepartmentDetail
+  errors: [QueryParameterValidationError]
 }
 
 type AccountSourceCountsResult {
   results: [AccountSourceCount]
+  errors: [QueryParameterValidationError]
 }
 
 type AccountSourcesResult {
   results: [AccountSource]
+  errors: [QueryParameterValidationError]
 }
 
 type AccountLookupResult {
   results: [AccountLookupIdentity]
+  errors: [QueryParameterValidationError]
 }
 
 ##Query types##
