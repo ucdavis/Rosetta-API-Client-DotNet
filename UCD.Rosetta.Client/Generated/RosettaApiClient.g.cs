@@ -96,7 +96,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>      ```
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<object> GraphqlAsync(object? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -335,7 +335,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -478,7 +478,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -621,7 +621,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -764,7 +764,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -907,7 +907,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -1423,7 +1423,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>      ```
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<object> GraphqlAsync(object? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1431,7 +1431,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -2846,7 +2846,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2854,7 +2854,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -3283,7 +3283,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3291,7 +3291,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -3720,7 +3720,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3728,7 +3728,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -4157,7 +4157,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4165,7 +4165,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -4594,7 +4594,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4602,7 +4602,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -6198,6 +6198,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.StringLength(64)]
         public string College_title { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6225,6 +6234,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> Groups { get; set; } = new System.Collections.Generic.List<string>();
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6243,6 +6261,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items> GroupMembers { get; set; } = new System.Collections.Generic.List<Items>();
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6250,23 +6277,32 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("name")]
-        public string? Name { get; set; } = default!;
+        public string Name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("iamid")]
-        public string? Iamid { get; set; } = default!;
+        public string Iamid { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("loginId")]
-        public string? LoginId { get; set; } = default!;
+        public string LoginId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employeeId")]
-        public string? EmployeeId { get; set; } = default!;
+        public string EmployeeId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("email")]
-        public string? Email { get; set; } = default!;
+        public string Email { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("groups")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items_2> Groups { get; set; } = new System.Collections.Generic.List<Items_2>();
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6281,6 +6317,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SourceId { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6299,6 +6344,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("accountCount")]
         public int AccountCount { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6314,13 +6368,22 @@ namespace UCD.Rosetta.Client.Generated
         public string RoleId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("description")]
-        public string? Description { get; set; } = default!;
+        public string Description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("enabled")]
-        public bool? Enabled { get; set; } = default!;
+        public bool Enabled { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("requestable")]
-        public bool? Requestable { get; set; } = default!;
+        public bool Requestable { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6337,17 +6400,26 @@ namespace UCD.Rosetta.Client.Generated
         public string RoleId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("description")]
-        public string? Description { get; set; } = default!;
+        public string Description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("enabled")]
-        public bool? Enabled { get; set; } = default!;
+        public bool Enabled { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("requestable")]
-        public bool? Requestable { get; set; } = default!;
+        public bool Requestable { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("roleMembers")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items> RoleMembers { get; set; } = new System.Collections.Generic.List<Items>();
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6356,23 +6428,32 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("name")]
-        public string? Name { get; set; } = default!;
+        public string Name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("iamid")]
-        public string? Iamid { get; set; } = default!;
+        public string Iamid { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("loginId")]
-        public string? LoginId { get; set; } = default!;
+        public string LoginId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employeeId")]
-        public string? EmployeeId { get; set; } = default!;
+        public string EmployeeId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("email")]
-        public string? Email { get; set; } = default!;
+        public string Email { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("roles")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items_3> Roles { get; set; } = new System.Collections.Generic.List<Items_3>();
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6406,6 +6487,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [System.ComponentModel.DataAnnotations.StringLength(1)]
         public string Major_status { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6476,6 +6566,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.DateTimeOffset Create_date { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     /// <summary>
@@ -6490,58 +6589,58 @@ namespace UCD.Rosetta.Client.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employeeids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string>? Employeeids { get; set; } = default!;
+        public System.Collections.Generic.ICollection<string> Employeeids { get; set; } = default!;
 
         /// <summary>
         /// List of student IDs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("studentids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string>? Studentids { get; set; } = default!;
+        public System.Collections.Generic.ICollection<string> Studentids { get; set; } = default!;
 
         /// <summary>
         /// List of 10-digit IAM IDs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("iamids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string>? Iamids { get; set; } = default!;
+        public System.Collections.Generic.ICollection<string> Iamids { get; set; } = default!;
 
         /// <summary>
         /// List of UC Davis login IDs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("loginids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string>? Loginids { get; set; } = default!;
+        public System.Collections.Generic.ICollection<string> Loginids { get; set; } = default!;
 
         /// <summary>
         /// List of PIDMs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("pidms")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string>? Pidms { get; set; } = default!;
+        public System.Collections.Generic.ICollection<string> Pidms { get; set; } = default!;
 
         /// <summary>
         /// List of email addresses to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("emails")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string>? Emails { get; set; } = default!;
+        public System.Collections.Generic.ICollection<string> Emails { get; set; } = default!;
 
         /// <summary>
         /// List of Mothra IDs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("mothraids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.ICollection<string>? Mothraids { get; set; } = default!;
+        public System.Collections.Generic.ICollection<string> Mothraids { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("limit")]
-        public int? Limit { get; set; } = default!;
+        public int Limit { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("offset")]
-        public int? Offset { get; set; } = default!;
+        public int Offset { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("count")]
-        public bool? Count { get; set; } = default!;
+        public bool Count { get; set; } = default!;
 
     }
 
@@ -6557,119 +6656,134 @@ namespace UCD.Rosetta.Client.Generated
         public string Iam_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_iam_id")]
-        public string? Reports_to_iam_id { get; set; } = default!;
+        public string Reports_to_iam_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_employee_id")]
-        public string? Reports_to_employee_id { get; set; } = default!;
+        public string Reports_to_employee_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_record")]
-        public string? Employee_record { get; set; } = default!;
+        public string Employee_record { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
-        public string? Employee_id { get; set; } = default!;
+        public string Employee_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("position_number")]
-        public string? Position_number { get; set; } = default!;
+        public string Position_number { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("position_title")]
-        public string? Position_title { get; set; } = default!;
+        public string Position_title { get; set; } = default!;
 
         /// <summary>
         /// Job indicator. Values are N (Not Applicable), S (Secondary Job), P (Primary Job).
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_indicator")]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<EmployeeAssociationJob_indicator>))]
-        public EmployeeAssociationJob_indicator? Job_indicator { get; set; } = default!;
+        public EmployeeAssociationJob_indicator Job_indicator { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
-        public string? Relationship_to_organization { get; set; } = default!;
+        public string Relationship_to_organization { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification")]
-        public string? Employee_classification { get; set; } = default!;
+        public string Employee_classification { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification_description")]
-        public string? Employee_classification_description { get; set; } = default!;
+        public string Employee_classification_description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("status")]
-        public string? Status { get; set; } = default!;
+        public string Status { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("hire_date")]
-        public string? Hire_date { get; set; } = default!;
+        public string Hire_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("start_date")]
-        public string? Start_date { get; set; } = default!;
+        public string Start_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("termination_date")]
-        public string? Termination_date { get; set; } = default!;
+        public string Termination_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("fte_percentage")]
-        public string? Fte_percentage { get; set; } = default!;
+        public string Fte_percentage { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_position")]
-        public string? Reports_to_position { get; set; } = default!;
+        public string Reports_to_position { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_type_id")]
-        public string? Job_type_id { get; set; } = default!;
+        public string Job_type_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_type_description")]
-        public string? Job_type_description { get; set; } = default!;
+        public string Job_type_description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_family_id")]
-        public string? Job_family_id { get; set; } = default!;
+        public string Job_family_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_family_description")]
-        public string? Job_family_description { get; set; } = default!;
+        public string Job_family_description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_id")]
-        public string? Business_unit_id { get; set; } = default!;
+        public string Business_unit_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_title")]
-        public string? Business_unit_title { get; set; } = default!;
+        public string Business_unit_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_id")]
-        public string? Department_id { get; set; } = default!;
+        public string Department_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_title")]
-        public string? Department_title { get; set; } = default!;
+        public string Department_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
-        public string? Department_short_title { get; set; } = default!;
+        public string Department_short_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_start")]
+        public string Leave_of_absence_start { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_end")]
+        public string Leave_of_absence_end { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_health_position")]
-        public string? Is_health_position { get; set; } = default!;
+        public string Is_health_position { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
-        public string? Is_campus_position { get; set; } = default!;
+        public string Is_campus_position { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
-        public string? Modified_date { get; set; } = default!;
+        public string Modified_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
-        public string? Create_date { get; set; } = default!;
+        public string Create_date { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6685,34 +6799,43 @@ namespace UCD.Rosetta.Client.Generated
         public string Department_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_title")]
-        public string? Department_title { get; set; } = default!;
+        public string Department_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
-        public string? Department_short_title { get; set; } = default!;
+        public string Department_short_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6739,6 +6862,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.StringLength(64)]
         public string Job_type_description { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     /// <summary>
@@ -6749,10 +6881,19 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6764,13 +6905,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
-        public System.Collections.Generic.ICollection<Divisions>? Divisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Divisions> Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6782,19 +6932,28 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
-        public System.Collections.Generic.ICollection<Subdivisions>? Subdivisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Subdivisions> Subdivisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6806,13 +6965,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
-        public System.Collections.Generic.ICollection<Divisions2>? Divisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Divisions2> Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6824,25 +6992,34 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4s")]
-        public System.Collections.Generic.ICollection<Subdivision_l4s>? Subdivision_l4s { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Subdivision_l4s> Subdivision_l4s { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6854,13 +7031,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
-        public System.Collections.Generic.ICollection<Divisions3>? Divisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Divisions3> Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6872,31 +7058,40 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("departments")]
-        public System.Collections.Generic.ICollection<Departments>? Departments { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Departments> Departments { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6908,13 +7103,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
-        public System.Collections.Generic.ICollection<Divisions4>? Divisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Divisions4> Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6934,34 +7138,43 @@ namespace UCD.Rosetta.Client.Generated
         public string Student_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("pidm")]
-        public string? Pidm { get; set; } = default!;
+        public string Pidm { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("college_code")]
-        public string? College_code { get; set; } = default!;
+        public string College_code { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("college_title")]
-        public string? College_title { get; set; } = default!;
+        public string College_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("major_code")]
-        public string? Major_code { get; set; } = default!;
+        public string Major_code { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("major_title")]
-        public string? Major_title { get; set; } = default!;
+        public string Major_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lvl_affiliation_code")]
-        public string? Lvl_affiliation_code { get; set; } = default!;
+        public string Lvl_affiliation_code { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cls_affiliation_code")]
-        public string? Cls_affiliation_code { get; set; } = default!;
+        public string Cls_affiliation_code { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("rank")]
-        public string? Rank { get; set; } = default!;
+        public string Rank { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
-        public System.DateTimeOffset? Modified_date { get; set; } = default!;
+        public System.DateTimeOffset Modified_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
-        public System.DateTimeOffset? Create_date { get; set; } = default!;
+        public System.DateTimeOffset Create_date { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6970,16 +7183,25 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("firstname")]
-        public string? Firstname { get; set; } = default!;
+        public string Firstname { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lastname")]
-        public string? Lastname { get; set; } = default!;
+        public string Lastname { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("iamid")]
-        public string? Iamid { get; set; } = default!;
+        public string Iamid { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("email")]
-        public string? Email { get; set; } = default!;
+        public string Email { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6999,6 +7221,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> Groups { get; set; } = new System.Collections.Generic.List<string>();
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -7014,13 +7245,22 @@ namespace UCD.Rosetta.Client.Generated
         public string RoleId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("description")]
-        public string? Description { get; set; } = default!;
+        public string Description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("enabled")]
-        public bool? Enabled { get; set; } = default!;
+        public bool Enabled { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("requestable")]
-        public bool? Requestable { get; set; } = default!;
+        public bool Requestable { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7723,37 +7963,46 @@ namespace UCD.Rosetta.Client.Generated
         public string Primary { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("primary_override")]
-        public string? Primary_override { get; set; } = default!;
+        public string Primary_override { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cosmos_affiliate")]
-        public string? Cosmos_affiliate { get; set; } = default!;
+        public string Cosmos_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cpe_affiliate")]
-        public string? Cpe_affiliate { get; set; } = default!;
+        public string Cpe_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee")]
-        public string? Employee { get; set; } = default!;
+        public string Employee { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("faculty")]
-        public string? Faculty { get; set; } = default!;
+        public string Faculty { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("health_affiliate")]
-        public string? Health_affiliate { get; set; } = default!;
+        public string Health_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("student")]
-        public string? Student { get; set; } = default!;
+        public string Student { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("student_applicant")]
-        public string? Student_applicant { get; set; } = default!;
+        public string Student_applicant { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("temporary_affiliate")]
-        public string? Temporary_affiliate { get; set; } = default!;
+        public string Temporary_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("ucanr_affiliate")]
-        public string? Ucanr_affiliate { get; set; } = default!;
+        public string Ucanr_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_affiliate")]
-        public string? Usda_whnrc_affiliate { get; set; } = default!;
+        public string Usda_whnrc_affiliate { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7762,34 +8011,43 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("employee")]
-        public string? Employee { get; set; } = default!;
+        public string Employee { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("faculty")]
-        public string? Faculty { get; set; } = default!;
+        public string Faculty { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("student")]
-        public string? Student { get; set; } = default!;
+        public string Student { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("student_applicant")]
-        public string? Student_applicant { get; set; } = default!;
+        public string Student_applicant { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("health_affiliate")]
-        public string? Health_affiliate { get; set; } = default!;
+        public string Health_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("temporary_affiliate")]
-        public string? Temporary_affiliate { get; set; } = default!;
+        public string Temporary_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cosmos_affiliate")]
-        public string? Cosmos_affiliate { get; set; } = default!;
+        public string Cosmos_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cpe_affiliate")]
-        public string? Cpe_affiliate { get; set; } = default!;
+        public string Cpe_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("ucanr_affiliate")]
-        public string? Ucanr_affiliate { get; set; } = default!;
+        public string Ucanr_affiliate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_affiliate")]
-        public string? Usda_whnrc_affiliate { get; set; } = default!;
+        public string Usda_whnrc_affiliate { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7798,70 +8056,79 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("is_without_salary")]
-        public string? Is_without_salary { get; set; } = default!;
+        public string Is_without_salary { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_academic")]
-        public string? Is_academic { get; set; } = default!;
+        public string Is_academic { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_academic_senate")]
-        public string? Is_academic_senate { get; set; } = default!;
+        public string Is_academic_senate { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_academic_federation")]
-        public string? Is_academic_federation { get; set; } = default!;
+        public string Is_academic_federation { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_faculty")]
-        public string? Is_faculty { get; set; } = default!;
+        public string Is_faculty { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_teaching_faculty")]
-        public string? Is_teaching_faculty { get; set; } = default!;
+        public string Is_teaching_faculty { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_msp")]
-        public string? Is_msp { get; set; } = default!;
+        public string Is_msp { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp")]
-        public string? Is_ssp { get; set; } = default!;
+        public string Is_ssp { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_msp_career")]
-        public string? Is_msp_career { get; set; } = default!;
+        public string Is_msp_career { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_msp_career_partial_year")]
-        public string? Is_msp_career_partial_year { get; set; } = default!;
+        public string Is_msp_career_partial_year { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_msp_contract")]
-        public string? Is_msp_contract { get; set; } = default!;
+        public string Is_msp_contract { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_msp_casual")]
-        public string? Is_msp_casual { get; set; } = default!;
+        public string Is_msp_casual { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_msp_senior_management")]
-        public string? Is_msp_senior_management { get; set; } = default!;
+        public string Is_msp_senior_management { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp_career")]
-        public string? Is_ssp_career { get; set; } = default!;
+        public string Is_ssp_career { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp_career_partial_year")]
-        public string? Is_ssp_career_partial_year { get; set; } = default!;
+        public string Is_ssp_career_partial_year { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp_contract")]
-        public string? Is_ssp_contract { get; set; } = default!;
+        public string Is_ssp_contract { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp_casual")]
-        public string? Is_ssp_casual { get; set; } = default!;
+        public string Is_ssp_casual { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp_casual_restricted")]
-        public string? Is_ssp_casual_restricted { get; set; } = default!;
+        public string Is_ssp_casual_restricted { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp_per_diem")]
-        public string? Is_ssp_per_diem { get; set; } = default!;
+        public string Is_ssp_per_diem { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_ssp_floater")]
-        public string? Is_ssp_floater { get; set; } = default!;
+        public string Is_ssp_floater { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_health_employee")]
-        public string? Is_health_employee { get; set; } = default!;
+        public string Is_health_employee { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_employee")]
-        public string? Is_campus_employee { get; set; } = default!;
+        public string Is_campus_employee { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7870,25 +8137,34 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_first_name")]
-        public string? Lived_first_name { get; set; } = default!;
+        public string Lived_first_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_middle_name")]
-        public string? Lived_middle_name { get; set; } = default!;
+        public string Lived_middle_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_last_name")]
-        public string? Lived_last_name { get; set; } = default!;
+        public string Lived_last_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_pronouns")]
-        public string? Lived_pronouns { get; set; } = default!;
+        public string Lived_pronouns { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_first_name")]
-        public string? Legal_first_name { get; set; } = default!;
+        public string Legal_first_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_middle_name")]
-        public string? Legal_middle_name { get; set; } = default!;
+        public string Legal_middle_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_last_name")]
-        public string? Legal_last_name { get; set; } = default!;
+        public string Legal_last_name { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7897,49 +8173,58 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
-        public string? Iam_id { get; set; } = default!;
+        public string Iam_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("login_id")]
-        public string? Login_id { get; set; } = default!;
+        public string Login_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("student_id")]
-        public string? Student_id { get; set; } = default!;
+        public string Student_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("mothra_id")]
-        public string? Mothra_id { get; set; } = default!;
+        public string Mothra_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
-        public string? Employee_id { get; set; } = default!;
+        public string Employee_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("mail_id")]
-        public Mail_id? Mail_id { get; set; } = default!;
+        public Mail_id Mail_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("pidm")]
-        public string? Pidm { get; set; } = default!;
+        public string Pidm { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("pps_id")]
-        public string? Pps_id { get; set; } = default!;
+        public string Pps_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cosmos_id")]
-        public string? Cosmos_id { get; set; } = default!;
+        public string Cosmos_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("cpe_id")]
-        public string? Cpe_id { get; set; } = default!;
+        public string Cpe_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("health_affiliate_id")]
-        public string? Health_affiliate_id { get; set; } = default!;
+        public string Health_affiliate_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("ucanr_id")]
-        public string? Ucanr_id { get; set; } = default!;
+        public string Ucanr_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_id")]
-        public string? Usda_whnrc_id { get; set; } = default!;
+        public string Usda_whnrc_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("affiliate_id")]
-        public string? Affiliate_id { get; set; } = default!;
+        public string Affiliate_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("ucnet_id")]
-        public string? Ucnet_id { get; set; } = default!;
+        public string Ucnet_id { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7948,13 +8233,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("campus")]
-        public string? Campus { get; set; } = default!;
+        public string Campus { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("health")]
-        public string? Health { get; set; } = default!;
+        public string Health { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("personal")]
-        public string? Personal { get; set; } = default!;
+        public string Personal { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7963,13 +8257,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("primary")]
-        public string? Primary { get; set; } = default!;
+        public string Primary { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("work")]
-        public string? Work { get; set; } = default!;
+        public string Work { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("personal")]
-        public string? Personal { get; set; } = default!;
+        public string Personal { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7978,25 +8281,34 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
-        public string? Iam_id { get; set; } = default!;
+        public string Iam_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("college_code")]
-        public string? College_code { get; set; } = default!;
+        public string College_code { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("college_title")]
-        public string? College_title { get; set; } = default!;
+        public string College_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("major_code")]
-        public string? Major_code { get; set; } = default!;
+        public string Major_code { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("major_title")]
-        public string? Major_title { get; set; } = default!;
+        public string Major_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("academic_level")]
-        public string? Academic_level { get; set; } = default!;
+        public string Academic_level { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("class_level")]
-        public string? Class_level { get; set; } = default!;
+        public string Class_level { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8005,113 +8317,128 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_record")]
-        public string? Employee_record { get; set; } = default!;
+        public string Employee_record { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
-        public string? Employee_id { get; set; } = default!;
+        public string Employee_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("position_number")]
-        public string? Position_number { get; set; } = default!;
+        public string Position_number { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("position_title")]
-        public string? Position_title { get; set; } = default!;
+        public string Position_title { get; set; } = default!;
 
         /// <summary>
         /// Job indicator. Values are N (Not Applicable), S (Secondary Job), P (Primary Job).
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_indicator")]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Employee_associationJob_indicator>))]
-        public Employee_associationJob_indicator? Job_indicator { get; set; } = default!;
+        public Employee_associationJob_indicator Job_indicator { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
-        public string? Relationship_to_organization { get; set; } = default!;
+        public string Relationship_to_organization { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification")]
-        public string? Employee_classification { get; set; } = default!;
+        public string Employee_classification { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification_description")]
-        public string? Employee_classification_description { get; set; } = default!;
+        public string Employee_classification_description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("status")]
-        public string? Status { get; set; } = default!;
+        public string Status { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("hire_date")]
-        public string? Hire_date { get; set; } = default!;
+        public string Hire_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("start_date")]
-        public string? Start_date { get; set; } = default!;
+        public string Start_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("termination_date")]
-        public string? Termination_date { get; set; } = default!;
+        public string Termination_date { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("fte_percentage")]
-        public string? Fte_percentage { get; set; } = default!;
+        public string Fte_percentage { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_type_id")]
-        public string? Job_type_id { get; set; } = default!;
+        public string Job_type_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_type_description")]
-        public string? Job_type_description { get; set; } = default!;
+        public string Job_type_description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_family_id")]
-        public string? Job_family_id { get; set; } = default!;
+        public string Job_family_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("job_family_description")]
-        public string? Job_family_description { get; set; } = default!;
+        public string Job_family_description { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
-        public string? Organization_id { get; set; } = default!;
+        public string Organization_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
-        public string? Organization_title { get; set; } = default!;
+        public string Organization_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_id")]
-        public string? Business_unit_id { get; set; } = default!;
+        public string Business_unit_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_title")]
-        public string? Business_unit_title { get; set; } = default!;
+        public string Business_unit_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_id")]
-        public string? Department_id { get; set; } = default!;
+        public string Department_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_title")]
-        public string? Department_title { get; set; } = default!;
+        public string Department_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
-        public string? Department_short_title { get; set; } = default!;
+        public string Department_short_title { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_start")]
+        public string Leave_of_absence_start { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_end")]
+        public string Leave_of_absence_end { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_position")]
-        public string? Reports_to_position { get; set; } = default!;
+        public string Reports_to_position { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_iam_id")]
-        public string? Reports_to_iam_id { get; set; } = default!;
+        public string Reports_to_iam_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_employee_id")]
-        public string? Reports_to_employee_id { get; set; } = default!;
+        public string Reports_to_employee_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_health_position")]
-        public string? Is_health_position { get; set; } = default!;
+        public string Is_health_position { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
-        public string? Is_campus_position { get; set; } = default!;
+        public string Is_campus_position { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8135,10 +8462,19 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8147,16 +8483,25 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8165,13 +8510,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
-        public System.Collections.Generic.ICollection<Subdivisions2>? Subdivisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Subdivisions2> Subdivisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8180,10 +8534,19 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8192,13 +8555,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
-        public System.Collections.Generic.ICollection<Subdivisions3>? Subdivisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Subdivisions3> Subdivisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8207,13 +8579,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("department_id")]
-        public string? Department_id { get; set; } = default!;
+        public string Department_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_title")]
-        public string? Department_title { get; set; } = default!;
+        public string Department_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
-        public string? Department_short_title { get; set; } = default!;
+        public string Department_short_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8222,13 +8603,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
-        public string? Division_id { get; set; } = default!;
+        public string Division_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
-        public string? Division_title { get; set; } = default!;
+        public string Division_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
-        public System.Collections.Generic.ICollection<Subdivisions4>? Subdivisions { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Subdivisions4> Subdivisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8237,10 +8627,19 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("campus")]
-        public string? Campus { get; set; } = default!;
+        public string Campus { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("health")]
-        public string? Health { get; set; } = default!;
+        public string Health { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8264,16 +8663,25 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8282,13 +8690,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4s")]
-        public System.Collections.Generic.ICollection<Subdivision_l4s2>? Subdivision_l4s { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Subdivision_l4s2> Subdivision_l4s { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8297,19 +8714,28 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
-        public string? Subdivision_id { get; set; } = default!;
+        public string Subdivision_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
-        public string? Subdivision_title { get; set; } = default!;
+        public string Subdivision_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("departments")]
-        public System.Collections.Generic.ICollection<Departments2>? Departments { get; set; } = default!;
+        public System.Collections.Generic.ICollection<Departments2> Departments { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8318,10 +8744,19 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_id")]
-        public string? Subdivision_l4_id { get; set; } = default!;
+        public string Subdivision_l4_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
-        public string? Subdivision_l4_title { get; set; } = default!;
+        public string Subdivision_l4_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8330,13 +8765,22 @@ namespace UCD.Rosetta.Client.Generated
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("department_id")]
-        public string? Department_id { get; set; } = default!;
+        public string Department_id { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_title")]
-        public string? Department_title { get; set; } = default!;
+        public string Department_title { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
-        public string? Department_short_title { get; set; } = default!;
+        public string Department_short_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
