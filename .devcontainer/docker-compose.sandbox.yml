@@ -1,0 +1,23 @@
+name: ${ROSETTA_SANDBOX_PROJECT:?Set ROSETTA_SANDBOX_PROJECT to a unique name for this checkout}
+
+services:
+  tools:
+    build:
+      context: ..
+      dockerfile: .devcontainer/sandbox.Dockerfile
+    init: true
+    working_dir: /workspace
+    command: ["sleep", "infinity"]
+    environment:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspace
+    healthcheck:
+      test: ["CMD-SHELL", "yq --version >/dev/null && dotnet --info >/dev/null && curl --version >/dev/null && unzip -v >/dev/null"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 5s

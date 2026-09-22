@@ -373,6 +373,32 @@ catch (OperationCanceledException)
 
 ## Development
 
+### Docker spec-update sandbox
+
+The recommended Docker Desktop workflow for applying API specification updates is the standalone tooling sandbox. It provides the YAML-aware updater dependencies and the .NET 8 SDK while bind-mounting this checkout, so all generated changes appear directly in the normal host working tree. Windows and macOS users need Docker Desktop with Compose; they do not need to install `jq`, `yq`, or .NET on the host.
+
+Check status without starting anything:
+
+```powershell
+$env:ROSETTA_SANDBOX_PROJECT = "rosetta-api-client-primary" # Use a unique value for each checkout/worktree.
+docker info
+docker compose -f .devcontainer/docker-compose.sandbox.yml ps --status running --services
+```
+
+On macOS, set the project name with `export ROSETTA_SANDBOX_PROJECT=rosetta-api-client-primary` in a terminal, then run the same `docker` commands. The project name must be unique to this checkout.
+
+After confirming that the sandbox may be started, create it the first time:
+
+```powershell
+docker compose -f .devcontainer/docker-compose.sandbox.yml up --build --detach --wait
+docker compose -f .devcontainer/docker-compose.sandbox.yml exec -T tools bash ./update-spec.sh <version>
+docker compose -f .devcontainer/docker-compose.sandbox.yml exec -T tools dotnet build UCD.Rosetta.sln
+```
+
+After stopping it, use `docker compose -f .devcontainer/docker-compose.sandbox.yml start --wait` next time. This reuses the existing container and its installed tools without rebuilding the image.
+
+No interactive container session is required. See [the Docker sandbox guide](docs/SANDBOX.md) for startup, safety, validation, and cleanup details.
+
 ### Project Structure
 
 ```
@@ -408,7 +434,7 @@ The GraphQL client (`obj/ZeroQL/rosetta.zeroql.json.g.cs`) is regenerated from `
 
 > **Note:** ZeroQL codegen runs via a local .NET tool declared in `.config/dotnet-tools.json`. A `Directory.Build.targets` at the repo root automatically runs `dotnet tool restore` before local builds, so no manual setup is required after cloning. CI restores tools explicitly once per job to avoid concurrent tool restore races during solution builds.
 
-To update both specs to a new API version, use the convenience script from macOS, Linux, WSL, or a Git Bash terminal:
+To update both specs without Docker, install [Mike Farah `yq` v4](https://github.com/mikefarah/yq) plus the other tools listed at the top of `update-spec.sh`, then use the convenience script from macOS, Linux, WSL, or a Git Bash terminal:
 
 ```bash
 ./update-spec.sh <version>  # e.g. 1.0.33
@@ -424,7 +450,7 @@ PowerShell cannot execute `update-spec.sh` directly. If Git for Windows is insta
 
 The [Rosetta API Anypoint Exchange page](https://anypoint.mulesoft.com/exchange/portals/university-of-california-346/9b04bfa8-6eeb-4d85-b676-91db930f8411/iam-rosetta-api/) is the source of truth for the API. To find the latest version number, open the **Download** dropdown and hover over any link — the version appears in the URL shown in the browser status bar.
 
-The script downloads the spec from MuleSoft Exchange, extracts the embedded GraphQL SDL into `specs/rosetta-api.graphql` (appending the `schema { query: Query }` root required by ZeroQL), and updates the README version badge. Then rebuild:
+The script follows the main document declared by MuleSoft's `exchange.json`, accepts YAML or JSON, and normalizes the checked-in OpenAPI artifact to `specs/rosetta-api.json`. It also extracts the embedded GraphQL SDL into `specs/rosetta-api.graphql` (appending the `schema { query: Query }` root required by ZeroQL) and updates the README version badge. Then rebuild:
 ```bash
 dotnet clean && dotnet build
 ```
