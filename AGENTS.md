@@ -4,7 +4,7 @@
 
 Use the [Docker spec-update sandbox quick start](README.md#docker-spec-update-sandbox) and the detailed [sandbox guide](docs/SANDBOX.md) when checking or applying a Rosetta API specification update.
 
-Choose a unique, lowercase `ROSETTA_SANDBOX_PROJECT` value for the current checkout and set it in every shell that runs Compose; never reuse another worktree's project name. Before starting anything, check the Docker engine with `docker info` and inspect the sandbox with `docker compose -f .devcontainer/docker-compose.sandbox.yml ps --status running --services`.
+The Compose project and container are both named `rosette-spec-updater`; do not generate a dated name or set `ROSETTA_SANDBOX_PROJECT`. Before starting anything, check the Docker engine with `docker info` and inspect the sandbox with `docker compose -f .devcontainer/docker-compose.sandbox.yml ps --all`. If a container already exists, verify that its `/workspace` bind mount points to this checkout before reusing it. A container mounted to another checkout must not be used for an update.
 
 Do not start Docker Desktop or the sandbox service implicitly. If a check proves either is stopped, tell the user which one is stopped and ask for confirmation before starting it. Treat access-denied or permission errors as an inability to inspect Docker, not proof that Docker is stopped; request permission to retry the read-only check with the required access.
 

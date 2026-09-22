@@ -1,7 +1,8 @@
-name: ${ROSETTA_SANDBOX_PROJECT:?Set ROSETTA_SANDBOX_PROJECT to a unique name for this checkout}
+name: rosette-spec-updater
 
 services:
   tools:
+    container_name: rosette-spec-updater
     build:
       context: ..
       dockerfile: .devcontainer/sandbox.Dockerfile

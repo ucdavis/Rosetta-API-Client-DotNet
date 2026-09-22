@@ -377,15 +377,14 @@ catch (OperationCanceledException)
 
 The recommended Docker Desktop workflow for applying API specification updates is the standalone tooling sandbox. It provides the YAML-aware updater dependencies and the .NET 8 SDK while bind-mounting this checkout, so all generated changes appear directly in the normal host working tree. Windows and macOS users need Docker Desktop with Compose; they do not need to install `jq`, `yq`, or .NET on the host.
 
-Check status without starting anything:
+Check status without starting anything. Compose uses `rosette-spec-updater` for both the project and container name:
 
 ```powershell
-$env:ROSETTA_SANDBOX_PROJECT = "rosetta-api-client-primary" # Use a unique value for each checkout/worktree.
 docker info
-docker compose -f .devcontainer/docker-compose.sandbox.yml ps --status running --services
+docker compose -f .devcontainer/docker-compose.sandbox.yml ps --all
 ```
 
-On macOS, set the project name with `export ROSETTA_SANDBOX_PROJECT=rosetta-api-client-primary` in a terminal, then run the same `docker` commands. The project name must be unique to this checkout.
+The same commands work in PowerShell on Windows and a terminal on macOS. Before reusing an existing container, confirm its `/workspace` bind mount points to this checkout.
 
 After confirming that the sandbox may be started, create it the first time:
 

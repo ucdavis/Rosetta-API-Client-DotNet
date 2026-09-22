@@ -6,17 +6,16 @@ The image build does not copy the checkout or `.env` into the image. At runtime 
 
 ## Check status without starting anything
 
-Choose a unique Compose project name for this checkout. Use a different value for every Git worktree and set it again in each new terminal. From the repository root:
+The Compose project and container are both named `rosette-spec-updater`. From the repository root:
 
 ```powershell
-$env:ROSETTA_SANDBOX_PROJECT = "rosetta-api-client-primary"
 docker info
-docker compose -f .devcontainer/docker-compose.sandbox.yml ps --status running --services
+docker compose -f .devcontainer/docker-compose.sandbox.yml ps --all
 ```
 
-On macOS, use `export ROSETTA_SANDBOX_PROJECT=rosetta-api-client-primary` instead of the PowerShell assignment. The remaining `docker` commands are the same. Set the variable again in each new terminal.
+The same commands work in PowerShell on Windows and a terminal on macOS. If a container already exists, verify that its `/workspace` bind mount points to this checkout before reusing it. The fixed project name is shared by every checkout on the same Docker engine; do not run an updater in a container mounted to another worktree.
 
-`docker info` fails when Docker Desktop's Linux engine is not available. An access-denied or permission error means its status could not be inspected; it does not prove Docker is stopped. The second command prints `tools` only when this checkout's sandbox service is running. Agents must ask before starting Docker Desktop or the sandbox.
+`docker info` fails when Docker Desktop's Linux engine is not available. An access-denied or permission error means its status could not be inspected; it does not prove Docker is stopped. The second command lists the sandbox container when it exists, including when stopped. Agents must ask before starting Docker Desktop or the sandbox.
 
 ## Start the sandbox
 
