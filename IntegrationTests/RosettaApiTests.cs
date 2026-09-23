@@ -187,6 +187,32 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     [SkippableFact]
+    public async Task PeopleGETAsync_WithIamId_EmployeeAssociationsHaveNullLeaveOfAbsenceDates()
+    {
+        var iamId = _fixture.TestData.IamId;
+        Skip.If(string.IsNullOrWhiteSpace(iamId),
+            "TestData__IamId must identify an employee without leave-of-absence dates");
+
+        // Act
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(iamid: iamId));
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Count.ShouldBe(1);
+        var person = result.Single();
+        person.Iam_id.ShouldBe(iamId);
+        person.Employee_association.ShouldNotBeNull();
+        person.Employee_association.ShouldNotBeEmpty();
+
+        foreach (var association in person.Employee_association)
+        {
+            association.ShouldNotBeNull();
+            association.Leave_of_absence_end.ShouldBeNull();
+            association.Leave_of_absence_start.ShouldBeNull();
+        }
+    }
+
+    [SkippableFact]
     public async Task PeopleGETAsync_MapsResultToPersonModel()
     {
         var iamId = await GetIamIdForPeopleFilterAsync();
