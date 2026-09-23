@@ -205,6 +205,8 @@ type EmployeeAssociation {
   department_id: String
   department_title: String
   department_short_title: String
+  leave_of_absence_start: String
+  leave_of_absence_end: String
   reports_to_position: String
   reports_to_iam_id: String
   reports_to_employee_id: String
@@ -266,6 +268,8 @@ type PpsAssociationRecord {
   department_id: String
   department_title: String
   department_short_title: String
+  leave_of_absence_start: String
+  leave_of_absence_end: String
   is_health_position: String
   is_campus_position: String
   modified_date: String
