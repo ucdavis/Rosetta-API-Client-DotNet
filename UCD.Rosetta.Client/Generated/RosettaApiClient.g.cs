@@ -96,7 +96,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>      ```
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<object> GraphqlAsync(object? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -335,7 +335,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -478,7 +478,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -621,7 +621,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -764,7 +764,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -907,7 +907,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -1423,7 +1423,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>      ```
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<object> GraphqlAsync(object? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<object> GraphqlAsync(object? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1431,7 +1431,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -2846,7 +2846,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2854,7 +2854,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -3283,7 +3283,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3291,7 +3291,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -3720,7 +3720,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3728,7 +3728,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -4157,7 +4157,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4165,7 +4165,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -4594,7 +4594,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <br/>  - `mothraids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4602,7 +4602,7 @@ namespace UCD.Rosetta.Client.Generated
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(generated, JsonSerializerSettings);
+                    var json_ = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(body, JsonSerializerSettings);
                     var content_ = new System.Net.Http.ByteArrayContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
@@ -6198,6 +6198,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.StringLength(64)]
         public string College_title { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6225,6 +6234,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> Groups { get; set; } = new System.Collections.Generic.List<string>();
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6242,6 +6260,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("groupMembers")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items> GroupMembers { get; set; } = new System.Collections.Generic.List<Items>();
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6268,6 +6295,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items_2> Groups { get; set; } = new System.Collections.Generic.List<Items_2>();
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6281,6 +6317,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SourceId { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6298,6 +6343,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("accountCount")]
         public int AccountCount { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6321,6 +6375,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("requestable")]
         public bool? Requestable { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6349,6 +6412,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items> RoleMembers { get; set; } = new System.Collections.Generic.List<Items>();
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6373,6 +6445,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("roles")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Items_3> Roles { get; set; } = new System.Collections.Generic.List<Items_3>();
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6406,6 +6487,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [System.ComponentModel.DataAnnotations.StringLength(1)]
         public string Major_status { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6475,6 +6565,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.DateTimeOffset Create_date { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6659,6 +6758,12 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
         public string? Department_short_title { get; set; } = default!;
 
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_start")]
+        public string? Leave_of_absence_start { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_end")]
+        public string? Leave_of_absence_end { get; set; } = default!;
+
         [System.Text.Json.Serialization.JsonPropertyName("is_health_position")]
         public string? Is_health_position { get; set; } = default!;
 
@@ -6670,6 +6775,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
         public string? Create_date { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6714,6 +6828,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
         public string? Organization_title { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     /// <summary>
@@ -6739,6 +6862,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.StringLength(64)]
         public string Job_type_description { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     /// <summary>
@@ -6753,6 +6885,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
         public string? Organization_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6771,6 +6912,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
         public System.Collections.Generic.ICollection<Divisions>? Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6796,6 +6946,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
         public System.Collections.Generic.ICollection<Subdivisions>? Subdivisions { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     /// <summary>
@@ -6813,6 +6972,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
         public System.Collections.Generic.ICollection<Divisions2>? Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6844,6 +7012,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4s")]
         public System.Collections.Generic.ICollection<Subdivision_l4s>? Subdivision_l4s { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     /// <summary>
@@ -6861,6 +7038,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
         public System.Collections.Generic.ICollection<Divisions3>? Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6898,6 +7084,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("departments")]
         public System.Collections.Generic.ICollection<Departments>? Departments { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     /// <summary>
@@ -6915,6 +7110,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("divisions")]
         public System.Collections.Generic.ICollection<Divisions4>? Divisions { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -6963,6 +7167,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
         public System.DateTimeOffset? Create_date { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6981,6 +7194,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("email")]
         public string? Email { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -6998,6 +7220,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("groups")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> Groups { get; set; } = new System.Collections.Generic.List<string>();
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7021,6 +7252,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("requestable")]
         public bool? Requestable { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7755,6 +7995,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_affiliate")]
         public string? Usda_whnrc_affiliate { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -7790,6 +8039,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_affiliate")]
         public string? Usda_whnrc_affiliate { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7863,6 +8121,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_employee")]
         public string? Is_campus_employee { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -7889,6 +8156,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("legal_last_name")]
         public string? Legal_last_name { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7941,6 +8217,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("ucnet_id")]
         public string? Ucnet_id { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -7956,6 +8241,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("personal")]
         public string? Personal { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -7970,6 +8264,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("personal")]
         public string? Personal { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -7997,6 +8300,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("class_level")]
         public string? Class_level { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8098,6 +8410,12 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
         public string? Department_short_title { get; set; } = default!;
 
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_start")]
+        public string? Leave_of_absence_start { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_end")]
+        public string? Leave_of_absence_end { get; set; } = default!;
+
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_position")]
         public string? Reports_to_position { get; set; } = default!;
 
@@ -8112,6 +8430,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
         public string? Is_campus_position { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8140,6 +8467,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
         public string? Division_title { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -8158,6 +8494,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
         public string? Subdivision_l4_title { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -8173,6 +8518,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
         public System.Collections.Generic.ICollection<Subdivisions2>? Subdivisions { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -8184,6 +8538,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
         public string? Subdivision_l4_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8200,6 +8563,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
         public System.Collections.Generic.ICollection<Subdivisions3>? Subdivisions { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -8214,6 +8586,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
         public string? Department_short_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8230,6 +8611,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivisions")]
         public System.Collections.Generic.ICollection<Subdivisions4>? Subdivisions { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -8241,6 +8631,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("health")]
         public string? Health { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8275,6 +8674,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
         public string? Subdivision_l4_title { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -8289,6 +8697,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4s")]
         public System.Collections.Generic.ICollection<Subdivision_l4s2>? Subdivision_l4s { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8311,6 +8728,15 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("departments")]
         public System.Collections.Generic.ICollection<Departments2>? Departments { get; set; } = default!;
 
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -8322,6 +8748,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
         public string? Subdivision_l4_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
@@ -8337,6 +8772,15 @@ namespace UCD.Rosetta.Client.Generated
 
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
         public string? Department_short_title { get; set; } = default!;
+
+        private System.Collections.Generic.IDictionary<string, object>? _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 
