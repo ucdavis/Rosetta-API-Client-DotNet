@@ -212,6 +212,46 @@ type EmployeeAssociation {
   reports_to_employee_id: String
   is_health_position: String
   is_campus_position: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_location: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_location_description: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_union_cd: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_barg_unit: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_bargaining_unit: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_exemption_status: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_pay_schedule: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_salary_type: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_expected_return_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_last_hire_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_assigned_end_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_expected_end_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_last_date_worked: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_auto_end: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_lastupddttm: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_lastupdoprid: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_cr_bt_dtm: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_cr_bt_nbr: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_ods_vrsn_nbr: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_dml_ind: String
 }
 
 type Person {
@@ -272,6 +312,46 @@ type PpsAssociationRecord {
   leave_of_absence_end: String
   is_health_position: String
   is_campus_position: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_location: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_location_description: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_union_cd: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_barg_unit: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_bargaining_unit: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_exemption_status: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_pay_schedule: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_salary_type: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_expected_return_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_last_hire_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_assigned_end_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_expected_end_date: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_last_date_worked: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_auto_end: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_lastupddttm: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_lastupdoprid: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_cr_bt_dtm: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_cr_bt_nbr: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_ods_vrsn_nbr: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_dml_ind: String
   modified_date: String
   create_date: String
 }
@@ -499,6 +579,7 @@ input PeopleFilterInput {
   affiliationNotContains: String
   affiliationState: String = "withAffiliation"
   department: String
+  jobtypeid: String
   collegecode: String
   majorcode: String
   academic_level: AcademicLevel
