@@ -6304,10 +6304,16 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Source
     {
 
+        /// <summary>
+        /// Human-friendly source system name (e.g., "Google Workspace", "Active Directory").
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sourceName")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SourceName { get; set; } = default!;
 
+        /// <summary>
+        /// Identifier for the source system (typically an application/tenant id).
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SourceId { get; set; } = default!;
@@ -6335,14 +6341,23 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Role
     {
 
+        /// <summary>
+        /// The human readable name assigned to the role.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roleName")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string RoleName { get; set; } = default!;
 
+        /// <summary>
+        /// The unique identifier for the RoleName.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roleId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string RoleId { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the access associated to the RoleName.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("description")]
         public string? Description { get; set; } = default!;
 
@@ -6358,14 +6373,23 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Type_1
     {
 
+        /// <summary>
+        /// The human readable name assigned to the role.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roleName")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string RoleName { get; set; } = default!;
 
+        /// <summary>
+        /// The unique identifier for the RoleName.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roleId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string RoleId { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the access associated to the RoleName.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("description")]
         public string? Description { get; set; } = default!;
 
@@ -6446,14 +6470,23 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Person
     {
 
+        /// <summary>
+        /// The unique identifier for this identity for use across all UC Davis systems.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// The first + last name of an identity. Prioritizes lived name if available.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("displayname")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Displayname { get; set; } = default!;
 
+        /// <summary>
+        /// The day that the person was born. Protected field. Returned only when the OAuth token includes `read:birthdate` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("birth_date")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Birth_date { get; set; } = default!;
@@ -6462,14 +6495,23 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Manager_iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// The overall provisioning status of the identity (if any). Takes into account the collective provisioning statuses of each affiliation to which it belongs.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("provisioning_status")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Provisioning_status> Provisioning_status { get; set; } = new System.Collections.Generic.List<Provisioning_status>();
 
+        /// <summary>
+        /// Flags indicating the affiliations of which this identity is currently a member.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("affiliation")]
         [System.ComponentModel.DataAnnotations.Required]
         public Affiliation Affiliation { get; set; } = new Affiliation();
 
+        /// <summary>
+        /// Flags indicating the employment status codes that apply to the identity.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employment_status")]
         [System.ComponentModel.DataAnnotations.Required]
         public Employment_status Employment_status { get; set; } = new Employment_status();
@@ -6498,10 +6540,16 @@ namespace UCD.Rosetta.Client.Generated
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Employee_association> Employee_association { get; set; } = new System.Collections.Generic.List<Employee_association>();
 
+        /// <summary>
+        /// The date/time of the last modification to the affiliate’s record.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.DateTimeOffset Modified_date { get; set; } = default!;
 
+        /// <summary>
+        /// The date/time the identity record was created in SailPoint.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.DateTimeOffset Create_date { get; set; } = default!;
@@ -6582,25 +6630,46 @@ namespace UCD.Rosetta.Client.Generated
     public partial class EmployeeAssociation
     {
 
+        /// <summary>
+        /// The unique identifier for this identity for use across all UC Davis systems.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID for who the iam_id’s position reports to.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_iam_id")]
         public string? Reports_to_iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// The employee ID for who the iam_id’s position reports to.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_employee_id")]
         public string? Reports_to_employee_id { get; set; } = default!;
 
+        /// <summary>
+        /// A unique, sequential number for each employee record.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_record")]
         public string? Employee_record { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of an employee’s record within the UCPath HR system.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
         public string? Employee_id { get; set; } = default!;
 
+        /// <summary>
+        /// An identifier for an approved position to which an employee is appointed.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("position_number")]
         public string? Position_number { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description for this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("position_title")]
         public string? Position_title { get; set; } = default!;
 
@@ -6611,60 +6680,117 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<EmployeeAssociationJob_indicator>))]
         public EmployeeAssociationJob_indicator? Job_indicator { get; set; } = default!;
 
+        /// <summary>
+        /// Indicates the relationship between the person’s job and the organization, such as EMP for employee.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
         public string? Relationship_to_organization { get; set; } = default!;
 
+        /// <summary>
+        /// The payroll status of the job.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification")]
         public string? Employee_classification { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the payroll status of the job.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification_description")]
         public string? Employee_classification_description { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the payroll status of the position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("status")]
         public string? Status { get; set; } = default!;
 
+        /// <summary>
+        /// The date when the most recent employment affiliation commenced.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("hire_date")]
         public string? Hire_date { get; set; } = default!;
 
+        /// <summary>
+        /// The first day that the assignment to this position began.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("start_date")]
         public string? Start_date { get; set; } = default!;
 
+        /// <summary>
+        /// The first day that the employee is no longer employed in the position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("termination_date")]
         public string? Termination_date { get; set; } = default!;
 
+        /// <summary>
+        /// A numeric value indicating the position’s percentage of full-time equivalence.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("fte_percentage")]
         public string? Fte_percentage { get; set; } = default!;
 
+        /// <summary>
+        /// The position number of the manager associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_position")]
         public string? Reports_to_position { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the job type within the organization.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_type_id")]
         public string? Job_type_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the job type within the organization.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_type_description")]
         public string? Job_type_description { get; set; } = default!;
 
+        /// <summary>
+        /// The code indicating the job family associated with this position. Similar to the concept of career tracks.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_family_id")]
         public string? Job_family_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the job family for this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_family_description")]
         public string? Job_family_description { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the top department within the organization associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
         public string? Organization_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the top department in the organization associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
         public string? Organization_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the second level of the organization associated with the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
         public string? Division_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the second level of the organization associated with the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
         public string? Division_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the subdivision associated with this position School/Division.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
         public string? Subdivision_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the subdivision association with this position, School/Division.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
         public string? Subdivision_title { get; set; } = default!;
 
@@ -6674,18 +6800,33 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
         public string? Subdivision_l4_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the business unit associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_id")]
         public string? Business_unit_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the business unit associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_title")]
         public string? Business_unit_title { get; set; } = default!;
 
+        /// <summary>
+        /// A unique identifier for the administrative unit that is responsible for paying for the position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("department_id")]
         public string? Department_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("department_title")]
         public string? Department_title { get; set; } = default!;
 
+        /// <summary>
+        /// A shortened human readable description of the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
         public string? Department_short_title { get; set; } = default!;
 
@@ -6695,15 +6836,144 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_end")]
         public string? Leave_of_absence_end { get; set; } = default!;
 
+        /// <summary>
+        /// An indicator designating that the employee is considered to be an employee or dual appointment of the UC Davis Health System.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("is_health_position")]
         public string? Is_health_position { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
         public string? Is_campus_position { get; set; } = default!;
 
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_location")]
+        public string? Ucpath_location { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field from `PS_LOCATION_TBL_V`. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_location_description")]
+        public string? Ucpath_location_description { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_union_cd")]
+        public string? Ucpath_union_cd { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_barg_unit")]
+        public string? Ucpath_barg_unit { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field from `PS_UNION_TBL_V`. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_bargaining_unit")]
+        public string? Ucpath_bargaining_unit { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_exemption_status")]
+        public string? Ucpath_exemption_status { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_pay_schedule")]
+        public string? Ucpath_pay_schedule { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_salary_type")]
+        public string? Ucpath_salary_type { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_expected_return_date")]
+        public string? Ucpath_expected_return_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_last_hire_date")]
+        public string? Ucpath_last_hire_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_assigned_end_date")]
+        public string? Ucpath_assigned_end_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_expected_end_date")]
+        public string? Ucpath_expected_end_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_last_date_worked")]
+        public string? Ucpath_last_date_worked { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_auto_end")]
+        public string? Ucpath_auto_end { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_lastupddttm")]
+        public string? Ucpath_lastupddttm { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_lastupdoprid")]
+        public string? Ucpath_lastupdoprid { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_cr_bt_dtm")]
+        public string? Ucpath_cr_bt_dtm { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_cr_bt_nbr")]
+        public string? Ucpath_cr_bt_nbr { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_ods_vrsn_nbr")]
+        public string? Ucpath_ods_vrsn_nbr { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_dml_ind")]
+        public string? Ucpath_dml_ind { get; set; } = default!;
+
+        /// <summary>
+        /// The date/time of the last modification to the affiliate’s record.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
         public string? Modified_date { get; set; } = default!;
 
+        /// <summary>
+        /// The date/time the identity record was created in SailPoint.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
         public string? Create_date { get; set; } = default!;
 
@@ -6961,41 +7231,77 @@ namespace UCD.Rosetta.Client.Generated
     public partial class StudentAssociation
     {
 
+        /// <summary>
+        /// The unique identifier for this identity for use across all UC Davis systems.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// A general (non-Banner specific) unique identifier for students and applicants at the university.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("student_id")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string Student_id { get; set; } = default!;
 
+        /// <summary>
+        /// Personal IDentification Master, a unique id for people in Banner.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("pidm")]
         public string? Pidm { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the college associated with the student’s major.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("college_code")]
         public string? College_code { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the college code.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("college_title")]
         public string? College_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the major the student is associated with.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("major_code")]
         public string? Major_code { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the major code.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("major_title")]
         public string? Major_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the student’s general academic program level.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lvl_affiliation_code")]
         public string? Lvl_affiliation_code { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the student’s academic class level.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("cls_affiliation_code")]
         public string? Cls_affiliation_code { get; set; } = default!;
 
+        /// <summary>
+        /// A number for differentiating when a student has multiple associations. Only used for ETL process.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("rank")]
         public string? Rank { get; set; } = default!;
 
+        /// <summary>
+        /// The date/time of the last modification to the affiliate’s record.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("modified_date")]
         public System.DateTimeOffset? Modified_date { get; set; } = default!;
 
+        /// <summary>
+        /// The date/time the identity record was created in SailPoint.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("create_date")]
         public System.DateTimeOffset? Create_date { get; set; } = default!;
 
@@ -7023,14 +7329,23 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Items_2
     {
 
+        /// <summary>
+        /// Human-friendly source system name (e.g., "Google Workspace", "Active Directory").
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sourceName")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SourceName { get; set; } = default!;
 
+        /// <summary>
+        /// Identifier for the source system (typically an application/tenant id).
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("sourceId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string SourceId { get; set; } = default!;
 
+        /// <summary>
+        /// List of group identifiers/names from the source system.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("groups")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<string> Groups { get; set; } = new System.Collections.Generic.List<string>();
@@ -7041,14 +7356,23 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Items_3
     {
 
+        /// <summary>
+        /// The human readable name assigned to the role.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roleName")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string RoleName { get; set; } = default!;
 
+        /// <summary>
+        /// The unique identifier for the RoleName.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("roleId")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string RoleId { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the access associated to the RoleName.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("description")]
         public string? Description { get; set; } = default!;
 
@@ -7905,24 +8229,42 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Name
     {
 
+        /// <summary>
+        /// A person's lived first name.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lived_first_name")]
         public string? Lived_first_name { get; set; } = default!;
 
+        /// <summary>
+        /// A person’s lived middle name or initial.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lived_middle_name")]
         public string? Lived_middle_name { get; set; } = default!;
 
+        /// <summary>
+        /// A person's lived last name.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("lived_last_name")]
         public string? Lived_last_name { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("lived_pronouns")]
         public string? Lived_pronouns { get; set; } = default!;
 
+        /// <summary>
+        /// A person's legal first name, if known. Protected field. Returned only when the OAuth token includes `read:legalNames` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("legal_first_name")]
         public string? Legal_first_name { get; set; } = default!;
 
+        /// <summary>
+        /// A person's legal middle name or initial, if known. Protected field. Returned only when the OAuth token includes `read:legalNames` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("legal_middle_name")]
         public string? Legal_middle_name { get; set; } = default!;
 
+        /// <summary>
+        /// A person's legal last name, if known. Protected field. Returned only when the OAuth token includes `read:legalNames` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("legal_last_name")]
         public string? Legal_last_name { get; set; } = default!;
 
@@ -7932,48 +8274,93 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Id
     {
 
+        /// <summary>
+        /// The unique identifier for this identity for use across all UC Davis systems.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
         public string? Iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// A unique identifier used to generate account names in source systems.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("login_id")]
         public string? Login_id { get; set; } = default!;
 
+        /// <summary>
+        /// A general (non-Banner specific) unique identifier for students and applicants at the university.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("student_id")]
         public string? Student_id { get; set; } = default!;
 
+        /// <summary>
+        /// A legacy unique identifier for identities.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("mothra_id")]
         public string? Mothra_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of an employee’s record within the UCPath HR system.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
         public string? Employee_id { get; set; } = default!;
 
+        /// <summary>
+        /// The username portion of an identity’s email address.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("mail_id")]
         public Mail_id? Mail_id { get; set; } = default!;
 
+        /// <summary>
+        /// Personal IDentification Master, a unique id for people in Banner.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("pidm")]
         public string? Pidm { get; set; } = default!;
 
+        /// <summary>
+        /// A unique ID of an employee’s record within the UC’s legacy HR system.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("pps_id")]
         public string? Pps_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of a COSMOS affiliate in its source dataset.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("cosmos_id")]
         public string? Cosmos_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of a CPE affiliate in its source dataset.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("cpe_id")]
         public string? Cpe_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of a Health affiliate in its source dataset.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("health_affiliate_id")]
         public string? Health_affiliate_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of a UCANR affiliate in its source dataset.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("ucanr_id")]
         public string? Ucanr_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of a USDA WHNRC affiliate in its source dataset.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("usda_whnrc_id")]
         public string? Usda_whnrc_id { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of an affiliate in the Mothra source dataset. Sometimes referred to as external ID and is taken from the most recent external affiliation.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("affiliate_id")]
         public string? Affiliate_id { get; set; } = default!;
 
+        /// <summary>
+        /// A numeric identifier that uniquely identifies a single member of the UC community.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("ucnet_id")]
         public string? Ucnet_id { get; set; } = default!;
 
@@ -7983,12 +8370,21 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Email
     {
 
+        /// <summary>
+        /// A person’s campus email address.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("campus")]
         public string? Campus { get; set; } = default!;
 
+        /// <summary>
+        /// A person’s UCD health email address. Protected field. Returned only when the OAuth token includes `read:healthEmail` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("health")]
         public string? Health { get; set; } = default!;
 
+        /// <summary>
+        /// A person’s personal email address. Protected field. Returned only when the OAuth token includes `read:personalContact` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("personal")]
         public string? Personal { get; set; } = default!;
 
@@ -7998,12 +8394,21 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Phone
     {
 
+        /// <summary>
+        /// A person’s primary phone number. Protected when sourced from a personal phone number. Personal phone data is returned only when the OAuth token includes `read:personalContact` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("primary")]
         public string? Primary { get; set; } = default!;
 
+        /// <summary>
+        /// A person’s work phone number.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("work")]
         public string? Work { get; set; } = default!;
 
+        /// <summary>
+        /// A person’s personal phone number. Protected field. Returned only when the OAuth token includes `read:personalContact` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("personal")]
         public string? Personal { get; set; } = default!;
 
@@ -8013,24 +8418,45 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Student_association
     {
 
+        /// <summary>
+        /// The unique identifier for this identity for use across all UC Davis systems.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("iam_id")]
         public string? Iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the college associated with the student’s major.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("college_code")]
         public string? College_code { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the college code.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("college_title")]
         public string? College_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the major the student is associated with.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("major_code")]
         public string? Major_code { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the major code.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("major_title")]
         public string? Major_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the student’s general academic program level.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("academic_level")]
         public string? Academic_level { get; set; } = default!;
 
+        /// <summary>
+        /// A code denoting the student’s academic class level.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("class_level")]
         public string? Class_level { get; set; } = default!;
 
@@ -8040,15 +8466,27 @@ namespace UCD.Rosetta.Client.Generated
     public partial class Employee_association
     {
 
+        /// <summary>
+        /// A unique, sequential number for each employee record.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_record")]
         public string? Employee_record { get; set; } = default!;
 
+        /// <summary>
+        /// The unique ID of an employee’s record within the UCPath HR system.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_id")]
         public string? Employee_id { get; set; } = default!;
 
+        /// <summary>
+        /// An identifier for an approved position to which an employee is appointed.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("position_number")]
         public string? Position_number { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description for this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("position_title")]
         public string? Position_title { get; set; } = default!;
 
@@ -8059,57 +8497,111 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Employee_associationJob_indicator>))]
         public Employee_associationJob_indicator? Job_indicator { get; set; } = default!;
 
+        /// <summary>
+        /// Indicates the relationship between the person’s job and the organization, such as EMP for employee.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("relationship_to_organization")]
         public string? Relationship_to_organization { get; set; } = default!;
 
+        /// <summary>
+        /// The payroll status of the job.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification")]
         public string? Employee_classification { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the payroll status of the job.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("employee_classification_description")]
         public string? Employee_classification_description { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the payroll status of the position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("status")]
         public string? Status { get; set; } = default!;
 
+        /// <summary>
+        /// The date when the most recent employment affiliation commenced.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("hire_date")]
         public string? Hire_date { get; set; } = default!;
 
+        /// <summary>
+        /// The first day that the assignment to this position began.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("start_date")]
         public string? Start_date { get; set; } = default!;
 
+        /// <summary>
+        /// The first day that the employee is no longer employed in the position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("termination_date")]
         public string? Termination_date { get; set; } = default!;
 
+        /// <summary>
+        /// A numeric value indicating the position’s percentage of full-time equivalence.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("fte_percentage")]
         public string? Fte_percentage { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the job type within the organization.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_type_id")]
         public string? Job_type_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the job type within the organization.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_type_description")]
         public string? Job_type_description { get; set; } = default!;
 
+        /// <summary>
+        /// The code indicating the job family associated with this position. Similar to the concept of career tracks.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_family_id")]
         public string? Job_family_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the job family for this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("job_family_description")]
         public string? Job_family_description { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the top department within the organization associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
         public string? Organization_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the top department in the organization associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("organization_title")]
         public string? Organization_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the second level of the organization associated with the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("division_id")]
         public string? Division_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the second level of the organization associated with the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("division_title")]
         public string? Division_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the subdivision associated with this position School/Division.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_id")]
         public string? Subdivision_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the subdivision association with this position, School/Division.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_title")]
         public string? Subdivision_title { get; set; } = default!;
 
@@ -8119,18 +8611,33 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("subdivision_l4_title")]
         public string? Subdivision_l4_title { get; set; } = default!;
 
+        /// <summary>
+        /// A code indicating the business unit associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_id")]
         public string? Business_unit_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the business unit associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("business_unit_title")]
         public string? Business_unit_title { get; set; } = default!;
 
+        /// <summary>
+        /// A unique identifier for the administrative unit that is responsible for paying for the position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("department_id")]
         public string? Department_id { get; set; } = default!;
 
+        /// <summary>
+        /// A human readable description of the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("department_title")]
         public string? Department_title { get; set; } = default!;
 
+        /// <summary>
+        /// A shortened human readable description of the department associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("department_short_title")]
         public string? Department_short_title { get; set; } = default!;
 
@@ -8140,20 +8647,152 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("leave_of_absence_end")]
         public string? Leave_of_absence_end { get; set; } = default!;
 
+        /// <summary>
+        /// The position number of the manager associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_position")]
         public string? Reports_to_position { get; set; } = default!;
 
+        /// <summary>
+        /// The iam id of the manager associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_iam_id")]
         public string? Reports_to_iam_id { get; set; } = default!;
 
+        /// <summary>
+        /// The employee id of the manager associated with this position.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("reports_to_employee_id")]
         public string? Reports_to_employee_id { get; set; } = default!;
 
+        /// <summary>
+        /// An indicator designating that the employee is considered to be an employee or dual appointment of the UC Davis Health System.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("is_health_position")]
         public string? Is_health_position { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("is_campus_position")]
         public string? Is_campus_position { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_location")]
+        public string? Ucpath_location { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field from `PS_LOCATION_TBL_V`. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_location_description")]
+        public string? Ucpath_location_description { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_union_cd")]
+        public string? Ucpath_union_cd { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_barg_unit")]
+        public string? Ucpath_barg_unit { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field from `PS_UNION_TBL_V`. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_bargaining_unit")]
+        public string? Ucpath_bargaining_unit { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_exemption_status")]
+        public string? Ucpath_exemption_status { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_pay_schedule")]
+        public string? Ucpath_pay_schedule { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_salary_type")]
+        public string? Ucpath_salary_type { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_expected_return_date")]
+        public string? Ucpath_expected_return_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_last_hire_date")]
+        public string? Ucpath_last_hire_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_assigned_end_date")]
+        public string? Ucpath_assigned_end_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_expected_end_date")]
+        public string? Ucpath_expected_end_date { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_last_date_worked")]
+        public string? Ucpath_last_date_worked { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_auto_end")]
+        public string? Ucpath_auto_end { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_lastupddttm")]
+        public string? Ucpath_lastupddttm { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_lastupdoprid")]
+        public string? Ucpath_lastupdoprid { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_cr_bt_dtm")]
+        public string? Ucpath_cr_bt_dtm { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_cr_bt_nbr")]
+        public string? Ucpath_cr_bt_nbr { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_ods_vrsn_nbr")]
+        public string? Ucpath_ods_vrsn_nbr { get; set; } = default!;
+
+        /// <summary>
+        /// Protected UCPath field. Returned only when the OAuth token includes `read:ucpath`; otherwise omitted.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucpath_dml_ind")]
+        public string? Ucpath_dml_ind { get; set; } = default!;
 
     }
 
@@ -8281,6 +8920,9 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("campus")]
         public string? Campus { get; set; } = default!;
 
+        /// <summary>
+        /// Protected field. Returned only when the OAuth token includes `read:healthEmail` or `read:sensitive`; otherwise masked when present.
+        /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("health")]
         public string? Health { get; set; } = default!;
 
