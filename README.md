@@ -1,6 +1,6 @@
 # UCD.Rosetta.Client
 
-![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.42-blue)
+![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.45-blue)
 
 Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.
 
@@ -165,7 +165,7 @@ await client.Api.PeopleGETAsync(iamid: "1234567890");
 await client.Api.PeopleGETAsync(email: "user@ucdavis.edu");
 await client.Api.PeopleGETAsync(employeeid: "123456");
 await client.Api.PeopleGETAsync(studentid: "987654");
-await client.Api.PeopleGETAsync(manager_iam_id: "0987654321");
+await client.Api.PeopleGETAsync(manager_iamid: "0987654321");
 
 // Subsets and bulk POST
 await client.Api.StudentsGETAsync(limit: 25);
@@ -182,7 +182,7 @@ await client.Api.PeoplePOSTAsync(new PeoplePostRequest
 ### Accounts, Roles, Groups, And Organizations
 
 ```csharp
-var accountSources = await client.Api.Sources2Async();
+var accountSources = await client.Api.SourcesAsync();
 var accounts = await client.Api.LookupAsync(loginid: "jsmith");
 
 var roles = await client.Api.RolesAllAsync(limit: 10);
@@ -193,7 +193,7 @@ if (roleSummary is not null)
 }
 
 var groups = await client.Api.GroupsAllAsync(limit: 10);
-var groupSources = await client.Api.SourcesAsync();
+var groupSources = await client.Api.Sources2Async();
 
 var organizations = await client.Api.OrganizationsAllAsync(limit: 10);
 var departments = await client.Api.DepartmentsAll2Async(organizationid: "ORG001");

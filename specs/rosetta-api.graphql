@@ -185,7 +185,7 @@ type EmployeeAssociation {
   employee_classification_description: String
   status: String
   hire_date: String
-  start_date: String
+  position_entry_date: String
   termination_date: String
   fte_percentage: String
   job_type_id: String
@@ -214,6 +214,8 @@ type EmployeeAssociation {
   is_campus_position: String
   "Protected UCPath field. Requires read:ucpath."
   ucpath_location: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_position_effdt: String
   "Protected UCPath field. Requires read:ucpath."
   ucpath_location_description: String
   "Protected UCPath field. Requires read:ucpath."
@@ -289,7 +291,7 @@ type PpsAssociationRecord {
   employee_classification_description: String
   status: String
   hire_date: String
-  start_date: String
+  position_entry_date: String
   termination_date: String
   fte_percentage: String
   reports_to_position: String
@@ -314,6 +316,8 @@ type PpsAssociationRecord {
   is_campus_position: String
   "Protected UCPath field. Requires read:ucpath."
   ucpath_location: String
+  "Protected UCPath field. Requires read:ucpath."
+  ucpath_position_effdt: String
   "Protected UCPath field. Requires read:ucpath."
   ucpath_location_description: String
   "Protected UCPath field. Requires read:ucpath."
@@ -553,41 +557,62 @@ enum ClassLevel {
 ###Query parameter / filters for queries###
 input PeopleFilterInput {
   iamid: String
+  iamId: String
   firstname: String
   lastname: String
   firstnamelike: String
   lastnamelike: String
-  manager_iam_id: String
+  manager_iamid: String
+  manager_iamId: String
   iamids: [String]
+  iamIds: [String]
   email: String
   emails: [String]
   loginid: String
+  loginId: String
   employeeid: String
+  employeeId: String
   studentid: String
+  studentId: String
   mailid: String
+  mailId: String
   pidm: String
   mothraid: String
-  pps_id: String
-  cosmos_id: String
-  cpe_id: String
-  health_affiliate_id: String
-  ucanr_id: String
-  usda_whnrc_id: String
-  affiliate_id: String
-  ucnet_id: String
+  mothraId: String
+  ppsid: String
+  ppsId: String
+  cosmosid: String
+  cosmosId: String
+  cpeid: String
+  cpeId: String
+  health_affiliateid: String
+  health_affiliateId: String
+  ucanrid: String
+  ucanrId: String
+  usda_whnrcid: String
+  usda_whnrcId: String
+  affiliateid: String
+  affiliateId: String
+  ucnetid: String
+  ucnetId: String
   affiliationContains: String
   affiliationNotContains: String
   affiliationState: String = "withAffiliation"
   department: String
   jobtypeid: String
+  jobtypeId: String
   collegecode: String
   majorcode: String
   academic_level: AcademicLevel
   class_level: ClassLevel
   organizationid: String
+  organizationId: String
   divisionid: String
+  divisionId: String
   subdivisionid: String
+  subdivisionId: String
   subdivisionl4id: String
+  subdivisionl4Id: String
   employmentStatus: String
   count: Boolean = false
   modifiedsince: String
@@ -705,6 +730,37 @@ input AccountLookupFilterInput {
   loginid: String
 }
 
+input IdentityLookupFilterInput {
+  email: String
+  emails: [String!]
+  campus_email: String
+  campus_emails: [String!]
+  iamid: String
+  iamId: String
+  iamids: [String!]
+  iamIds: [String!]
+  loginid: String
+  loginId: String
+  loginids: [String!]
+  loginIds: [String!]
+  employeeid: String
+  employeeId: String
+  employeeids: [String!]
+  employeeIds: [String!]
+  mothraid: String
+  mothraId: String
+  mothraids: [String!]
+  mothraIds: [String!]
+  ucnetid: String
+  ucnetId: String
+  ucnetids: [String!]
+  ucnetIds: [String!]
+  departmentid: String
+  departmentId: String
+  departmentids: [String!]
+  departmentIds: [String!]
+}
+
 ##Results##
 type PeopleResult {
   results: [Person]
@@ -819,6 +875,32 @@ type AccountLookupResult {
   errors: [QueryParameterValidationError]
 }
 
+type IdentityLookupRecord {
+  iam_id: String
+  display_name: String
+  campus_email: String
+  # Only returned when non-null and the token has read:sensitive or read:healthEmail.
+  health_email: String
+  login_id: String
+  employee_id: String
+  student_id: String
+  mothra_id: String
+  ucnet_id: String
+  pidm: String
+  cosmos_id: String
+  cpe_id: String
+  health_affiliate_id: String
+  ucanr_id: String
+  usda_whnrc_id: String
+  affiliate_id: String
+  department_id: String
+}
+
+type IdentityLookupResult {
+  results: [IdentityLookupRecord]
+  errors: [QueryParameterValidationError]
+}
+
 ##Query types##
 type Query {
   #Colleges
@@ -833,6 +915,9 @@ type Query {
   people_employees(filter: PeopleFilterInput): PeopleResult
   people_faculty(filter: PeopleFilterInput): PeopleResult
   people_external(filter: PeopleFilterInput): PeopleResult
+
+  # Lean identity lookup
+  identityLookup(filter: IdentityLookupFilterInput!): IdentityLookupResult
 
   #Groups
   groups(filter: GroupsFilterInput): GroupsResult
