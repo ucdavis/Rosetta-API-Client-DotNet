@@ -1,6 +1,6 @@
 # UCD.Rosetta.Client
 
-![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.42-blue)
+![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.46-blue)
 
 Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.
 
@@ -165,7 +165,7 @@ await client.Api.PeopleGETAsync(iamid: "1234567890");
 await client.Api.PeopleGETAsync(email: "user@ucdavis.edu");
 await client.Api.PeopleGETAsync(employeeid: "123456");
 await client.Api.PeopleGETAsync(studentid: "987654");
-await client.Api.PeopleGETAsync(manager_iam_id: "0987654321");
+await client.Api.PeopleGETAsync(manager_iamid: "0987654321");
 
 // Subsets and bulk POST
 await client.Api.StudentsGETAsync(limit: 25);
@@ -182,7 +182,7 @@ await client.Api.PeoplePOSTAsync(new PeoplePostRequest
 ### Accounts, Roles, Groups, And Organizations
 
 ```csharp
-var accountSources = await client.Api.Sources2Async();
+var accountSources = await client.Api.SourcesAsync();
 var accounts = await client.Api.LookupAsync(loginid: "jsmith");
 
 var roles = await client.Api.RolesAllAsync(limit: 10);
@@ -193,7 +193,7 @@ if (roleSummary is not null)
 }
 
 var groups = await client.Api.GroupsAllAsync(limit: 10);
-var groupSources = await client.Api.SourcesAsync();
+var groupSources = await client.Api.Sources2Async();
 
 var organizations = await client.Api.OrganizationsAllAsync(limit: 10);
 var departments = await client.Api.DepartmentsAll2Async(organizationid: "ORG001");
@@ -214,6 +214,8 @@ await client.Api.MajorsAsync(major_status: "A"); // active majors only
 ### GraphQL (Strongly-Typed)
 
 The `client.GraphQL` property exposes a [ZeroQL](https://github.com/byme8/ZeroQL/wiki)-generated client. Queries are written as C# lambdas and validated at compile time — no raw query strings, full IntelliSense on every field.
+
+Creating the first `RosettaClient` configures ZeroQL's shared JSON defaults to use case-sensitive property names, preserving schema aliases such as `iamid` and `iamId`. This runs once and affects request serialization and response deserialization for all ZeroQL clients in the same application. It also replaces any previous ZeroQL serializer customizations. Initialize Rosetta during application startup; apply any custom ZeroQL converters or settings afterward, before making GraphQL calls, and keep `PropertyNameCaseInsensitive = false`.
 
 ```csharp
 // People — select specific fields

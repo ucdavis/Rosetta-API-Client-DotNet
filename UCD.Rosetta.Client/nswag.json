@@ -36,7 +36,7 @@
       "parameterDateTimeFormat": "s",
       "parameterDateFormat": "yyyy-MM-dd",
       "generateUpdateJsonSerializerSettingsMethod": true,
-      "useRequestAndResponseSerializationSettings": false,
+      "useRequestAndResponseSerializationSettings": true,
       "serializeTypeInformation": false,
       "queryNullValue": "",
       "className": "{controller}Client",

@@ -314,7 +314,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
     }
 
     /// <summary>
-    /// Neat, we can query all the users that a manager manages. This is a good test of the manager_iam_id filter.
+    /// Neat, we can query all the users that a manager manages. This is a good test of the manager_iamid filter.
     /// </summary>
     /// <returns></returns>
     [SkippableFact]
@@ -323,7 +323,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         var managerIamId = await GetManagerIamIdForPeopleFilterAsync();
 
         // Act
-        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(manager_iam_id: managerIamId));
+        var result = await SkipEnvironmentLimitations(() => _fixture.Client.Api.PeopleGETAsync(manager_iamid: managerIamId));
 
         // Assert — every returned person should report the searched manager IAM ID
         result.ShouldNotBeNull();
@@ -403,7 +403,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         return await ResolveFilterValueAsync(
             _fixture.TestData.ManagerIamId,
             NormalizeFilterValue,
-            managerIamId => _fixture.Client.Api.PeopleGETAsync(manager_iam_id: managerIamId),
+            managerIamId => _fixture.Client.Api.PeopleGETAsync(manager_iamid: managerIamId),
             sample => sample.Select(p => p.Manager_iam_id).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id)),
             HasFilterValue,
             "No people with manager_iam_id returned from API sample");
@@ -812,7 +812,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         var counts = await SkipEnvironmentLimitations(() => _fixture.Client.Api.AccountsAsync());
         counts.ShouldNotBeNull();
 
-        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Api.Sources2Async());
+        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Api.SourcesAsync());
         sources.ShouldNotBeNull();
 
         var selector = await FirstConfiguredSelectorAsync();
@@ -858,7 +858,7 @@ public class RosettaApiTests : IClassFixture<RosettaClientFixture>
         var groups = await SkipEnvironmentLimitations(() => _fixture.Client.Api.GroupsAllAsync(limit: 1));
         groups.ShouldNotBeNull();
 
-        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Api.SourcesAsync());
+        var sources = await SkipEnvironmentLimitations(() => _fixture.Client.Api.Sources2Async());
         sources.ShouldNotBeNull();
 
         var groupId = groups.SelectMany(g => g.Groups ?? []).FirstOrDefault(id => !string.IsNullOrWhiteSpace(id));

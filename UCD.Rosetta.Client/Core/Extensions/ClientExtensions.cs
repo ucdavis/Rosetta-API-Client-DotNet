@@ -61,10 +61,10 @@ public partial class Client
         }
     }
     
-    static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings)
+    static partial void UpdateJsonSerializerSettings(JsonSerializerOptions settings, bool isRequest)
     {
-        // Add any custom JSON serialization settings here
-        settings.PropertyNameCaseInsensitive = true;
+        // Requests must preserve case-only aliases; responses remain case-insensitive.
+        settings.PropertyNameCaseInsensitive = !isRequest;
         settings.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
         
         // Gracefully handle ICollection<T> arrays that may contain null or unexpected
