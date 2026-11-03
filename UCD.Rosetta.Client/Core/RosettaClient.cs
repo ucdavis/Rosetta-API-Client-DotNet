@@ -2,6 +2,7 @@ using UCD.Rosetta.Client.Core.Authentication;
 using UCD.Rosetta.Client.Core.Configuration;
 using UCD.Rosetta.Client.Generated;
 using UCD.Rosetta.Client.GraphQL;
+using ZeroQL.Json;
 
 namespace UCD.Rosetta.Client.Core;
 
@@ -16,6 +17,13 @@ public class RosettaClient : IDisposable
     private readonly bool _disposeHttpClient;
     private readonly bool _disposeGraphqlHttpClient;
     private readonly OAuthTokenProvider? _ownedTokenProvider;
+
+    static RosettaClient()
+    {
+        // GraphQL input aliases such as iamid and iamId must remain distinct.
+        // Configure once because ZeroQL shares these options across all clients.
+        ZeroQLJsonOptions.Configure(options => options.PropertyNameCaseInsensitive = false);
+    }
 
     /// <summary>
     /// Gets the underlying API client that provides access to all Rosetta API endpoints.

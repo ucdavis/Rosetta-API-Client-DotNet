@@ -215,6 +215,8 @@ await client.Api.MajorsAsync(major_status: "A"); // active majors only
 
 The `client.GraphQL` property exposes a [ZeroQL](https://github.com/byme8/ZeroQL/wiki)-generated client. Queries are written as C# lambdas and validated at compile time — no raw query strings, full IntelliSense on every field.
 
+Creating the first `RosettaClient` configures ZeroQL's shared JSON defaults to use case-sensitive property names, preserving schema aliases such as `iamid` and `iamId`. This runs once and affects request serialization and response deserialization for all ZeroQL clients in the same application. It also replaces any previous ZeroQL serializer customizations. Initialize Rosetta during application startup; apply any custom ZeroQL converters or settings afterward, before making GraphQL calls, and keep `PropertyNameCaseInsensitive = false`.
+
 ```csharp
 // People — select specific fields
 var filter = new PeopleFilterInput { Loginid = "jsmith" };
