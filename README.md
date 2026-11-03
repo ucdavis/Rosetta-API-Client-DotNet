@@ -1,6 +1,6 @@
 # UCD.Rosetta.Client
 
-![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.45-blue)
+![Rosetta API Spec](https://img.shields.io/badge/Rosetta%20API%20Spec-v1.0.46-blue)
 
 Official .NET client library for the UC Davis IAM Rosetta API. Provides easy access to identity and access management data from UC Davis IAM services.
 

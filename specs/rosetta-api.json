@@ -2160,10 +2160,11 @@
           },
           {
             "name": "pidm",
-            "description": "Filter by PIDM",
+            "description": "Filter by a PIDM containing 6 to 9 digits",
             "required": false,
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "pattern": "^\\d{6,9}$"
           },
           {
             "name": "mothraid",
@@ -3133,10 +3134,11 @@
           },
           {
             "name": "pidm",
-            "description": "Filter by PIDM",
+            "description": "Filter by a PIDM containing 6 to 9 digits",
             "required": false,
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "pattern": "^\\d{6,9}$"
           },
           {
             "name": "mothraid",
@@ -4106,10 +4108,11 @@
           },
           {
             "name": "pidm",
-            "description": "Filter by PIDM",
+            "description": "Filter by a PIDM containing 6 to 9 digits",
             "required": false,
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "pattern": "^\\d{6,9}$"
           },
           {
             "name": "mothraid",
@@ -5079,10 +5082,11 @@
           },
           {
             "name": "pidm",
-            "description": "Filter by PIDM",
+            "description": "Filter by a PIDM containing 6 to 9 digits",
             "required": false,
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "pattern": "^\\d{6,9}$"
           },
           {
             "name": "mothraid",
@@ -6052,10 +6056,11 @@
           },
           {
             "name": "pidm",
-            "description": "Filter by PIDM",
+            "description": "Filter by a PIDM containing 6 to 9 digits",
             "required": false,
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "pattern": "^\\d{6,9}$"
           },
           {
             "name": "mothraid",

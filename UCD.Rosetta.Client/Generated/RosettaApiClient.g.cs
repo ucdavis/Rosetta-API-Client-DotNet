@@ -422,7 +422,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -598,7 +598,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -774,7 +774,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -950,7 +950,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -1126,7 +1126,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -3825,7 +3825,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -4387,7 +4387,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -4949,7 +4949,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -5511,7 +5511,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
@@ -6073,7 +6073,7 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="studentId">Alias for studentid; the I in ID may be uppercase</param>
         /// <param name="mailid">Filter by mail ID (pre-@ part)</param>
         /// <param name="mailId">Alias for mailid; the I in ID may be uppercase</param>
-        /// <param name="pidm">Filter by PIDM</param>
+        /// <param name="pidm">Filter by a PIDM containing 6 to 9 digits</param>
         /// <param name="mothraid">Filter by Mothra ID</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase</param>
         /// <param name="ppsid">Filter by PPS ID</param>
