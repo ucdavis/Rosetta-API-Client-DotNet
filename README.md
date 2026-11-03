@@ -375,6 +375,8 @@ catch (OperationCanceledException)
 
 ## Development
 
+Maintainers: publishing uses the GitHub environment `package-publishing` (only branch `main`, no required reviewers). Before merging, the NuGet account holder must [configure trusted publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing) under the package's current owner for repository owner `ucdavis`, repository `Rosetta-API-Client-DotNet`, workflow `ci-cd.yml`, environment `package-publishing`, scoped to new versions of `UCD.Rosetta.Client`, and set the environment variable `NUGET_USER` to the personal NuGet username that created the policy (not an organization name or email).
+
 ### Docker spec-update sandbox
 
 The recommended Docker Desktop workflow for applying API specification updates is the standalone tooling sandbox. It provides the YAML-aware updater dependencies and the .NET 8 SDK while bind-mounting this checkout, so all generated changes appear directly in the normal host working tree. Windows and macOS users need Docker Desktop with Compose; they do not need to install `jq`, `yq`, or .NET on the host.
