@@ -751,6 +751,8 @@ input IdentityLookupFilterInput {
   mothraId: String
   mothraids: [String!]
   mothraIds: [String!]
+  ppsid: String
+  ppsId: String
   ucnetid: String
   ucnetId: String
   ucnetids: [String!]
@@ -885,6 +887,7 @@ type IdentityLookupRecord {
   employee_id: String
   student_id: String
   mothra_id: String
+  pps_id: String
   ucnet_id: String
   pidm: String
   cosmos_id: String
