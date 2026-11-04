@@ -196,10 +196,12 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="loginId">Alias for loginid; the I in ID may be uppercase.</param>
         /// <param name="employeeId">Alias for employeeid; the I in ID may be uppercase.</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase.</param>
+        /// <param name="ppsid">Filter by PPS ID.</param>
+        /// <param name="ppsId">Alias for ppsid; the I in ID may be uppercase.</param>
         /// <param name="ucnetId">Alias for ucnetid; the I in ID may be uppercase.</param>
         /// <param name="departmentId">Alias for departmentid; the I in ID may be uppercase.</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Identity>> IdentityGETAsync(string? email = null, string? campus_email = null, string? iamid = null, string? iamId = null, string? loginid = null, string? loginId = null, string? employeeid = null, string? employeeId = null, string? mothraid = null, string? mothraId = null, string? ucnetid = null, string? ucnetId = null, string? departmentid = null, string? departmentId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Identity>> IdentityGETAsync(string? email = null, string? campus_email = null, string? iamid = null, string? iamId = null, string? loginid = null, string? loginId = null, string? employeeid = null, string? employeeId = null, string? mothraid = null, string? mothraId = null, string? ppsid = null, string? ppsId = null, string? ucnetid = null, string? ucnetId = null, string? departmentid = null, string? departmentId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
@@ -465,36 +467,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
@@ -641,36 +653,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
@@ -817,36 +839,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
@@ -993,36 +1025,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
@@ -1169,36 +1211,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
@@ -2495,10 +2547,12 @@ namespace UCD.Rosetta.Client.Generated
         /// <param name="loginId">Alias for loginid; the I in ID may be uppercase.</param>
         /// <param name="employeeId">Alias for employeeid; the I in ID may be uppercase.</param>
         /// <param name="mothraId">Alias for mothraid; the I in ID may be uppercase.</param>
+        /// <param name="ppsid">Filter by PPS ID.</param>
+        /// <param name="ppsId">Alias for ppsid; the I in ID may be uppercase.</param>
         /// <param name="ucnetId">Alias for ucnetid; the I in ID may be uppercase.</param>
         /// <param name="departmentId">Alias for departmentid; the I in ID may be uppercase.</param>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Identity>> IdentityGETAsync(string? email = null, string? campus_email = null, string? iamid = null, string? iamId = null, string? loginid = null, string? loginId = null, string? employeeid = null, string? employeeId = null, string? mothraid = null, string? mothraId = null, string? ucnetid = null, string? ucnetId = null, string? departmentid = null, string? departmentId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Identity>> IdentityGETAsync(string? email = null, string? campus_email = null, string? iamid = null, string? iamId = null, string? loginid = null, string? loginId = null, string? employeeid = null, string? employeeId = null, string? mothraid = null, string? mothraId = null, string? ppsid = null, string? ppsId = null, string? ucnetid = null, string? ucnetId = null, string? departmentid = null, string? departmentId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -2553,6 +2607,14 @@ namespace UCD.Rosetta.Client.Generated
                     if (mothraId != null)
                     {
                         urlBuilder_.Append(System.Uri.EscapeDataString("mothraId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(mothraId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ppsid != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ppsid")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ppsid, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    }
+                    if (ppsId != null)
+                    {
+                        urlBuilder_.Append(System.Uri.EscapeDataString("ppsId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(ppsId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     }
                     if (ucnetid != null)
                     {
@@ -4184,36 +4246,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> PeoplePOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
@@ -4746,36 +4818,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> StudentsPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
@@ -5308,36 +5390,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> EmployeesPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
@@ -5870,36 +5962,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> FacultyPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
@@ -6432,36 +6534,46 @@ namespace UCD.Rosetta.Client.Generated
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <remarks>
-        /// Returns person records matching filter parameters supplied in the JSON request body. This is intended for requests that need to send lists of identifiers without using query parameters.
+        /// Returns person records matching lists of identifiers supplied in the JSON request body. This POST method is intended for set-based lookups where sending many identifiers as query parameters would be awkward or too large.
         /// <br/>
-        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before query parameters are applied.
+        /// <br/>This description is shared by `/people` and the people sub-endpoints. Depending on the endpoint path, results may already be pre-scoped by affiliation before the body filters are applied.
         /// <br/>
-        /// <br/>The POST method is intended for lookups using one or more identity filters supplied in the JSON request body. Each filter accepts an array of values.
+        /// <br/>Each accepted filter is an array of values. ID list filters accept either
+        /// <br/>lowercase `...ids` names or the equivalent `...Ids` spelling where available.
         /// <br/>
-        /// <br/>If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
+        /// <br/>  If multiple identity filters are supplied, all filters are applied together (logical AND). A person must match at least one value in each supplied filter to be returned.
         /// <br/>
-        /// <br/>Example:
-        /// <br/>  Data:
-        /// <br/>    { email: johndoe@ucdavis.edu, iamid: 1234567890 }
-        /// <br/>    { email: janedoe@ucdavis.edu, iamid: 5555555555 }
+        /// <br/>  Example:
+        /// <br/>    Data:
+        /// <br/>      { email: johndoe@ucdavis.edu, iamid: 1234567890 }
+        /// <br/>      { email: janedoe@ucdavis.edu, iamid: 5555555555 }
         /// <br/>
-        /// <br/>  Request body:
-        /// <br/>    {
-        /// <br/>      "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
-        /// <br/>      "iamids": ["1234567890", "2345678901"]
-        /// <br/>    }
+        /// <br/>    Request body:
+        /// <br/>      {
+        /// <br/>        "emails": ["johndoe@ucdavis.edu", "janedoe@ucdavis.edu"],
+        /// <br/>        "iamids": ["1234567890", "2345678901"]
+        /// <br/>      }
         /// <br/>
-        /// <br/>  Result:
-        /// <br/>    Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
+        /// <br/>    Result:
+        /// <br/>      Only records matching both an email in `emails` and an IAM ID in `iamids` are returned.
         /// <br/>
-        /// <br/>Accepted identity filters:
-        /// <br/>  - `iamids`
-        /// <br/>  - `emails`
-        /// <br/>  - `loginids`
-        /// <br/>  - `employeeids`
-        /// <br/>  - `studentids`
-        /// <br/>  - `pidms`
-        /// <br/>  - `mothraids`
+        /// <br/>  Accepted body filters:
+        /// <br/>    - `iamids`
+        /// <br/>    - `emails`
+        /// <br/>    - `loginids`
+        /// <br/>    - `employeeids`
+        /// <br/>    - `studentids`
+        /// <br/>    - `mailids`
+        /// <br/>    - `pidms`
+        /// <br/>    - `mothraids`
+        /// <br/>    - `ppsids`
+        /// <br/>    - `cosmosids`
+        /// <br/>    - `cpeids`
+        /// <br/>    - `health_affiliateids`
+        /// <br/>    - `ucanrids`
+        /// <br/>    - `usda_whnrcids`
+        /// <br/>    - `affiliateids`
+        /// <br/>    - `ucnetids`
         /// </remarks>
         /// <exception cref="RosettaApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Person>> ExternalPOSTAsync(PeoplePostRequest? generated = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
@@ -7838,6 +7950,9 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("mothra_id")]
         public string? Mothra_id { get; set; } = default!;
 
+        [System.Text.Json.Serialization.JsonPropertyName("pps_id")]
+        public string? Pps_id { get; set; } = default!;
+
         [System.Text.Json.Serialization.JsonPropertyName("ucnet_id")]
         public string? Ucnet_id { get; set; } = default!;
 
@@ -7874,6 +7989,7 @@ namespace UCD.Rosetta.Client.Generated
     /// <br/>`id`; the `i` may be lowercase or uppercase. Use `email` for one address or
     /// <br/>`emails` for an array of addresses in the `ucdavis.edu` domain or its subdomains.
     /// <br/>IAM ID filters accept `iamid`/`iamId` or the list forms `iamids`/`iamIds`.
+    /// <br/>PPS ID filters accept `ppsid`/`ppsId`.
     /// <br/>
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.2.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -7968,6 +8084,14 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("mothraIds")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
         public System.Collections.Generic.ICollection<string>? MothraIds { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ppsid")]
+        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
+        public string? Ppsid { get; set; } = default!;
+
+        [System.Text.Json.Serialization.JsonPropertyName("ppsId")]
+        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
+        public string? PpsId { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("ucnetid")]
         [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 1)]
@@ -8321,11 +8445,25 @@ namespace UCD.Rosetta.Client.Generated
         public System.Collections.Generic.ICollection<string>? Employeeids { get; set; } = default!;
 
         /// <summary>
+        /// Alias for employeeids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("employeeIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? EmployeeIds { get; set; } = default!;
+
+        /// <summary>
         /// List of student IDs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("studentids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
         public System.Collections.Generic.ICollection<string>? Studentids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for studentids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("studentIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? StudentIds { get; set; } = default!;
 
         /// <summary>
         /// List of 10-digit IAM IDs to return.
@@ -8335,11 +8473,25 @@ namespace UCD.Rosetta.Client.Generated
         public System.Collections.Generic.ICollection<string>? Iamids { get; set; } = default!;
 
         /// <summary>
+        /// Alias for iamids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("iamIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? IamIds { get; set; } = default!;
+
+        /// <summary>
         /// List of UC Davis login IDs to return.
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("loginids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
         public System.Collections.Generic.ICollection<string>? Loginids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for loginids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("loginIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? LoginIds { get; set; } = default!;
 
         /// <summary>
         /// List of PIDMs to return.
@@ -8361,6 +8513,139 @@ namespace UCD.Rosetta.Client.Generated
         [System.Text.Json.Serialization.JsonPropertyName("mothraids")]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
         public System.Collections.Generic.ICollection<string>? Mothraids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for mothraids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("mothraIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? MothraIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of mail IDs (username portions of email addresses) to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("mailids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Mailids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for mailids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("mailIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? MailIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of PPS IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ppsids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Ppsids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for ppsids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ppsIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? PpsIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of COSMOS affiliate IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("cosmosids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Cosmosids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for cosmosids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("cosmosIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? CosmosIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of CPE affiliate IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("cpeids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Cpeids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for cpeids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("cpeIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? CpeIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of Health affiliate IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("health_affiliateids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Health_affiliateids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for health_affiliateids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("health_affiliateIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Health_affiliateIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of UCANR IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucanrids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Ucanrids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for ucanrids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucanrIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? UcanrIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of USDA WHNRC IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("usda_whnrcids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Usda_whnrcids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for usda_whnrcids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("usda_whnrcIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Usda_whnrcIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of affiliate IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("affiliateids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Affiliateids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for affiliateids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("affiliateIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? AffiliateIds { get; set; } = default!;
+
+        /// <summary>
+        /// List of UCnet IDs to return.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucnetids")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? Ucnetids { get; set; } = default!;
+
+        /// <summary>
+        /// Alias for ucnetids.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("ucnetIds")]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<string>? UcnetIds { get; set; } = default!;
 
         [System.Text.Json.Serialization.JsonPropertyName("limit")]
         public int? Limit { get; set; } = default!;
