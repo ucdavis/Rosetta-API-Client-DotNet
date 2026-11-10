@@ -261,7 +261,7 @@ type Person {
   displayname: String
   birth_date: String
   manager_iam_id: String
-  provisioning_status: [ProvisioningStatus]
+  provisioning_status: ProvisioningStatus
   affiliation: Affiliation
   employment_status: EmploymentStatus
   name: [NameRecord]

@@ -8374,7 +8374,7 @@ namespace UCD.Rosetta.Client.Generated
         /// </summary>
         [System.Text.Json.Serialization.JsonPropertyName("provisioning_status")]
         [System.ComponentModel.DataAnnotations.Required]
-        public System.Collections.Generic.ICollection<Provisioning_status> Provisioning_status { get; set; } = new System.Collections.Generic.List<Provisioning_status>();
+        public Provisioning_status Provisioning_status { get; set; } = new Provisioning_status();
 
         /// <summary>
         /// Flags indicating the affiliations of which this identity is currently a member.
